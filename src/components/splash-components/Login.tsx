@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Component } from 'react';
 
-class Login extends Component {
-
+type LoginProps = {
+  setAppState: Function
+}
+class Login extends React.Component<LoginProps, {}> {
   render() {
     return(
       <div>Got to login</div>
