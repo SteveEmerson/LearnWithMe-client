@@ -10,6 +10,21 @@ type SplashProps = {
 
 
 class Splash extends React.Component<SplashProps, {}> {
+
+  handleLogout = () :void => {
+    console.log("got here")
+    localStorage.removeItem('sessionToken')
+    this.props.setAppState(
+      {
+        role: "",
+        displayName: "",
+        userId: 0,
+        partnerList: [],
+        availability: {temp:""}
+      }
+    )
+  }
+
   render(){
     return (
       <div className="App">
@@ -21,6 +36,7 @@ class Splash extends React.Component<SplashProps, {}> {
               <div className='enter' style={{marginRight:'40px'}}>
                 <Link to='/login'><h4> Login </h4></Link>
                 <Link to='/signup'><h4> Signup </h4></Link>
+                <button onClick={this.handleLogout}>Logout</button>
               </div>
           </div>
           <br/>

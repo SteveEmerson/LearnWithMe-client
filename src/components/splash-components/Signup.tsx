@@ -12,12 +12,10 @@ type User = {
 }
 
 type SignupState = {
-  sessionToken: string
   email: string
   password: string
   role: string
   displayName: string
-  userId: number
 }
 
 // type FormData = {
@@ -30,19 +28,17 @@ class Signup extends React.Component<SignupProps, SignupState> {
   constructor(props: SignupProps){
     super(props);
     this.state = {
-      sessionToken: "",
       email: "",
       password: "",
       role: "",
       displayName: "",
-      userId: 0
     }
   }
   
   handleSubmit = (e: React.SyntheticEvent) : void => {
     e.preventDefault();
 
-    const url: string = 'http://localhost:3000/teacher/register'
+    const url: string = `http://localhost:3000/${this.state.role}/register`
     fetch(url,
     {
         method: 'POST',
@@ -54,12 +50,14 @@ class Signup extends React.Component<SignupProps, SignupState> {
     .then((res) => res.json())
     .then((user: User) => {
         console.log(user);
+        localStorage.setItem('sessionToken', user.sessionToken); 
         this.props.setAppState(
-          user.sessionToken, 
           {
               role:user.role,
               displayName: user.displayName,
-              userId: user.userId
+              userId: user.userId,
+              partnerList: [],
+              availability: {temp:""}
           })
     })
   }
@@ -98,12 +96,12 @@ class Signup extends React.Component<SignupProps, SignupState> {
           <div>
             <p>Role:</p>
             <div>
-              <label htmlFor="teacher"> Teacher</label>
-              <input type="radio" name="role" id="teacher" value="teacher" onChange={this.roleChange}/>
+              <label htmlFor="student"> Student</label>
+              <input type="radio" name="role" id="student" value="student" defaultChecked onChange={this.roleChange}/>
             </div>
             <div>
-              <label htmlFor="student"> Student</label>
-              <input type="radio" name="role" id="student" value="student" onChange={this.roleChange}/>
+              <label htmlFor="teacher"> Teacher</label>
+              <input type="radio" name="role" id="teacher" value="teacher" onChange={this.roleChange}/>
             </div>
           </div>
           <div>
@@ -124,12 +122,10 @@ class Signup extends React.Component<SignupProps, SignupState> {
         <hr/>
         <br/>
         <h1> Current Signin State</h1>
-        <p>token: {this.state.sessionToken}</p>
         <p>displayName: {this.state.displayName}</p>
         <p>email: {this.state.email}</p>
         <p>password: {this.state.password}</p>
         <p>role: {this.state.role}</p>
-        <p>userId: {this.state.userId}</p>
       </div>
     )
   }

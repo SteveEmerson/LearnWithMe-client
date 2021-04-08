@@ -6,10 +6,11 @@ type User = {
   role: string
   displayName: string
   userId: number
+  partnerList: number[]
+  availability?: {temp: any}
 }
 
 type AppState = {
-  sessionToken: string
   user: User
 }
 
@@ -17,20 +18,20 @@ class App extends React.Component<{}, AppState> {
   constructor(){
     super({});
     this.state = {
-      sessionToken: "initial token",
       user: {
         role: "",
         displayName: "",
-        userId: 0
+        userId: 0,
+        partnerList: [],
+        availability: {temp:""}
       }
     }
   }
 
-  handler = (token: string, currUser: User) :void => {
-    console.log(token);
+  handler = (currUser: User) :void => {
     console.log(currUser);
     this.setState(() => {
-    return  {sessionToken: token, user: currUser}
+    return  {user: currUser}
     })
     console.log(this.state)
   }
@@ -41,10 +42,12 @@ class App extends React.Component<{}, AppState> {
         <Splash setAppState={this.handler}/>
         <div>
           <h1>Current App State</h1>
-          <p>token: {this.state.sessionToken}</p>
           <p>displayName: {this.state.user.displayName}</p>
           <p>role: {this.state.user.role}</p>
           <p>userId: {this.state.user.userId}</p>
+          <p>sessionToken: {localStorage.getItem('sessionToken')}</p>
+          {/* <p>partnerList: {this.state.user.partnerList}</p> */}
+          {/* <p>availability: {this.state.user.availability}</p> */}
         </div>
       </div>
     );
