@@ -17,7 +17,7 @@ class App extends React.Component<{}, AppState> {
   constructor(){
     super({});
     this.state = {
-      sessionToken: "",
+      sessionToken: "initial token",
       user: {
         role: "",
         displayName: "",
@@ -26,10 +26,26 @@ class App extends React.Component<{}, AppState> {
     }
   }
 
+  handler = (token: string, currUser: User) :void => {
+    console.log(token);
+    console.log(currUser);
+    this.setState(() => {
+    return  {sessionToken: token, user: currUser}
+    })
+    console.log(this.state)
+  }
+
   render() {
     return (
       <div className="App">
-        <Splash setAppState={this.setState}/>
+        <Splash setAppState={this.handler}/>
+        <div>
+          <h1>Current App State</h1>
+          <p>token: {this.state.sessionToken}</p>
+          <p>displayName: {this.state.user.displayName}</p>
+          <p>role: {this.state.user.role}</p>
+          <p>userId: {this.state.user.userId}</p>
+        </div>
       </div>
     );
   }
