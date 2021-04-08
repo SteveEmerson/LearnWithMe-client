@@ -28,11 +28,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
     }
   }
 
-handleSubmit(event: Event) { // not sure this is right, but everything needs typed yo!
-    event.preventDefault();
-  }
   render() {
-    // NOTE ... COULD TRY USING FORMIK FOR THIS WHEN GET TO STYLING
     return(
       <div>
 
