@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useForm } from 'react-hook-form';
 
 type SignupProps = {
   setAppState: Function
@@ -34,8 +33,6 @@ class Signup extends React.Component<SignupProps, SignupState> {
       }
     }
   }
-
- const { register, handleSubmit } = useForm<FormData>();
 
   render() {
     return(
