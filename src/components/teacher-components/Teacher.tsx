@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import UpdateSettings from '../settings-components/UpdateSettings'
+import TeacherStudentView from './TeacherStudentView';
 
 type TeacherProps = {
   currUser: User
@@ -30,8 +33,18 @@ class Teacher extends React.Component<TeacherProps, {}> {
   render() {
     return(
       <div>
-        <h4><button onClick={this.handleLogout}>Logout</button></h4>
-        Got to teacher
+        <h1> Teacher </h1>
+        <Router>
+          <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+            <Link to='/'><h4>LearnWithMe</h4></Link>
+            <h4><button onClick={this.handleLogout}>Logout</button></h4>
+            <Link to='/settings'><h4>Settings</h4></Link>
+          </div>
+          <Switch>
+            <Route exact path='/'><TeacherStudentView /></Route>
+            <Route exact path='/settings'><UpdateSettings role={this.props.currUser.role} userId={this.props.currUser.userId} setAppState={this.props.setAppState}/></Route>
+          </Switch>
+        </Router>
       </div>
     )
   }
