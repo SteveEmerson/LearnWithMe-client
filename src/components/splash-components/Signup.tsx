@@ -124,14 +124,12 @@ class Signup extends React.Component<SignupProps, SignupState> {
           </div>
           <input type="submit" value="Submit" />
         </form>
-        <br/>
-        <hr/>
-        <br/>
-        <h1> Current Signin State</h1>
+
+        {/* <h1> Current Signin State</h1>
         <p>displayName: {this.state.displayName}</p>
         <p>email: {this.state.email}</p>
         <p>password: {this.state.password}</p>
-        <p>role: {this.state.role}</p>
+        <p>role: {this.state.role}</p> */}
       </div>
     )
   }

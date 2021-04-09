@@ -117,13 +117,11 @@ class Login extends React.Component<LoginProps, LoginState> {
           </div>
           <input type="submit" value="Submit" />
         </form>
-        <br/>
-        <hr/>
-        <br/>
-        <h1> Current Login State</h1>
+
+        {/* <h1> Current Login State</h1>
         <p>email: {this.state.email}</p>
         <p>password: {this.state.password}</p>
-        <p>role: {this.state.role}</p>
+        <p>role: {this.state.role}</p> */}
       </div>
     )
   }

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import './App.css';
-import Splash from './components/splash-components/Splash'
+import Splash from './components/splash-components/Splash';
+import Teacher from './components/teacher-components/Teacher';
+import Student from './components/student-components/Student';
 
 type User = {
   role: string
@@ -23,15 +25,16 @@ class App extends React.Component<{}, AppState> {
         displayName: "",
         userId: 0,
         partnerList: [],
-        availability: {temp:""}
+        availability: {temp: {}}
+       
       }
     }
   }
 
-  handler = (currUser: User) :void => {
-    console.log(currUser);
+  handler = (logoutUser: User) :void => {
+    console.log(logoutUser);
     this.setState(() => {
-    return  {user: currUser}
+    return  {user: logoutUser}
     })
     console.log(this.state)
   }
@@ -39,16 +42,25 @@ class App extends React.Component<{}, AppState> {
   render() {
     return (
       <div className="App">
-        <Splash setAppState={this.handler}/>
-        <div>
+        {
+        this.state.user.role === "" ? 
+          <Splash setAppState={this.handler}/> 
+        :
+        this.state.user.role === "teacher" ? 
+          <Teacher currUser={this.state.user} setAppState={this.handler}/> 
+        :
+          <Student currUser={this.state.user} setAppState={this.handler}/>
+        }
+        
+        
+        
+        {/* <div>
           <h1>Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>
           <p>role: {this.state.user.role}</p>
           <p>userId: {this.state.user.userId}</p>
           <p>sessionToken: {localStorage.getItem('sessionToken')}</p>
-          {/* <p>partnerList: {this.state.user.partnerList}</p> */}
-          {/* <p>availability: {this.state.user.availability}</p> */}
-        </div>
+        </div> */}
       </div>
     );
   }

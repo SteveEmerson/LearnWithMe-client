@@ -1,6 +1,17 @@
 import * as React from 'react';
 
-class UpdateSettings extends React.Component<{}, {}>{
+type USProps = {
+  setAppState: Function
+}
+
+type USState = {
+  email: string
+  password: string
+  role: string
+  displayName: string
+}
+
+class UpdateSettings extends React.Component<USProps, USState>{
 
   render(){
 

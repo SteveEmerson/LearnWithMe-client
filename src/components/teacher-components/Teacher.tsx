@@ -1,11 +1,38 @@
 import * as React from 'react';
-import { Component } from 'react';
 
-class Teacher extends Component {
+type TeacherProps = {
+  currUser: User
+  setAppState: Function
+}
+
+type User = {
+  userId: number
+  displayName: string
+  partnerList: number[]
+  role: string
+  availability?: {temp?:any}
+}
+class Teacher extends React.Component<TeacherProps, {}> {
+
+  handleLogout = () :void => {
+    localStorage.removeItem('sessionToken')
+    this.props.setAppState(
+      {
+        role: "",
+        displayName: "",
+        userId: 0,
+        partnerList: [],
+        availability: {temp:{}}
+      }
+    )
+  }
 
   render() {
     return(
-      <div>Got to teacher</div>
+      <div>
+        <h4><button onClick={this.handleLogout}>Logout</button></h4>
+        Got to teacher
+      </div>
     )
   }
 }
