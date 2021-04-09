@@ -37,29 +37,35 @@ class Signup extends React.Component<SignupProps, SignupState> {
   
   handleSubmit = (e: React.SyntheticEvent) : void => {
     e.preventDefault();
-
-    const url: string = `http://localhost:3000/${this.state.role}/register`
-    fetch(url,
-    {
-        method: 'POST',
-        body: JSON.stringify({email: this.state.email, password: this.state.password, name:this.state.displayName}),
-        headers: new Headers ({
-        'Content-Type': 'application/json',
-        })
-    })
-    .then((res) => res.json())
-    .then((user: User) => {
-        console.log(user);
-        localStorage.setItem('sessionToken', user.sessionToken); 
-        this.props.setAppState(
-          {
-              role:user.role,
-              displayName: user.displayName,
-              userId: user.userId,
-              partnerList: [],
-              availability: {temp:""}
+    if(this.state.role === ""){
+      console.log("Error: No Role Given")
+    }else{
+      const url: string = `http://localhost:3000/${this.state.role}/register`
+      fetch(url,
+      {
+          method: 'POST',
+          body: JSON.stringify({email: this.state.email, password: this.state.password, name:this.state.displayName}),
+          headers: new Headers ({
+          'Content-Type': 'application/json',
           })
-    })
+      })
+      .then((res) => res.json())
+      .then((user: User) => {
+          console.log(user);
+          localStorage.setItem('sessionToken', user.sessionToken); 
+          this.props.setAppState(
+            {
+                role:user.role,
+                displayName: user.displayName,
+                userId: user.userId,
+                partnerList: [],
+                availability: {temp:""}
+            })
+      })
+      .catch(err => {
+        console.log(`Error in fetch: ${err}`)
+      })
+    }
   }
 
   // testSetAppState = () :void =>  {

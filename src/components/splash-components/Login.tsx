@@ -37,29 +37,36 @@ class Login extends React.Component<LoginProps, LoginState> {
   
   handleSubmit = (e: React.SyntheticEvent) : void => {
     e.preventDefault();
+    if(this.state.role === ""){
+      console.log("Error: No Role Given")
+    }else{
 
-    const url: string = `http://localhost:3000/${this.state.role}/signin`
-    fetch(url,
-    {
-        method: 'POST',
-        body: JSON.stringify({email: this.state.email, password: this.state.password}),
-        headers: new Headers ({
-        'Content-Type': 'application/json',
-        })
-    })
-    .then((res) => res.json())
-    .then((user: User) => {
-        console.log(user);
-        localStorage.setItem('sessionToken', user.sessionToken); 
-        this.props.setAppState(
-          {
-            role:user.role,
-            displayName: user.displayName,
-            userId: user.userId,
-            partnerList: [],
-            availability: {temp:""}
+      const url: string = `http://localhost:3000/${this.state.role}/signin`
+      fetch(url,
+        {
+          method: 'POST',
+          body: JSON.stringify({email: this.state.email, password: this.state.password}),
+          headers: new Headers ({
+            'Content-Type': 'application/json',
           })
-    })
+        })
+        .then((res) => res.json())
+        .then((user: User) => {
+          console.log(user);
+          localStorage.setItem('sessionToken', user.sessionToken); 
+          this.props.setAppState(
+            {
+              role:user.role,
+              displayName: user.displayName,
+              userId: user.userId,
+              partnerList: [],
+              availability: {temp:""}
+            })
+          })
+          .catch(err => {
+            console.log(`Error in fetch: ${err}`)
+          })
+        }
   }
 
   // testSetAppState = () :void =>  {
@@ -93,7 +100,7 @@ class Login extends React.Component<LoginProps, LoginState> {
             <p>Role:</p>
             <div>
               <label htmlFor="student"> Student</label>
-              <input type="radio" name="role" id="student" value="student" defaultChecked onChange={this.roleChange}/>
+              <input type="radio" name="role" id="student" value="student" onChange={this.roleChange}/>
             </div>
             <div>
               <label htmlFor="teacher"> Teacher</label>
