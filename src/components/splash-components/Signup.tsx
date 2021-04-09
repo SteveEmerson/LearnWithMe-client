@@ -97,7 +97,8 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   render() {
     return(
-      <div>
+      <div style={{textAlign:'left', marginLeft:'50px'}}>
+        <h2>Signup</h2>
         <form onSubmit={this.handleSubmit}>
           <div>
             <p>Role:</p>

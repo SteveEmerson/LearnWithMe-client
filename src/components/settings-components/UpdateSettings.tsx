@@ -24,16 +24,15 @@ type FetchData = {
 }
 
 type USProps = {
-  userId: number
-  role: string
+  user: User
   setAppState: Function
 }
 
 type USState = {
-  email: string,
-  passwordhash: string,
+  email: string
+  passwordhash: string
   currPassword: string
-  newPassword: string,
+  newPassword: string
   displayName: string
   partnerList: number[] | undefined
   availability?: {temp?: any}
@@ -48,15 +47,15 @@ class UpdateSettings extends React.Component<USProps, USState>{
       passwordhash: "",
       currPassword: "",
       newPassword: "",
-      displayName: "",
-      partnerList: [],
-      availability: {},
+      displayName: this.props.user.displayName,
+      partnerList: this.props.user.partnerList,
+      availability: this.props.user.availability,
       hideSetPassword: true
     }
   }
 
   componentDidMount(){
-    const url: string = `http://localhost:3000/${this.props.role}/${this.props.userId}`
+    const url: string = `http://localhost:3000/${this.props.user.role}/${this.props.user.userId}`
 
     fetch(url,
       {
@@ -68,14 +67,13 @@ class UpdateSettings extends React.Component<USProps, USState>{
       })
       .then((res) => res.json())
       .then((data: FetchData) => {
-        console.log(data)
+        let partners: number[]|undefined = (data.studentList) ? data.studentList: data.teacherList;
           this.setState(
             {
                 email: data.email,
                 passwordhash: data.passwordhash,
                 displayName: data.name,
-                partnerList: 
-                  (data.role === "teacher") ? data.teacherList: data.studentList,
+                partnerList: partners,
                 availability: data.availability
             })
       })
@@ -85,46 +83,46 @@ class UpdateSettings extends React.Component<USProps, USState>{
   }
 
   renderForm = () =>  {
-
-    let currPartnerList: number[] = (this.state.partnerList) ? this.state.partnerList : [];
-
     return(
-      <form onSubmit={this.handleSubmit}>
-        <div>
-          <label htmlFor="name"> Display Name:</label>
-          <input type="text" name="name" id="name" value={this.state.displayName} onChange={this.nameChange}/>
-        </div>
-        <div>
-          <label htmlFor="email"> School email:</label>
-          <input type="text" name="email" id="email" value={this.state.email} onChange={this.emailChange}/>
-        </div>
-        <div>
-          <label htmlFor="showSetPassword"> Password:</label>
-          <button 
-            id="email" 
-            value={this.state.email} 
-            onClick={() => this.setState({hideSetPassword:!this.state.hideSetPassword})}
-          >
-            {(this.state.hideSetPassword ? "update" : "cancel")}
-          </button>
-          <div hidden={this.state.hideSetPassword}>
-            <label htmlFor="currpassword"> Current Password:</label>
-            <input type="text" name="currpassword" id="currpassword" onChange={this.currPasswordChange}/>
-            <label htmlFor="password"> New Password:</label>
-            <input type="text" name="newpassword" id="newpassword" value={this.state.newPassword} onChange={this.newPasswordChange}/>
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <div>
+            <label htmlFor="name"> Display Name:</label>
+            <input type="text" name="name" id="name" value={this.state.displayName} onChange={this.nameChange}/>
           </div>
           <div>
-            <UpdatePartnerList role={this.props.role} currPartnerList={currPartnerList} setSettingsState={this.setState}/>
+            <label htmlFor="email"> School email:</label>
+            <input type="text" name="email" id="email" value={this.state.email} onChange={this.emailChange}/>
           </div>
+          <div>
+            <label htmlFor="showSetPassword"> Password:</label>
+            <button 
+              id="email" 
+              value={this.state.email} 
+              onClick={() => this.setState({hideSetPassword:!this.state.hideSetPassword})}
+            >
+              {(this.state.hideSetPassword ? "update" : "cancel")}
+            </button>
+            <div hidden={this.state.hideSetPassword}>
+              <label htmlFor="currpassword"> Current Password:</label>
+              <input type="text" name="currpassword" id="currpassword" onChange={this.currPasswordChange}/>
+              <label htmlFor="password"> New Password:</label>
+              <input type="text" name="newpassword" id="newpassword" value={this.state.newPassword} onChange={this.newPasswordChange}/>
+            </div>
+
+          </div>
+          <input type="submit" value="Submit" />
+        </form>
+        <div>
+          <UpdatePartnerList user={this.props.user} setSettingsState={this.setState}/>
         </div>
-        <input type="submit" value="Submit" />
-      </form>
+      </div>
     )
   }
 
   handleSubmit = (e: React.SyntheticEvent) : void => {
     e.preventDefault();
-    const url: string = `http://localhost:3000/${this.props.role}/register`
+    const url: string = `http://localhost:3000/${this.props.user.role}/register`
     fetch(url,
     {
         method: 'PUT',
@@ -181,9 +179,9 @@ class UpdateSettings extends React.Component<USProps, USState>{
         <p>passwordHash: {this.state.passwordhash}</p>
         <p>currPassword: {this.state.currPassword}</p>
         <p>newPassword: {this.state.newPassword}</p>
-        <p>partnerList: {this.state.partnerList}</p>
+        <p>partnerList: {String(this.state.partnerList)}</p>
         <p>availability: {String(this.state.availability)}</p>
-        <p>role: {this.props.role}</p>
+        <p>role: {this.props.user.role}</p>
       </div>
     )
   }

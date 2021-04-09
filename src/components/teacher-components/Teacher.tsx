@@ -31,8 +31,9 @@ class Teacher extends React.Component<TeacherProps, {}> {
   }
 
   render() {
+    console.log(this.props.currUser)
     return(
-      <div>
+      <div style={{textAlign:'left', marginLeft:'50px'}}>
         <h1> Teacher </h1>
         <Router>
           <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
@@ -42,7 +43,7 @@ class Teacher extends React.Component<TeacherProps, {}> {
           </div>
           <Switch>
             <Route exact path='/'><TeacherStudentView /></Route>
-            <Route exact path='/settings'><UpdateSettings role={this.props.currUser.role} userId={this.props.currUser.userId} setAppState={this.props.setAppState}/></Route>
+            <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>
           </Switch>
         </Router>
       </div>

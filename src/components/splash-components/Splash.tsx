@@ -41,7 +41,6 @@ class Splash extends React.Component<SplashProps, {}> {
             <Route exact path='/'><Home /></Route>
             <Route exact path='/login'><Login setAppState={this.props.setAppState}/></Route>
             <Route exact path='/signup'><Signup setAppState={this.props.setAppState}/></Route>
-
           </Switch>
         </Router>
         <br/>

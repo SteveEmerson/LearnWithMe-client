@@ -30,7 +30,7 @@ class Student extends React.Component<StudentProps, {}> {
 
   render() {
     return(
-      <div>
+      <div style={{textAlign:'left', marginLeft:'50px'}}>
         <h4><button onClick={this.handleLogout}>Logout</button></h4>
         Got to student
       </div>

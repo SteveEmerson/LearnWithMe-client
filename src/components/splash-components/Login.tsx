@@ -51,15 +51,16 @@ class Login extends React.Component<LoginProps, LoginState> {
           })
         })
         .then((res) => res.json())
-        .then((user: User) => {
+        .then((user) => {
           console.log(user);
+          let partners: number[] = (user.studentList) ? user.studentList: user.teacherList;
           localStorage.setItem('sessionToken', user.sessionToken); 
           this.props.setAppState(
             {
               role:user.role,
               displayName: user.displayName,
               userId: user.userId,
-              partnerList: [],
+              partnerList: partners,
               availability: {temp:""}
             })
           })
@@ -94,7 +95,8 @@ class Login extends React.Component<LoginProps, LoginState> {
 
   render() {
     return(
-      <div>
+      <div style={{textAlign:'left', marginLeft:'50px'}}>
+        <h2>Login</h2>
         <form onSubmit={this.handleSubmit}>
           <div>
             <p>Role:</p>

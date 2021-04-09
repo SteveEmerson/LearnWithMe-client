@@ -1,13 +1,23 @@
 import * as React from 'react';
 
-type UPLProps = {
-  currPartnerList: number[]
-  setSettingsState: Function
+
+type User = {
+  userId: number
+  displayName: string
+  partnerList: number[]
   role: string
+  availability?: {temp?:any}
+}
+
+type UPLProps = {
+  user: User
+  setSettingsState: Function
+
 }
 
 type UPLState = {
-  newPartners: number[]
+  newPartnerList: number[]
+  newPartnerData: Array<Partner>
   allDatabasePartners: Array<Partner>
 }
 
@@ -35,19 +45,20 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   constructor(props: UPLProps){
     super(props)
     this.state = {
-      newPartners: this.props.currPartnerList,
+      newPartnerList: this.props.user.partnerList,
+      newPartnerData: [],
       allDatabasePartners: []
     }
   }
 
   componentDidMount(){
     this.makeAllDatabasePartnerList();
-    
+    this.makeNewPartnerData()
   }
 
-  makeAllDatabasePartnerList = (): void => {
+  makeAllDatabasePartnerList = () => {
 
-    let partnerRole = (this.props.role === 'teacher'? "student": "teacher")
+    let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
     const url: string = `http://localhost:3000/${partnerRole}/`
     fetch(url,
       {
@@ -71,36 +82,64 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   }
 
 
-  // makeNewPartnerList = () => {
-  //   for(id in )
-  // }
-
-  getPartner(id: number){
-    let partnerRole = (this.props.role === 'teacher'? "student": "teacher")
-    const url: string = `http://localhost:3000/${partnerRole}/${id}`
-    fetch(url,
-      {
+  makeNewPartnerData = () => {
+    for(let id of this.state.newPartnerList){
+      let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
+      const url: string = `http://localhost:3000/${partnerRole}/${id}`
+      fetch(url,
+        {
           method: 'GET',
           headers: new Headers ({
           'Content-Type': 'application/json',
           'Authorization': String(localStorage.getItem('sessionToken'))
           })
-      })
-      .then((res) => res.json())
-      .then((data: FetchUserData) => {
-        return {id: data.id, name: data.name}
-      })
-      .catch(err => {
-        console.log(`Error in fetch: ${err}`)
-      }) 
+        })
+        .then((res) => res.json())
+        .then((data: FetchUserData) => {
+          return {id: data.id, name: data.name}
+        })
+        .then((partner: Partner) =>  this.state.newPartnerData.push(partner))
+        .catch(err => {
+          console.log(`Error in user fetch: ${err}`)
+        }) 
+    }
+  }
+
+  displayCurrentPartners = () => {
+    return (
+      <div>
+        <h5>Current Partners</h5>
+        {
+          this.state.newPartnerData.map((partner: Partner) => {
+            return (
+              <div>
+                <span>{partner.name}</span>
+                <button 
+                  onClick={() =>{
+                    let filteredPartnerList: number[] = this.state.newPartnerList.filter(id => id !== partner.id)
+                    this.setState({newPartnerList: filteredPartnerList})
+                  }}
+                  >
+                  remove
+                </button>
+              </div>
+            )
+          })
+        }
+
+      </div>
+     
+    )
   }
 
   render() {
     return(
       <div>
         <h3>Update Partner List</h3>
+        
+        {this.displayCurrentPartners()}
         <h5>All Database Partners</h5>
-        {this.state.allDatabasePartners.map((partner: Partner) => {return <p>{partner.name}</p>})}
+        {this.state.allDatabasePartners.map((partner: Partner) => <p>{partner.name}</p>)}
       </div>
     )
   }
