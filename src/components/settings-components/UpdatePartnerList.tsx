@@ -2,11 +2,13 @@ import * as React from 'react';
 
 
 type User = {
+  email: string
   userId: number
   displayName: string
   partnerList: number[]
   role: string
-  availability?: {temp?:any}
+  availability: {}
+  sessionToken: string
 }
 
 type UPLProps = {
@@ -18,7 +20,7 @@ type UPLProps = {
 type UPLState = {
   newPartnerList: number[]
   newPartnerData: Array<Partner>
-  allDatabasePartners: Array<Partner>
+  allDatabasePartnerData: Array<Partner>
   selectedPartner: number
 }
 
@@ -48,31 +50,30 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     this.state = {
       newPartnerList: this.props.user.partnerList,
       newPartnerData: [],
-      allDatabasePartners: [],
+      allDatabasePartnerData: [],
       selectedPartner: 0
     }
   }
 
   componentDidMount(){
     console.log("Mount")
-    console.log(this.state.newPartnerList)
-    console.log(this.state.newPartnerData)
+    console.log("Partner List on Mount", this.state.newPartnerList)
+    console.log("Partner Data on Mount", this.state.newPartnerData)
+    console.log("All Database Partner on Mount", this.state.allDatabasePartnerData)
+
     this.makeAllDatabasePartnerList();
-    this.makeNewPartnerData()
+    // this.makeNewPartnerData()
   }
 
   componentDidUpdate(){
     console.log("Update")
     console.log("Partner List: ",this.state.newPartnerList)
     console.log("Partner Data: ", this.state.newPartnerData)
-    console.log("All Database Partner", this.state.allDatabasePartners)
+    console.log("All Database Partner", this.state.allDatabasePartnerData)
 
   }
 
-
-
   makeAllDatabasePartnerList = () => {
-
     let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
     const url: string = `http://localhost:3000/${partnerRole}/`
     fetch(url,
@@ -80,24 +81,44 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
           method: 'GET',
           headers: new Headers ({
           'Content-Type': 'application/json',
-          'Authorization': String(localStorage.getItem('sessionToken'))
+          'Authorization': this.props.user.sessionToken
           })
       })
       .then((res) => res.json())
       .then((data: AllPartners) => {
-        let allPartners: Array<Partner> = data.map((partner:FetchUserData) => {
+        let allPartners: Array<Partner> = 
+        data.map((partner:FetchUserData) => {
           return {id: partner.id, name: partner.name}
         })
-        this.setState({allDatabasePartners: allPartners})
+        .filter((partner: Partner) => !this.props.user.partnerList.includes(partner.id))
+
+        this.setState({allDatabasePartnerData: allPartners})
+
+        let newPartners: Array<Partner> = 
+        data.map((partner: FetchUserData) => {
+          return {id: partner.id, name: partner.name}
+        })
+        .filter((partner: Partner) => this.props.user.partnerList.includes(partner.id))
+        this.setState({newPartnerData: newPartners})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
       }) 
   }
 
-  displayAllDatabasePartners = () => {
+  // displayAllDatabasePartners = () => {
     
-  }
+  // }
+
+  // displayCurrentPartners = () => {
+  //   return (
+  //     <div>
+        
+
+  //     </div>
+     
+  //   )
+  // }
 
 
   makeNewPartnerData = () => {
@@ -109,7 +130,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
           method: 'GET',
           headers: new Headers ({
           'Content-Type': 'application/json',
-          'Authorization': String(localStorage.getItem('sessionToken'))
+          'Authorization': this.props.user.sessionToken
           })
         })
         .then((res) => res.json())
@@ -128,26 +149,32 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   //   this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
   // }
 
-  handleAddStudentChange = (e: React.FormEvent<HTMLSelectElement>) => {
+  handleAddStudent = (e: React.FormEvent<HTMLSelectElement>) => {
+    e.preventDefault();
     console.log(e.currentTarget.value)
-    this.setState({selectedPartner: +e.currentTarget.value})
-    this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
+    // this.setState({selectedPartner: +e.currentTarget.value})
+    // this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
+    // let tempAll = this.state.allDatabasePartnerData
   }
 
-  // displayCurrentPartners = () => {
-  //   return (
-  //     <div>
-        
+  handleRemoveStudent = (id: number) => {
+    console.log(id)
+    // let filteredPartnerList: number[] = this.state.newPartnerList.filter(id => id !== partner.id)
+    // this.setState({newPartnerList: filteredPartnerList})
+    // Get the data for the student to remove
+    let [remStudent]: Array<Partner> = this.state.newPartnerData.filter(p => p.id === id);
+    let tempAll: Array<Partner> = this.state.allDatabasePartnerData;
+    tempAll.push(remStudent);
+    this.setState({allDatabasePartnerData: tempAll});
+    let filteredPartnerData: Array<Partner> = this.state.newPartnerData.filter(p => p.id !== id);
+    this.setState({newPartnerData: filteredPartnerData});
 
-  //     </div>
-     
-  //   )
-  // }
+
+  }
 
   render() {
     return(
       <div>
-        <h3>Update Partner List</h3>
         <h5>Current Partners</h5>
         <ol>
         {
@@ -155,14 +182,9 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
             return (
                 <li key={`Partner${partner.id}`}>{partner.name}
                 <button
-                  key={`Remove${partner.id}`} 
-                  onClick={() =>{
-                    let filteredPartnerList: number[] = this.state.newPartnerList.filter(id => id !== partner.id)
-                    this.setState({newPartnerList: filteredPartnerList})
-                    let filteredPartnerData: Partner[] = this.state.newPartnerData.filter(p => p.id !== partner.id)
-                    this.setState({newPartnerData: filteredPartnerData})
-                    
-                  }}
+                  key={`Remove${partner.id}`}
+                  value={partner.id}
+                  onClick={() => this.handleRemoveStudent(partner.id)}
                   >
                   remove
                 </button>
@@ -174,12 +196,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
         <h5>All Database Partners</h5>
         
           {
-            this.state.allDatabasePartners
-            .filter((partner: Partner) => {
-              return(
-                !this.state.newPartnerList.includes(partner.id)
-              )
-            })
+            this.state.allDatabasePartnerData
             .map((partner: Partner) => {
               return(
                 <div>
@@ -187,8 +204,8 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
                   <button
                     key={`Add${partner.id}`} 
                     onClick={() =>{
-                      let filteredPartnerList: Partner[] = this.state.allDatabasePartners.filter(p => p.id !== partner.id)
-                      this.setState({allDatabasePartners: filteredPartnerList})
+                      let filteredPartnerList: Partner[] = this.state.allDatabasePartnerData.filter(p => p.id !== partner.id)
+                      this.setState({allDatabasePartnerData: filteredPartnerList})
                       this.setState({newPartnerList: [...this.state.newPartnerList, partner.id]})
                       this.setState({newPartnerData: [...this.state.newPartnerData, partner]})
                     }}

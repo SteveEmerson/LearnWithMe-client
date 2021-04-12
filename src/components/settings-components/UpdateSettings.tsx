@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import UpdatePartnerList from './UpdatePartnerList'
+import UpdatePartnerList from './UpdatePartnerList'
 //import fetch, {Headers} from 'node-fetch';
 
 type User = {
@@ -181,6 +181,8 @@ class UpdateSettings extends React.Component<USProps, USState>{
         <h1>Update Settings</h1>
         <h3>Update Personal Information</h3>
         {this.renderPersonalInfoForm()}
+        <h3>Update Partner List</h3>
+        <UpdatePartnerList user={this.props.user} setSettingsState={this.setState}/>
         <hr/>
         <h3> Current Settings State</h3>
         <p>displayName: {this.state.displayName}</p>
