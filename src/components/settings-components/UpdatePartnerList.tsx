@@ -70,7 +70,6 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     console.log("Partner List: ",this.state.newPartnerList)
     console.log("Partner Data: ", this.state.newPartnerData)
     console.log("All Database Partner", this.state.allDatabasePartnerData)
-
   }
 
   makeAllDatabasePartnerList = () => {
@@ -149,27 +148,23 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   //   this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
   // }
 
-  handleAddStudent = (e: React.FormEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-    console.log(e.currentTarget.value)
-    // this.setState({selectedPartner: +e.currentTarget.value})
-    // this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
-    // let tempAll = this.state.allDatabasePartnerData
+  handleAddStudent = (partner: Partner) => {
+    console.log(partner)
+    let tempNew: Array<Partner> = this.state.newPartnerData;
+    tempNew.push(partner);
+    this.setState({newPartnerData: tempNew});
+    let filteredAllPartnerData: Array<Partner> = this.state.allDatabasePartnerData.filter(p => p !== partner);
+    this.setState({allDatabasePartnerData: filteredAllPartnerData});
   }
 
-  handleRemoveStudent = (id: number) => {
-    console.log(id)
-    // let filteredPartnerList: number[] = this.state.newPartnerList.filter(id => id !== partner.id)
-    // this.setState({newPartnerList: filteredPartnerList})
-    // Get the data for the student to remove
-    let [remStudent]: Array<Partner> = this.state.newPartnerData.filter(p => p.id === id);
+  // THIS WORKS AS OF 4.12 AM
+  handleRemoveStudent = (partner: Partner) => {
+    console.log(partner)
     let tempAll: Array<Partner> = this.state.allDatabasePartnerData;
-    tempAll.push(remStudent);
+    tempAll.push(partner);
     this.setState({allDatabasePartnerData: tempAll});
-    let filteredPartnerData: Array<Partner> = this.state.newPartnerData.filter(p => p.id !== id);
+    let filteredPartnerData: Array<Partner> = this.state.newPartnerData.filter(p => p !== partner);
     this.setState({newPartnerData: filteredPartnerData});
-
-
   }
 
   render() {
@@ -184,7 +179,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
                 <button
                   key={`Remove${partner.id}`}
                   value={partner.id}
-                  onClick={() => this.handleRemoveStudent(partner.id)}
+                  onClick={() => this.handleRemoveStudent(partner)}
                   >
                   remove
                 </button>
@@ -203,12 +198,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
                   <p id={String(partner.id)} key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</p>
                   <button
                     key={`Add${partner.id}`} 
-                    onClick={() =>{
-                      let filteredPartnerList: Partner[] = this.state.allDatabasePartnerData.filter(p => p.id !== partner.id)
-                      this.setState({allDatabasePartnerData: filteredPartnerList})
-                      this.setState({newPartnerList: [...this.state.newPartnerList, partner.id]})
-                      this.setState({newPartnerData: [...this.state.newPartnerData, partner]})
-                    }}
+                    onClick={() =>{this.handleAddStudent(partner)}}
                     >
                     add
                   </button>
