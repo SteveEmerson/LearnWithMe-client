@@ -9,29 +9,36 @@ type TeacherProps = {
 }
 
 type User = {
+  email: string
   userId: number
   displayName: string
   partnerList: number[]
   role: string
-  availability?: {temp?:any}
+  availability: {}
+  sessionToken: string
 }
+
 class Teacher extends React.Component<TeacherProps, {}> {
 
-  handleLogout = () :void => {
+  handleLogout = () => {
     localStorage.removeItem('sessionToken')
     this.props.setAppState(
       {
-        role: "",
-        displayName: "",
-        userId: 0,
-        partnerList: [],
-        availability: {temp:{}}
+        user: {
+          email: "",
+          role: "",
+          displayName: "",
+          userId: 0,
+          partnerList: [],
+          availability: {},
+          sessionToken:""
+        }
       }
     )
   }
 
   render() {
-    console.log(this.props.currUser)
+    //console.log(this.props.currUser)
     return(
       <div style={{textAlign:'left', marginLeft:'50px'}}>
         <h1> Teacher </h1>

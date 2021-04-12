@@ -1,13 +1,15 @@
 import * as React from 'react';
-import UpdatePartnerList from './UpdatePartnerList'
+// import UpdatePartnerList from './UpdatePartnerList'
 //import fetch, {Headers} from 'node-fetch';
 
 type User = {
+  email: string
   userId: number
   displayName: string
   partnerList: number[]
   role: string
-  availability?: {temp?:any}
+  availability: {}
+  sessionToken: string
 }
 
 type FetchData = {
@@ -34,7 +36,7 @@ type USState = {
   currPassword: string
   newPassword: string
   displayName: string
-  partnerList: number[] | undefined
+  partnerList: number[]
   availability?: {temp?: any}
   hideSetPassword: boolean
 }
@@ -43,7 +45,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
   constructor(props: USProps){
     super(props);
     this.state = {
-      email: "",
+      email: this.props.user.email,
       passwordhash: "",
       currPassword: "",
       newPassword: "",
@@ -62,27 +64,28 @@ class UpdateSettings extends React.Component<USProps, USState>{
           method: 'GET',
           headers: new Headers ({
           'Content-Type': 'application/json',
-          'Authorization': String(localStorage.getItem('sessionToken'))
+          'Authorization': this.props.user.sessionToken
           })
       })
       .then((res) => res.json())
       .then((data: FetchData) => {
-        let partners: number[]|undefined = (data.studentList) ? data.studentList: data.teacherList;
-          this.setState(
-            {
-                email: data.email,
-                passwordhash: data.passwordhash,
-                displayName: data.name,
-                partnerList: partners,
-                availability: data.availability
-            })
+        this.setState(
+          {
+              passwordhash: data.passwordhash,
+          })
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
       }) 
   }
 
-  renderForm = () =>  {
+  togglePssword= (e: React.SyntheticEvent)=> {
+    e.preventDefault();
+    this.setState({hideSetPassword:!this.state.hideSetPassword})
+
+  }
+
+  renderPersonalInfoForm = () =>  {
     return(
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -97,9 +100,8 @@ class UpdateSettings extends React.Component<USProps, USState>{
           <div>
             <label htmlFor="showSetPassword"> Password:</label>
             <button 
-              id="email" 
-              value={this.state.email} 
-              onClick={() => this.setState({hideSetPassword:!this.state.hideSetPassword})}
+              id="togglepassword"  
+              onClick={this.togglePssword}
             >
               {(this.state.hideSetPassword ? "update" : "cancel")}
             </button>
@@ -113,37 +115,42 @@ class UpdateSettings extends React.Component<USProps, USState>{
           </div>
           <input type="submit" value="Submit" />
         </form>
-        <div>
+        {/* <div>
           <UpdatePartnerList user={this.props.user} setSettingsState={this.setState}/>
-        </div>
+        </div> */}
       </div>
     )
   }
 
-  handleSubmit = (e: React.SyntheticEvent) : void => {
+  handleSubmit = (e: React.SyntheticEvent)=> {
     e.preventDefault();
-    const url: string = `http://localhost:3000/${this.props.user.role}/register`
+    const url: string = `http://localhost:3000/${this.props.user.role}/${this.props.user.userId}`
+    console.log(url);
     fetch(url,
-    {
-        method: 'PUT',
-        body: JSON.stringify(
-          {
-            email: this.state.email, 
-            name:this.state.displayName, 
-            partnerList: this.state.partnerList, }),
-        headers: new Headers ({
+    { 
+      method: 'PUT',
+      headers: new Headers ({
         'Content-Type': 'application/json',
+        'Authorization': this.props.user.sessionToken
+        }),
+      body: JSON.stringify(
+        {
+          email: this.state.email, 
+          name: this.state.displayName,
+          //password: this.state.newPassword  //coming in version 2.0
+
         })
+      
     })
     .then((res) => res.json())
     .then((user: User) => {
-        console.log(user);
+        console.log("Updated Settings", user);
         this.props.setAppState(
           {
               displayName: user.displayName,
               userId: user.userId,
-              partnerList: [],
-              availability: {temp:""}
+              partnerList: user.partnerList,
+              availability: user.availability
           })
     })
     .catch(err => {
@@ -168,10 +175,12 @@ class UpdateSettings extends React.Component<USProps, USState>{
   }
 
   render() {
+    console.log(this.props.user)
     return(
       <div style={{textAlign:'left', marginLeft:'50px'}}>
         <h1>Update Settings</h1>
-        {this.renderForm()}
+        <h3>Update Personal Information</h3>
+        {this.renderPersonalInfoForm()}
         <hr/>
         <h3> Current Settings State</h3>
         <p>displayName: {this.state.displayName}</p>

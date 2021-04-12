@@ -19,6 +19,7 @@ type UPLState = {
   newPartnerList: number[]
   newPartnerData: Array<Partner>
   allDatabasePartners: Array<Partner>
+  selectedPartner: number
 }
 
 type Partner = {
@@ -47,14 +48,28 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     this.state = {
       newPartnerList: this.props.user.partnerList,
       newPartnerData: [],
-      allDatabasePartners: []
+      allDatabasePartners: [],
+      selectedPartner: 0
     }
   }
 
   componentDidMount(){
+    console.log("Mount")
+    console.log(this.state.newPartnerList)
+    console.log(this.state.newPartnerData)
     this.makeAllDatabasePartnerList();
     this.makeNewPartnerData()
   }
+
+  componentDidUpdate(){
+    console.log("Update")
+    console.log("Partner List: ",this.state.newPartnerList)
+    console.log("Partner Data: ", this.state.newPartnerData)
+    console.log("All Database Partner", this.state.allDatabasePartners)
+
+  }
+
+
 
   makeAllDatabasePartnerList = () => {
 
@@ -74,11 +89,14 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
           return {id: partner.id, name: partner.name}
         })
         this.setState({allDatabasePartners: allPartners})
-        console.log(this.state.allDatabasePartners)
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
       }) 
+  }
+
+  displayAllDatabasePartners = () => {
+    
   }
 
 
@@ -105,41 +123,83 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     }
   }
 
-  displayCurrentPartners = () => {
-    return (
-      <div>
-        <h5>Current Partners</h5>
-        {
-          this.state.newPartnerData.map((partner: Partner) => {
-            return (
-              <div>
-                <span>{partner.name}</span>
-                <button 
-                  onClick={() =>{
-                    let filteredPartnerList: number[] = this.state.newPartnerList.filter(id => id !== partner.id)
-                    this.setState({newPartnerList: filteredPartnerList})
-                  }}
-                  >
-                  remove
-                </button>
-              </div>
-            )
-          })
-        }
+  // handleAddStudentSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
+  // }
 
-      </div>
-     
-    )
+  handleAddStudentChange = (e: React.FormEvent<HTMLSelectElement>) => {
+    console.log(e.currentTarget.value)
+    this.setState({selectedPartner: +e.currentTarget.value})
+    this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
   }
+
+  // displayCurrentPartners = () => {
+  //   return (
+  //     <div>
+        
+
+  //     </div>
+     
+  //   )
+  // }
 
   render() {
     return(
       <div>
         <h3>Update Partner List</h3>
-        
-        {this.displayCurrentPartners()}
+        <h5>Current Partners</h5>
+        <ol>
+        {
+          this.state.newPartnerData.map((partner: Partner) => {
+            return (
+                <li key={`Partner${partner.id}`}>{partner.name}
+                <button
+                  key={`Remove${partner.id}`} 
+                  onClick={() =>{
+                    let filteredPartnerList: number[] = this.state.newPartnerList.filter(id => id !== partner.id)
+                    this.setState({newPartnerList: filteredPartnerList})
+                    let filteredPartnerData: Partner[] = this.state.newPartnerData.filter(p => p.id !== partner.id)
+                    this.setState({newPartnerData: filteredPartnerData})
+                    
+                  }}
+                  >
+                  remove
+                </button>
+                </li>
+            )
+          })
+        }
+        </ol>
         <h5>All Database Partners</h5>
-        {this.state.allDatabasePartners.map((partner: Partner) => <p>{partner.name}</p>)}
+        
+          {
+            this.state.allDatabasePartners
+            .filter((partner: Partner) => {
+              return(
+                !this.state.newPartnerList.includes(partner.id)
+              )
+            })
+            .map((partner: Partner) => {
+              return(
+                <div>
+                  <p id={String(partner.id)} key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</p>
+                  <button
+                    key={`Add${partner.id}`} 
+                    onClick={() =>{
+                      let filteredPartnerList: Partner[] = this.state.allDatabasePartners.filter(p => p.id !== partner.id)
+                      this.setState({allDatabasePartners: filteredPartnerList})
+                      this.setState({newPartnerList: [...this.state.newPartnerList, partner.id]})
+                      this.setState({newPartnerData: [...this.state.newPartnerData, partner]})
+                    }}
+                    >
+                    add
+                  </button>
+                </div>
+              ) 
+            })
+          }
+   
       </div>
     )
   }

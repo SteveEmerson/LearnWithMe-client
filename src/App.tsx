@@ -5,11 +5,13 @@ import Teacher from './components/teacher-components/Teacher';
 import Student from './components/student-components/Student';
 
 type User = {
+  email: string
   role: string
   displayName: string
   userId: number
   partnerList: number[]
-  availability?: {temp: any}
+  availability: {}
+  sessionToken: string
 }
 
 type AppState = {
@@ -17,26 +19,21 @@ type AppState = {
 }
 
 class App extends React.Component<{}, AppState> {
-  constructor(){
-    super({});
+  constructor(props: any){
+    super(props);
     this.state = {
       user: {
+        email:"",
         role: "",
         displayName: "",
         userId: 0,
         partnerList: [],
-        availability: {temp: {}}
+        availability: {},
+        sessionToken: ""
        
       }
     }
-  }
-
-  handler = (logoutUser: User) :void => {
-    console.log(logoutUser);
-    this.setState(() => {
-    return  {user: logoutUser}
-    })
-    console.log(this.state)
+    this.setState = this.setState.bind(this)
   }
 
   render() {
@@ -44,23 +41,23 @@ class App extends React.Component<{}, AppState> {
       <div className="App">
         {
         this.state.user.role === "" ? 
-          <Splash setAppState={this.handler}/> 
+          <Splash setAppState={this.setState}/> 
         :
         this.state.user.role === "teacher" ? 
-          <Teacher currUser={this.state.user} setAppState={this.handler}/> 
+          <Teacher currUser={this.state.user} setAppState={this.setState}/> 
         :
-          <Student currUser={this.state.user} setAppState={this.handler}/>
+          <Student currUser={this.state.user} setAppState={this.setState}/>
         }
         
         
         
-        {/* <div>
+        <div>
           <h1>Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>
           <p>role: {this.state.user.role}</p>
           <p>userId: {this.state.user.userId}</p>
-          <p>sessionToken: {localStorage.getItem('sessionToken')}</p>
-        </div> */}
+          <p>sessionToken: {this.state.user.sessionToken}</p>
+        </div>
       </div>
     );
   }

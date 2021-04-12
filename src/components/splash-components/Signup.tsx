@@ -35,7 +35,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
     }
   }
   
-  handleSubmit = (e: React.SyntheticEvent) : void => {
+  handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if(this.state.role === ""){
       console.log("Error: No Role Given")
@@ -51,15 +51,17 @@ class Signup extends React.Component<SignupProps, SignupState> {
       })
       .then((res) => res.json())
       .then((user: User) => {
-          console.log(user);
-          localStorage.setItem('sessionToken', user.sessionToken); 
+          console.log(user); 
           this.props.setAppState(
             {
+              user:{
                 role:user.role,
                 displayName: user.displayName,
                 userId: user.userId,
                 partnerList: [],
-                availability: {temp:""}
+                availability: {},
+                sessionToken: user.sessionToken
+              }
             })
       })
       .catch(err => {

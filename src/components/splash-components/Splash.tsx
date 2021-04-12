@@ -10,20 +10,6 @@ type SplashProps = {
 
 class Splash extends React.Component<SplashProps, {}> {
 
-  handleLogout = () :void => {
-    console.log("got here")
-    localStorage.removeItem('sessionToken')
-    this.props.setAppState(
-      {
-        role: "",
-        displayName: "",
-        userId: 0,
-        partnerList: [],
-        availability: {temp:{}}
-      }
-    )
-  }
-
   render(){
     return (
       <div>

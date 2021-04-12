@@ -4,14 +4,14 @@ type LoginProps = {
   setAppState: Function
 }
 
-type User = {
-  userId: number
-  displayName: string
-  partnerList: string[]
-  role: string
-  availability: {temp?: any}
-  sessionToken: string
-}
+// type User = {
+//   userId: number
+//   displayName: string
+//   partnerList: string[]
+//   role: string
+//   availability: {temp?: any}
+//   sessionToken: string
+// }
 
 type LoginState = {
   email: string
@@ -52,16 +52,20 @@ class Login extends React.Component<LoginProps, LoginState> {
         })
         .then((res) => res.json())
         .then((user) => {
-          console.log(user);
+          //console.log(user);
           let partners: number[] = (user.studentList) ? user.studentList: user.teacherList;
-          localStorage.setItem('sessionToken', user.sessionToken); 
+          //console.log(partners)
           this.props.setAppState(
             {
-              role:user.role,
-              displayName: user.displayName,
-              userId: user.userId,
-              partnerList: partners,
-              availability: {temp:""}
+              user:{
+                email: user.email,
+                role: user.role,
+                displayName: user.displayName,
+                userId: user.userId,
+                partnerList: partners,
+                availability: user.availability,
+                sessionToken: user.sessionToken
+              }
             })
           })
           .catch(err => {
