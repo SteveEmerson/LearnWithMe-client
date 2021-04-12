@@ -125,14 +125,14 @@ class UpdateSettings extends React.Component<USProps, USState>{
   handleSubmit = (e: React.SyntheticEvent)=> {
     e.preventDefault();
     const url: string = `http://localhost:3000/${this.props.user.role}/${this.props.user.userId}`
-    console.log(url);
+    console.log(this.props.user.sessionToken);
     fetch(url,
     { 
       method: 'PUT',
-      headers: new Headers ({
+      headers:{
         'Content-Type': 'application/json',
         'Authorization': this.props.user.sessionToken
-        }),
+        },
       body: JSON.stringify(
         {
           email: this.state.email, 
