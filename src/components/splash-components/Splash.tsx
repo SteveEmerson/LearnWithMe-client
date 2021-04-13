@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom';
 import Login from './Login';
 import Signup from './Signup';
 import Home from './Home';
@@ -16,7 +16,7 @@ class Splash extends React.Component<SplashProps, {}> {
         <h1>Splash</h1>
         <Router>
           <div className="navbar" style={{margin:'40px', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-              <Link to='/'><h4> LearnWithMe </h4></Link>
+              <Link to='/home'><h4> LearnWithMe </h4></Link>
               <Link to='/login'><h4> Login </h4></Link>
               <Link to='/signup'><h4> Signup </h4></Link>
               
@@ -24,7 +24,8 @@ class Splash extends React.Component<SplashProps, {}> {
           <br/>
           <br/>
           <Switch>
-            <Route exact path='/'><Home /></Route>
+            <Route exact path='/'><Redirect to='/home' /></Route>
+            <Route exact path='/home'><Home /></Route>
             <Route exact path='/login'><Login setAppState={this.props.setAppState}/></Route>
             <Route exact path='/signup'><Signup setAppState={this.props.setAppState}/></Route>
           </Switch>
