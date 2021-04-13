@@ -54,9 +54,12 @@ class App extends React.Component<{}, AppState> {
         <div>
           <h1>Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>
+          <p>email: {this.state.user.email}</p>
           <p>role: {this.state.user.role}</p>
           <p>userId: {this.state.user.userId}</p>
           <p>sessionToken: {this.state.user.sessionToken}</p>
+          <p>partnerList: {this.state.user.partnerList}</p>
+          <p>availability: {String(this.state.user.availability)}</p>
         </div>
       </div>
     );

@@ -18,10 +18,9 @@ type UPLProps = {
 }
 
 type UPLState = {
-  newPartnerList: number[]
+  // newPartnerList: number[]
   newPartnerData: Array<Partner>
   allDatabasePartnerData: Array<Partner>
-  selectedPartner: number
 }
 
 type Partner = {
@@ -48,16 +47,16 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   constructor(props: UPLProps){
     super(props)
     this.state = {
-      newPartnerList: this.props.user.partnerList,
+      // newPartnerList: this.props.user.partnerList,
       newPartnerData: [],
-      allDatabasePartnerData: [],
-      selectedPartner: 0
+      allDatabasePartnerData: []
     }
+
   }
 
   componentDidMount(){
     console.log("Mount")
-    console.log("Partner List on Mount", this.state.newPartnerList)
+    // console.log("Partner List on Mount", this.state.newPartnerList)
     console.log("Partner Data on Mount", this.state.newPartnerData)
     console.log("All Database Partner on Mount", this.state.allDatabasePartnerData)
 
@@ -67,7 +66,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
 
   componentDidUpdate(){
     console.log("Update")
-    console.log("Partner List: ",this.state.newPartnerList)
+    // console.log("Partner List: ",this.state.newPartnerList)
     console.log("Partner Data: ", this.state.newPartnerData)
     console.log("All Database Partner", this.state.allDatabasePartnerData)
   }
@@ -105,23 +104,8 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
       }) 
   }
 
-  // displayAllDatabasePartners = () => {
-    
-  // }
-
-  // displayCurrentPartners = () => {
-  //   return (
-  //     <div>
-        
-
-  //     </div>
-     
-  //   )
-  // }
-
-
   makeNewPartnerData = () => {
-    for(let id of this.state.newPartnerList){
+    for(let id of this.props.user.partnerList){
       let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
       const url: string = `http://localhost:3000/${partnerRole}/${id}`
       fetch(url,
@@ -143,12 +127,8 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     }
   }
 
-  // handleAddStudentSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   this.setState({newPartnerList: [...this.state.newPartnerList, this.state.selectedPartner]})
-  // }
 
-  handleAddStudent = (partner: Partner) => {
+  handleAddPartner = (partner: Partner) => {
     console.log(partner)
     let tempNew: Array<Partner> = this.state.newPartnerData;
     tempNew.push(partner);
@@ -157,8 +137,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     this.setState({allDatabasePartnerData: filteredAllPartnerData});
   }
 
-  // THIS WORKS AS OF 4.12 AM
-  handleRemoveStudent = (partner: Partner) => {
+  handleRemovePartner = (partner: Partner) => {
     console.log(partner)
     let tempAll: Array<Partner> = this.state.allDatabasePartnerData;
     tempAll.push(partner);
@@ -166,28 +145,35 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     let filteredPartnerData: Array<Partner> = this.state.newPartnerData.filter(p => p !== partner);
     this.setState({newPartnerData: filteredPartnerData});
   }
+  
+  handleSubmitPartners = () => {
+    let newPartners: number[] = this.state.newPartnerData.map((partner: Partner) => partner.id);
+    console.log(newPartners);
+    this.props.setSettingsState({partnerList: newPartners});
 
+  }
   render() {
     return(
       <div>
         <h5>Current Partners</h5>
-        <ol>
+
         {
           this.state.newPartnerData.map((partner: Partner) => {
             return (
-                <li key={`Partner${partner.id}`}>{partner.name}
+              <div>
+                <span key={`Partner${partner.id}`}>{partner.name}</span>
                 <button
                   key={`Remove${partner.id}`}
                   value={partner.id}
-                  onClick={() => this.handleRemoveStudent(partner)}
+                  onClick={() => this.handleRemovePartner(partner)}
                   >
                   remove
                 </button>
-                </li>
+              </div>
             )
           })
         }
-        </ol>
+
         <h5>All Database Partners</h5>
         
           {
@@ -195,10 +181,10 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
             .map((partner: Partner) => {
               return(
                 <div>
-                  <p id={String(partner.id)} key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</p>
+                  <span id={String(partner.id)} key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</span>
                   <button
                     key={`Add${partner.id}`} 
-                    onClick={() =>{this.handleAddStudent(partner)}}
+                    onClick={() =>{this.handleAddPartner(partner)}}
                     >
                     add
                   </button>
@@ -206,6 +192,9 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
               ) 
             })
           }
+
+          <br/>
+          <button onClick={this.handleSubmitPartners}>Update Partner List</button>
    
       </div>
     )
