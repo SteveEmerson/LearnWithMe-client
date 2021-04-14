@@ -15,12 +15,22 @@ type User = {
 type Student = {
   id: number
   displayName: string
-  meetings?:number[]
+  meetings?:Array<Meeting>
   goals?:number[]
+}
+
+type Meeting= {
+  id: number,
+  dt: string,
+  teacherId: number,
+  studentId: number,
+  createdAt: Date,
+  updatedAt: Date
 }
 
 type TSVProps = {
   user: User
+  meetings: Array<Meeting>
 }
 
 type TSVState = {
@@ -85,11 +95,16 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
       }) 
   }
 
+  // WEDS PMPASS MEETINGS MATCHING THIS STUDENT AS A PROP
   renderStudentList = () => {
     return(
       this.state.allTeacherStudents.map((student: Student) => {
         return(
-          <StudentCardSmall student={student} setTSVState = {this.setState}/>
+          <StudentCardSmall 
+            student={student} 
+            setTSVState = {this.setState}  
+            token={this.props.user.sessionToken}
+          />
         )
       })
     )

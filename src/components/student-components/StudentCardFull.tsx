@@ -3,8 +3,17 @@ import * as React from 'react';
 type Student = {
   id: number
   displayName: string
-  meetings?: number[]
+  meetings?: Array<Meeting>
   goals?: number[]
+}
+
+type Meeting= {
+  id: number,
+  dt: string,
+  teacherId: number,
+  studentId: number,
+  createdAt: Date,
+  updatedAt: Date
 }
 
 type SCFProps = {

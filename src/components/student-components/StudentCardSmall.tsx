@@ -3,18 +3,34 @@ import * as React from 'react';
 type Student = {
   id: number
   displayName: string
-  meetings?:number[]
-  goals?:number[]
+  meetings?:Array<Meeting>
+  goal?: Goal
+}
+
+type Goal = {
+  description : string,
+  dateCreated: Date,
+  targetDate: Date
 }
 
 type SCSProps = {
   student: Student
   setTSVState: Function
+  token: string
+}
+
+type Meeting= {
+  id: number,
+  dt: string,
+  teacherId: number,
+  studentId: number,
+  createdAt: Date,
+  updatedAt: Date
 }
 
 type SCSState = {
-  meetings: number[]
-  goals: number[]
+  meetings: Array<Meeting>
+  goal: Goal
 }
 
 class StudentCardSmall extends React.Component<SCSProps,SCSState>{
@@ -22,8 +38,22 @@ class StudentCardSmall extends React.Component<SCSProps,SCSState>{
     super(props);
     this.state = {
       meetings: [],
-      goals: []
+      goal: {
+        description : "",
+        dateCreated: new Date(),
+        targetDate: new Date()
+      }
     }
+  }
+
+  componentDidMount(){
+    
+  }
+
+
+
+  getGoal = () => {
+
   }
 
   setCurrStudent = () => {
@@ -31,18 +61,22 @@ class StudentCardSmall extends React.Component<SCSProps,SCSState>{
       id: this.props.student.id,
       displayName: this.props.student.displayName,
       meetings: this.state.meetings,
-      goals: this.state.goals
+      goal: this.state.goal
     }
 
     this.props.setTSVState({currStudent: thisStudent})
   }
+
   render(){
     return(
       <div>
         <h4>Student Card Small</h4>
-        <p onClick={()=> this.setCurrStudent()}>{this.props.student.displayName}</p>
+        <div onClick={()=> this.setCurrStudent()}>
+          <p >{this.props.student.displayName}</p>
+          <p>M {this.state.meetings.length}</p>
+        </div>
       </div>
-    )
+    ) 
   }
 }
 

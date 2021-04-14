@@ -19,7 +19,43 @@ type User = {
   sessionToken: string
 }
 
-class Teacher extends React.Component<TeacherProps, {}> {
+type Meeting= {
+  id: number,
+  dt: string,
+  teacherId: number,
+  studentId: number,
+  createdAt: Date,
+  updatedAt: Date
+}
+type TeacherState = {
+  meetings: Array<Meeting> 
+}
+class Teacher extends React.Component<TeacherProps, TeacherState> {
+  constructor(props: TeacherProps){
+    super(props);
+    this.state = {
+      meetings: []
+    }
+  }
+
+  getMeetings = () => {
+    const url: string = `http://localhost:3000/meetings/teacher_get`
+    fetch(url,
+      {
+          method: 'GET',
+          headers: new Headers ({
+          'Content-Type': 'application/json',
+          'Authorization': this.props.currUser.sessionToken
+          })
+      })
+      .then((res) => res.json())
+      .then((data: Array<Meeting>) => {
+        this.setState({meetings: data})
+      })
+      .catch(err => {
+        console.log(`Error in fetch: ${err}`)
+      }) 
+  }
 
   handleLogout = () => {
     localStorage.removeItem('sessionToken')
@@ -51,7 +87,9 @@ class Teacher extends React.Component<TeacherProps, {}> {
             <Link to='/settings'><h4>Settings</h4></Link>
           </div>
           <Switch>
-            <Route exact path='/teacher-student'><TeacherStudentView user={this.props.currUser}/></Route>
+            <Route exact path='/teacher-student'>
+              <TeacherStudentView user={this.props.currUser} meetings={this.state.meetings}/>
+            </Route>
             <Route exact path='/teacher-meeting'><TeacherMeetingView user={this.props.currUser}/></Route>
             <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>
           </Switch>
