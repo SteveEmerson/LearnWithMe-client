@@ -48,9 +48,7 @@ class App extends React.Component<{}, AppState> {
         :
           <Student currUser={this.state.user} setAppState={this.setState}/>
         }
-        
-        
-        
+            
         <div>
           <h1>Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>

@@ -105,7 +105,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
         <div className="StudentCardSmallList">
           {this.state.allTeacherStudents.length !== 0 ? this.renderStudentList() : null}
         </div>
-      <hr/>
+        <hr/>
       </div>
       
     )
