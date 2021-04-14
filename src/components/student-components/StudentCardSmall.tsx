@@ -8,9 +8,13 @@ type Student = {
 }
 
 type Goal = {
-  description : string,
-  dateCreated: Date,
+  id: number
+  description: string
   targetDate: Date
+  createdAt: Date
+  updatedAt: Date
+  studentId: number
+  teacherId: number | null
 }
 
 type SCSProps = {
@@ -21,7 +25,7 @@ type SCSProps = {
 
 type Meeting= {
   id: number,
-  dt: string,
+  d_t: Date,
   teacherId: number,
   studentId: number,
   createdAt: Date,
@@ -29,20 +33,13 @@ type Meeting= {
 }
 
 type SCSState = {
-  meetings: Array<Meeting>
-  goal: Goal
+  
 }
 
 class StudentCardSmall extends React.Component<SCSProps,SCSState>{
   constructor(props: SCSProps){
     super(props);
     this.state = {
-      meetings: [],
-      goal: {
-        description : "",
-        dateCreated: new Date(),
-        targetDate: new Date()
-      }
     }
   }
 
@@ -57,14 +54,7 @@ class StudentCardSmall extends React.Component<SCSProps,SCSState>{
   }
 
   setCurrStudent = () => {
-    let thisStudent: Student = {
-      id: this.props.student.id,
-      displayName: this.props.student.displayName,
-      meetings: this.state.meetings,
-      goal: this.state.goal
-    }
-
-    this.props.setTSVState({currStudent: thisStudent})
+    this.props.setTSVState({currStudent: this.props.student})
   }
 
   render(){
@@ -73,7 +63,8 @@ class StudentCardSmall extends React.Component<SCSProps,SCSState>{
         <h4>Student Card Small</h4>
         <div onClick={()=> this.setCurrStudent()}>
           <p >{this.props.student.displayName}</p>
-          <p>M {this.state.meetings.length}</p>
+          <p>M {this.props.student.meetings ? this.props.student.meetings.length : null}</p>
+          <p>{this.props.student.goal ? 'G' : null}</p>
         </div>
       </div>
     ) 

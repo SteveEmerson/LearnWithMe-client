@@ -4,12 +4,18 @@ type Student = {
   id: number
   displayName: string
   meetings?: Array<Meeting>
-  goals?: number[]
+  goals?: Goal
+}
+
+type Goal = {
+  description : string,
+  dateCreated: Date,
+  targetDate: Date
 }
 
 type Meeting= {
   id: number,
-  dt: string,
+  d_t: Date,
   teacherId: number,
   studentId: number,
   createdAt: Date,

@@ -21,25 +21,44 @@ type User = {
 
 type Meeting= {
   id: number,
-  dt: string,
+  d_t: Date,
   teacherId: number,
   studentId: number,
   createdAt: Date,
   updatedAt: Date
 }
-type TeacherState = {
-  meetings: Array<Meeting> 
+
+type Goal = {
+  id: number
+  description: string
+  targetDate: Date
+  createdAt: Date
+  updatedAt: Date
+  studentId: number
+  teacherId: number | null
 }
+
+type TeacherState = {
+  meetings: Array<Meeting>
+  goals: Array<Goal>
+}
+
 class Teacher extends React.Component<TeacherProps, TeacherState> {
   constructor(props: TeacherProps){
     super(props);
     this.state = {
-      meetings: []
+      meetings: [],
+      goals: []
     }
   }
 
+  componentDidMount(){
+    this.getMeetings();
+    this.getGoals();
+  }
+
   getMeetings = () => {
-    const url: string = `http://localhost:3000/meetings/teacher_get`
+    const url: string = `http://localhost:3000/meeting/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -50,7 +69,28 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       })
       .then((res) => res.json())
       .then((data: Array<Meeting>) => {
+        console.log(data);
         this.setState({meetings: data})
+      })
+      .catch(err => {
+        console.log(`Error in fetch: ${err}`)
+      }) 
+  }
+
+  getGoals = () => {
+    const url: string = `http://localhost:3000/goal/teacher_get`
+    fetch(url,
+      {
+          method: 'GET',
+          headers: new Headers ({
+          'Content-Type': 'application/json',
+          'Authorization': this.props.currUser.sessionToken
+          })
+      })
+      .then((res) => res.json())
+      .then((data: Array<Goal>) => {
+        console.log(data);
+        this.setState({goals: data})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -88,7 +128,11 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
           </div>
           <Switch>
             <Route exact path='/teacher-student'>
-              <TeacherStudentView user={this.props.currUser} meetings={this.state.meetings}/>
+              <TeacherStudentView 
+                user={this.props.currUser} 
+                meetings={this.state.meetings}
+                goals={this.state.goals}
+              />
             </Route>
             <Route exact path='/teacher-meeting'><TeacherMeetingView user={this.props.currUser}/></Route>
             <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>

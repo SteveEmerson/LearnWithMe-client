@@ -12,16 +12,26 @@ type User = {
   sessionToken: string
 }
 
+type Goal = {
+  id: number
+  description: string
+  targetDate: Date
+  createdAt: Date
+  updatedAt: Date
+  studentId: number
+  teacherId: number | null
+}
+
 type Student = {
   id: number
   displayName: string
   meetings?:Array<Meeting>
-  goals?:number[]
+  goal?:Goal
 }
 
 type Meeting= {
   id: number,
-  dt: string,
+  d_t: Date,
   teacherId: number,
   studentId: number,
   createdAt: Date,
@@ -31,6 +41,7 @@ type Meeting= {
 type TSVProps = {
   user: User
   meetings: Array<Meeting>
+  goals: Array<Goal>
 }
 
 type TSVState = {
@@ -57,7 +68,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
     super(props)
     this.state = {
       currStudent: null,
-      allTeacherStudents: []
+      allTeacherStudents: [],
     }
 
     this.setState = this.setState.bind(this)
@@ -95,15 +106,30 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
       }) 
   }
 
-  // WEDS PMPASS MEETINGS MATCHING THIS STUDENT AS A PROP
+  getStudentMeetings = (id: number) => {
+    let studentMeetings: Array<Meeting> = 
+      this.props.meetings.filter((meeting: Meeting) => meeting.studentId === id)
+    return studentMeetings
+  }
+
+  getStudentGoal = (id: number) => {
+    let studentGoal: Goal = 
+      this.props.goals.filter((goal: Goal) => goal.studentId === id)[0]
+    return studentGoal
+  }
+
   renderStudentList = () => {
     return(
       this.state.allTeacherStudents.map((student: Student) => {
+        let studentMeetings = this.getStudentMeetings(student.id)
+        student.meetings = studentMeetings
+        student.goal = this.getStudentGoal(student.id)
         return(
           <StudentCardSmall 
             student={student} 
             setTSVState = {this.setState}  
             token={this.props.user.sessionToken}
+            key={`SCS${student.id}`}
           />
         )
       })
