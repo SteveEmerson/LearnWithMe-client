@@ -1,29 +1,15 @@
 import * as React from 'react';
+//import {RouteComponentProps, withRouter} from "react-router-dom"
 
 type LoginProps = {
   setAppState: Function
 }
-
-// type User = {
-//   userId: number
-//   displayName: string
-//   partnerList: string[]
-//   role: string
-//   availability: {temp?: any}
-//   sessionToken: string
-// }
 
 type LoginState = {
   email: string
   password: string
   role: string
 }
-
-// type FormData = {
-//   name: string;
-//   email: string;
-//   password: string;
-// }
 
 class Login extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps){
@@ -34,6 +20,7 @@ class Login extends React.Component<LoginProps, LoginState> {
       role: "",
     }
   }
+
   
   handleSubmit = (e: React.SyntheticEvent) : void => {
     e.preventDefault();
@@ -71,18 +58,9 @@ class Login extends React.Component<LoginProps, LoginState> {
           .catch(err => {
             console.log(`Error in fetch: ${err}`)
           })
+          
         }
   }
-
-  // testSetAppState = () :void =>  {
-  //   this.props.setAppState(this.state.sessionToken, 
-  //       {
-  //         role:this.state.role,
-  //         displayName: this.state.displayName,
-  //         userId: this.state.userId
-  //       }
-  //     )
-  // }
 
   emailChange = (e: React.FormEvent<HTMLInputElement>) : void => {
     this.setState({email: e.currentTarget.value})
@@ -95,7 +73,6 @@ class Login extends React.Component<LoginProps, LoginState> {
   roleChange = (e: React.FormEvent<HTMLInputElement>) : void => {
     this.setState({role: e.currentTarget.value})
   }
-
 
   render() {
     return(

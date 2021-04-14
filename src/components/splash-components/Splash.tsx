@@ -19,7 +19,6 @@ class Splash extends React.Component<SplashProps, {}> {
               <Link to='/home'><h4> LearnWithMe </h4></Link>
               <Link to='/login'><h4> Login </h4></Link>
               <Link to='/signup'><h4> Signup </h4></Link>
-              
           </div>
           <br/>
           <br/>
