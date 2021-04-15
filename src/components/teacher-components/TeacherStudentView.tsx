@@ -99,7 +99,10 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
           return {id: partner.id, displayName: partner.name}
         } )
         this.setState({allTeacherStudents: allStudents})
-        this.setState({currStudent: allStudents[0]})
+        let cStud = allStudents[0]; 
+        cStud.meetings = this.getStudentMeetings(cStud.id)
+        cStud.goal = this.getStudentGoal(cStud.id)
+        this.setState({currStudent: cStud})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -131,6 +134,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
             token={this.props.user.sessionToken}
             key={`SCS${student.id}`}
           />
+
         )
       })
     )
@@ -141,7 +145,14 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
       <div> 
         <h3>Teacher Student View</h3>
         <div className="StudentCardFull">
-          {this.state.currStudent ? <StudentCardFull student={this.state.currStudent}/> : null}
+          {this.state.currStudent 
+          ? <StudentCardFull 
+              student={this.state.currStudent}
+              setTSVState={this.setState}
+              token={this.props.user.sessionToken}
+            />
+          : null}
+          <br />
         </div>
         <div className="StudentCardSmallList">
           {this.state.allTeacherStudents.length !== 0 ? this.renderStudentList() : null}

@@ -32,26 +32,7 @@ type Meeting= {
   updatedAt: Date
 }
 
-type SCSState = {
-  
-}
-
-class StudentCardSmall extends React.Component<SCSProps,SCSState>{
-  constructor(props: SCSProps){
-    super(props);
-    this.state = {
-    }
-  }
-
-  componentDidMount(){
-    
-  }
-
-
-
-  getGoal = () => {
-
-  }
+class StudentCardSmall extends React.Component<SCSProps,{}>{
 
   setCurrStudent = () => {
     this.props.setTSVState({currStudent: this.props.student})
@@ -59,9 +40,9 @@ class StudentCardSmall extends React.Component<SCSProps,SCSState>{
 
   render(){
     return(
-      <div>
+      <div style={{border:'1px solid'}} onClick={()=> this.setCurrStudent()}>
         <h4>Student Card Small</h4>
-        <div onClick={()=> this.setCurrStudent()}>
+        <div >
           <p >{this.props.student.displayName}</p>
           <p>M {this.props.student.meetings ? this.props.student.meetings.length : null}</p>
           <p>{this.props.student.goal ? 'G' : null}</p>
