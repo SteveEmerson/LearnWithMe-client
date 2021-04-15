@@ -128,7 +128,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
         student.meetings = studentMeetings
         student.goal = this.getStudentGoal(student.id)
         return(
-          <StudentCardSmall 
+          <StudentCardSmall
             student={student} 
             setTSVState = {this.setState}  
             token={this.props.user.sessionToken}
@@ -150,6 +150,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
               student={this.state.currStudent}
               setTSVState={this.setState}
               token={this.props.user.sessionToken}
+              teacherName={this.props.user.displayName} 
             />
           : null}
           <br />

@@ -34,6 +34,7 @@ type SCFProps = {
   student: Student
   setTSVState: Function
   token: string
+  teacherName: string
 }
 
 type SCFState = {
@@ -60,6 +61,21 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
     this.setState({makeGoal: !this.state.makeGoal})
   }
 
+  renderMeetingMinis = () => {
+    return(
+      this.props.student.meetings?.map((meeting) => {
+        return(
+          <MeetingCardMini 
+            meeting={meeting} 
+            token={this.props.token} 
+            teacherName={this.props.teacherName}
+            studentName={this.props.student.displayName}
+          />
+        )
+      })
+    )
+  }
+
   render(){
     return(
       <div style={{border:'2px solid'}}>
@@ -69,7 +85,8 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
         {this.props.student.goal ? <button id="make-goal" onClick={this.toggleMakeGoal}>New Goal</button> : null}
         {this.state.makeMeeting ? <ScheduleMeeting /> : null}
         {this.state.makeGoal ? <MakeGoal /> : null}
-        {this.props.student.goal? <GoalCard goal={this.props.student.goal} token={this.props.token}/>: null} 
+        {this.props.student.goal ? <GoalCard goal={this.props.student.goal} token={this.props.token}/>: null}
+        {this.props.student.meetings ? this.renderMeetingMinis() : null}
 
       </div>
     )
