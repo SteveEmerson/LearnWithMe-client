@@ -69,7 +69,6 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       })
       .then((res) => res.json())
       .then((data: Array<Meeting>) => {
-        console.log(data);
         this.setState({meetings: data})
       })
       .catch(err => {
@@ -89,7 +88,6 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       })
       .then((res) => res.json())
       .then((data: Array<Goal>) => {
-        console.log(data);
         this.setState({goals: data})
       })
       .catch(err => {

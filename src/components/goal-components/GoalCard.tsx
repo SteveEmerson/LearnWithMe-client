@@ -88,7 +88,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         <h4>GoalCard</h4>
         <p>Id: {goal.id}</p>
         <p>{goal.description}</p>
-        <p>Target Date {goal.targetDate}</p>
+        <p>Target Date {String(goal.targetDate)}</p>
         <button id='edit-goal' onClick={this.editGoal}>Edit</button>
         {this.state.tasks.length !== 0 ? this.renderTasks() : null}
       </div>

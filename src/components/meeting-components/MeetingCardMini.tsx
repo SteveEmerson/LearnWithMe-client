@@ -57,7 +57,6 @@ class MeetingCardMini extends React.Component<MCMProps,MCMState>{
       })
       .then((res) => res.json())
       .then((data: Array<Note>) => {
-        console.log(data)
         this.setState({notes: data})
       })
       .catch(err => {

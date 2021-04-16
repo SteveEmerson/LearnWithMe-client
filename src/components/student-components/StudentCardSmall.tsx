@@ -3,9 +3,12 @@ import * as React from 'react';
 type Student = {
   id: number
   displayName: string
+  email: string
+  availability: {}
   meetings?:Array<Meeting>
-  goal?: Goal
+  goal?:Goal
 }
+
 
 type Goal = {
   id: number

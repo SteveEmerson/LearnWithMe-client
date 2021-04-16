@@ -7,8 +7,21 @@ import ScheduleMeeting from '../meeting-components/ScheduleMeeting';
 type Student = {
   id: number
   displayName: string
-  meetings?: Array<Meeting>
-  goal?: Goal
+  email: string
+  availability: {}
+  meetings?:Array<Meeting>
+  goal?:Goal
+}
+
+
+type User = {
+  email: string
+  userId: number
+  displayName: string
+  partnerList: number[]
+  role: string
+  availability: {}
+  sessionToken: string
 }
 
 type Goal = {
@@ -34,7 +47,7 @@ type SCFProps = {
   student: Student
   setTSVState: Function
   token: string
-  teacherName: string
+  teacher: User
 }
 
 type SCFState = {
@@ -68,8 +81,9 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
           <MeetingCardMini 
             meeting={meeting} 
             token={this.props.token} 
-            teacherName={this.props.teacherName}
+            teacherName={this.props.teacher.displayName}
             studentName={this.props.student.displayName}
+            key={`MCM${meeting.id}`}
           />
         )
       })
@@ -82,8 +96,13 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
         <h4>Student Card Full</h4>
         <p>{this.props.student.displayName}</p>
         <button id="schedule-meeting" onClick={this.toggleMakeMeeting}>New Meeting</button>
-        {this.props.student.goal ? <button id="make-goal" onClick={this.toggleMakeGoal}>New Goal</button> : null}
-        {this.state.makeMeeting ? <ScheduleMeeting /> : null}
+        {!this.props.student.goal ? <button id="make-goal" onClick={this.toggleMakeGoal}>New Goal</button> : null}
+        {this.state.makeMeeting 
+          ? <ScheduleMeeting 
+              teacher={this.props.teacher} 
+              student={this.props.student}
+              setTSVState={this.props.setTSVState}/> 
+          : null}
         {this.state.makeGoal ? <MakeGoal /> : null}
         {this.props.student.goal ? <GoalCard goal={this.props.student.goal} token={this.props.token}/>: null}
         {this.props.student.meetings ? this.renderMeetingMinis() : null}

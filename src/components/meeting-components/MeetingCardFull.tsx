@@ -32,7 +32,7 @@ class MeetingCardFull extends React.Component<MCFProps,{}>{
     return(
       this.props.notes.map((note) => {
         return(
-          <div>
+          <div key={`Note${note.id}`}>
             <p>{note.teacherId ? this.props.teacherName : this.props.studentName}</p>
             <p>{note.content}</p>
             <p>{note.createdAt}</p>

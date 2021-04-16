@@ -25,6 +25,8 @@ type Goal = {
 type Student = {
   id: number
   displayName: string
+  email: string
+  availability: {}
   meetings?:Array<Meeting>
   goal?:Goal
 }
@@ -45,8 +47,9 @@ type TSVProps = {
 }
 
 type TSVState = {
-  currStudent: Student | null
+  currStudent: Student
   allTeacherStudents: Array<Student>
+  mounted: boolean
 }
 
 type FetchUserData = {
@@ -67,8 +70,24 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   constructor(props: TSVProps){
     super(props)
     this.state = {
-      currStudent: null,
+      currStudent: {
+        id: 0,
+        displayName: "",
+        email: "",
+        availability: {},
+        meetings:[],
+        goal: {
+          id: 0,
+          description: "",
+          targetDate: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          studentId: 0,
+          teacherId: 0
+        }
+      },
       allTeacherStudents: [],
+      mounted: false,
     }
 
     this.setState = this.setState.bind(this)
@@ -76,6 +95,14 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
 
   componentDidMount(){
     this.getStudentList();
+    
+  }
+
+  componentDidUpdate(prevProps: TSVProps, prevState: TSVState){
+    if (this.state.currStudent && prevState.currStudent.meetings !== this.state.currStudent.meetings){
+      console.log(this.state.currStudent)
+      this.getStudentList();
+    }
   }
 
 
@@ -96,13 +123,17 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
           return this.props.user.partnerList.includes(partner.id)
         })
         .map((partner: FetchUserData) => {
-          return {id: partner.id, displayName: partner.name}
+          return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
         } )
-        this.setState({allTeacherStudents: allStudents})
-        let cStud = allStudents[0]; 
-        cStud.meetings = this.getStudentMeetings(cStud.id)
-        cStud.goal = this.getStudentGoal(cStud.id)
-        this.setState({currStudent: cStud})
+
+        if(!this.state.mounted){
+          this.setState({allTeacherStudents: allStudents})
+          let cStud = allStudents[0]; 
+          cStud.meetings = this.getStudentMeetings(cStud.id)
+          cStud.goal = this.getStudentGoal(cStud.id)
+          this.setState({currStudent: cStud})
+          this.setState({mounted: true})
+        }
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -145,12 +176,12 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
       <div> 
         <h3>Teacher Student View</h3>
         <div className="StudentCardFull">
-          {this.state.currStudent 
+          {this.state.currStudent.id !== 0
           ? <StudentCardFull 
               student={this.state.currStudent}
               setTSVState={this.setState}
               token={this.props.user.sessionToken}
-              teacherName={this.props.user.displayName} 
+              teacher={this.props.user} 
             />
           : null}
           <br />
