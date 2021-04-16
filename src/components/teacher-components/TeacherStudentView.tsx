@@ -44,6 +44,7 @@ type TSVProps = {
   user: User
   meetings: Array<Meeting>
   goals: Array<Goal>
+  getMeetings: Function
 }
 
 type TSVState = {
@@ -101,7 +102,8 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   componentDidUpdate(prevProps: TSVProps, prevState: TSVState){
     if (this.state.currStudent && prevState.currStudent.meetings !== this.state.currStudent.meetings){
       console.log(this.state.currStudent)
-      this.getStudentList();
+      //this.getStudentList();
+      this.props.getMeetings();
     }
   }
 
@@ -125,9 +127,9 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
         .map((partner: FetchUserData) => {
           return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
         } )
-
+        this.setState({allTeacherStudents: allStudents})
+        console.log(this.state.allTeacherStudents)
         if(!this.state.mounted){
-          this.setState({allTeacherStudents: allStudents})
           let cStud = allStudents[0]; 
           cStud.meetings = this.getStudentMeetings(cStud.id)
           cStud.goal = this.getStudentGoal(cStud.id)
@@ -181,7 +183,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
               student={this.state.currStudent}
               setTSVState={this.setState}
               token={this.props.user.sessionToken}
-              teacher={this.props.user} 
+              teacher={this.props.user}
             />
           : null}
           <br />
