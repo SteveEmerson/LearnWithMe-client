@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+//Some of this will need changed when  this component is reused in other places.
 type Student = {
   id: number
   displayName: string
@@ -55,6 +56,29 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     }
   }
 
+  getDateString = (d: Date): string => {
+    return d.toISOString().slice(0,10) + "T07:00"
+  }
+
+  getMaxDate = (): Date => {
+    let today: Date = new Date();
+    let cYear: number = today.getFullYear()
+    let cMonth: number = today.getMonth();
+    let maxMonth: number = 5;
+    let maxYear: number = cYear;
+    if (cMonth > maxMonth){
+      maxYear = cYear + 1
+    }
+    let maxDay: number = this.getLastDayOfMonth(maxMonth, maxYear);
+    return new Date(maxYear, maxMonth, maxDay)
+  }
+
+  getLastDayOfMonth = (m: number, y: number): number => {
+    let date: Date = new Date(y, m + 1, 0);
+    let day: number = date.getDate();
+    return day
+  }
+
   handleDate = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({d_t: new Date(e.currentTarget.value)})
   }
@@ -81,7 +105,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
       .then((data: Meeting) => {
         let meetings:  Array<Meeting> = 
         this.props.student.meetings ? this.props.student.meetings : [];
-        
+        // Some of this maybe going to need to change later ... this component will be used elsewhere as well
         let cStud: Student = {
           id: this.props.student.id,
           displayName: this.props.student.displayName,
@@ -103,6 +127,8 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   render(){
+    console.log(this.getDateString(new Date()))
+    console.log(this.getDateString(this.getMaxDate()))
     return(
       <div>
         <h4>Schedule Meeting</h4>
@@ -110,8 +136,8 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>
           <label htmlFor="meeting-time">Meeting Time:</label>
           <input onChange={this.handleDate} type="datetime-local" id="meeting-time"
-            name="meeting-time" value={String(new Date(Date.now()))}
-            min={String(new Date(Date.now()))} max="2021-06-01T00:00">
+            name="meeting-time" value={this.getDateString(new Date())}
+            min={this.getDateString(new Date())} max={this.getDateString(this.getMaxDate())}>
           </input>
           <input type='submit' value='Submit'/>
         </form>

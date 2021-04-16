@@ -101,9 +101,18 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
           ? <ScheduleMeeting 
               teacher={this.props.teacher} 
               student={this.props.student}
-              setTSVState={this.props.setTSVState}/> 
+              setTSVState={this.props.setTSVState}
+            /> 
           : null}
-        {this.state.makeGoal ? <MakeGoal /> : null}
+        {this.state.makeGoal 
+          ? <MakeGoal 
+              teacherId={this.props.teacher.userId}
+              teacherName = {this.props.teacher.displayName} 
+              studentId={this.props.student.id}
+              studentName={this.props.student.displayName}
+              setTSVState={this.props.setTSVState}
+            /> 
+          : null}
         {this.props.student.goal ? <GoalCard goal={this.props.student.goal} token={this.props.token}/>: null}
         {this.props.student.meetings ? this.renderMeetingMinis() : null}
 
