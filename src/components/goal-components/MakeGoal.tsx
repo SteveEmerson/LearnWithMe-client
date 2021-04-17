@@ -39,9 +39,9 @@ type Goal = {
 }
 
 type MGProps = {
-  teacher: User
-  student: Student
-  setTSVState: Function
+  // teacher: User
+  // student: Student
+  // setTSVState: Function
 }
 
 class MakeGoal extends React.Component<MGProps,{}>{
