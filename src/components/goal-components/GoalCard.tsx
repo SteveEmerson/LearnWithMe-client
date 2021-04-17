@@ -39,7 +39,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   componentDidUpdate(){
-    this.getTasks()
+    
   }
 
   editGoal = () => {
