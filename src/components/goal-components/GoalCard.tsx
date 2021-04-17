@@ -1,9 +1,30 @@
 import * as React from 'react';
 
 type GCProps = {
+  student: Student
   goal: Goal
   token: string
   tasks?: Array<Task>
+  setTSVState: Function
+}
+
+type Student = {
+  id: number
+  displayName: string
+  email: string
+  availability: {}
+  meetings?:Array<Meeting>
+  goal?:Goal
+  tasks?: Array<Task>
+}
+
+type Meeting= {
+  id: number,
+  d_t: Date,
+  teacherId: number,
+  studentId: number,
+  createdAt: Date,
+  updatedAt: Date
 }
 
 type Goal = {
@@ -82,7 +103,39 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   updateGoal = () => {
-    
+    this.toggleEditForm()
+    const url = `http://localhost:3000/goal/teacher_update/${this.props.goal.id}`
+    fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify({
+        description: this.state.newGoalDesc,
+        targetDate: this.state.newDate
+      }),
+      headers: new Headers ({
+        'Content-Type': 'application/json',
+        'Authorization': this.props.token
+      })
+    })
+    .then(res => res.json())
+    .then((json: {data: number[]}) => {
+      console.log(json.data[0])
+      let newGoal: Goal = this.props.goal;
+      newGoal.description = this.state.newGoalDesc;
+      newGoal.targetDate = this.state.newDate;
+
+      let cStud: Student = {
+        id: this.props.student.id,
+        displayName: this.props.student.displayName,
+        email: this.props.student.email,
+        availability: this.props.student.availability,
+        meetings: this.props.student.meetings,
+        goal: newGoal,
+        tasks: this.props.student.tasks
+      }
+
+      this.props.setTSVState({currStudent: cStud});
+    })
+    .catch(err => console.log(`Error in updating goal ${err}`))
   }
 
   renderTasks = () => {
@@ -111,15 +164,15 @@ class GoalCard extends React.Component<GCProps,GCState>{
     return(
       <div style={{border:'1px dashed'}}>
         <h4>GoalCard</h4>
-        <div id="goal-info" onClick={this.toggleEditForm}>
+        <div hidden={this.state.showEditForm} id="goal-info" onClick={this.toggleEditForm}>
           <p>Id: {goal.id}</p>
           <p>{goal.description}</p>
-          <p>Target Date {String(goal.targetDate)}</p>
+          <p>Target Date {String(goal.targetDate).slice(0,10)}</p>
           <p>click goal to edit</p>
         </div>
-        <div id="change-goal-info">
+        <div hidden={!this.state.showEditForm} id="change-goal-info">
           <p>Id: {goal.id}</p>
-          <input 
+          <input  
             type='date' 
             id="target-date" 
             name="goal-target-date"
