@@ -45,6 +45,7 @@ type TSVProps = {
   meetings: Array<Meeting>
   goals: Array<Goal>
   getMeetings: Function
+  getGoals: Function
 }
 
 type TSVState = {
@@ -100,10 +101,15 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   componentDidUpdate(prevProps: TSVProps, prevState: TSVState){
-    if (this.state.currStudent && prevState.currStudent.meetings !== this.state.currStudent.meetings){
-      console.log(this.state.currStudent)
-      //this.getStudentList();
+    // FIX THIS ... SEEMS LIKE THIS IS TRIGGERIENG WHEN THE GOAL IS UPDATED
+    if (this.state.currStudent.meetings && prevState.currStudent.meetings !== this.state.currStudent.meetings){
+      console.log(`TSV UPDATE CURR STUDENT MEETINGS  ${this.state.currStudent.id} ${this.state.currStudent.meetings}`)
       this.props.getMeetings();
+    }
+    
+    if (this.state.currStudent && prevState.currStudent.goal !== this.state.currStudent.goal){
+      console.log(`TSV UPDATE CURR STUDENT GOAL ${this.state.currStudent.id} ${this.state.currStudent.goal}`)
+      this.props.getGoals();
     }
   }
 

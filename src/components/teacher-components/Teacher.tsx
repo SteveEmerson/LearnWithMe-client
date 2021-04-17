@@ -131,6 +131,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                 meetings={this.state.meetings}
                 goals={this.state.goals}
                 getMeetings={this.getMeetings}
+                getGoals={this.getGoals}
               />
             </Route>
             <Route exact path='/teacher-meeting'><TeacherMeetingView user={this.props.currUser}/></Route>
