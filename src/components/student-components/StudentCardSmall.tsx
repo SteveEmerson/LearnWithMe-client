@@ -53,15 +53,26 @@ class StudentCardSmall extends React.Component<SCSProps,{}>{
     this.props.setTSVState({currStudent: this.props.student})
   }
 
-  // ADD DISPLAYING TASK INFO NEXT TO GOAL IE "T 2 3"
+  taskInfo = (taskList: Array<Task>): string => {
+    let complete = 0;
+    let incomplete = 0;
+    for(let i = 0; i < taskList.length; i++){
+      taskList[i].completed ? complete++: incomplete++;
+    }
+
+    return `T ${complete} ${incomplete}`
+  }
   render(){
     return(
       <div style={{border:'1px solid'}} onClick={()=> this.setCurrStudent()}>
         <h4>Student Card Small</h4>
         <div >
-          <p >{this.props.student.displayName}</p>
+          <p>{this.props.student.displayName}</p>
           <p>M {this.props.student.meetings ? this.props.student.meetings.length : null}</p>
-          <p>{this.props.student.goal ? 'G' : null}</p>
+          <p>
+            {this.props.student.goal ? 'G ' : null} 
+            {this.props.student.tasks ? this.taskInfo(this.props.student.tasks) : null}
+          </p>
         </div>
       </div>
     ) 
