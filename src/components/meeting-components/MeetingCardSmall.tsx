@@ -4,7 +4,7 @@ class MeetingCardSmall extends React.Component<{},{}>{
   render(){
     return(
       <div>
-        <h4>MeetingCardFull</h4>
+        <h4>MeetingCardSmall</h4>
       </div>
     )
   }

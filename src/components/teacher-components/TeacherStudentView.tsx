@@ -29,6 +29,7 @@ type Student = {
   availability: {}
   meetings?:Array<Meeting>
   goal?:Goal
+  tasks?: Array<Task>
 }
 
 type Meeting= {
@@ -40,12 +41,25 @@ type Meeting= {
   updatedAt: Date
 }
 
+type Task = {
+  id: number
+  description: string
+  completed: boolean
+  createdAt: Date,
+  updatedAt: Date,
+  goalId: number,
+  studentId: number,
+  teacherId: number
+}
+
 type TSVProps = {
   user: User
   meetings: Array<Meeting>
   goals: Array<Goal>
+  tasks: Array<Task>
   getMeetings: Function
   getGoals: Function
+  getTasks: Function
 }
 
 type TSVState = {
@@ -86,7 +100,8 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
           updatedAt: new Date(),
           studentId: 0,
           teacherId: 0
-        }
+        },
+        tasks: []
       },
       allTeacherStudents: [],
       mounted: false,
@@ -101,7 +116,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   componentDidUpdate(prevProps: TSVProps, prevState: TSVState){
-    // FIX THIS ... SEEMS LIKE THIS IS TRIGGERIENG WHEN THE GOAL IS UPDATED
+    // FIX THIS ... SEEMS LIKE ALL OF THIS IS TRIGGERING WHEN THE GOAL IS UPDATED
     if (this.state.currStudent.meetings && prevState.currStudent.meetings !== this.state.currStudent.meetings){
       console.log(`TSV UPDATE CURR STUDENT MEETINGS  ${this.state.currStudent.id} ${this.state.currStudent.meetings}`)
       this.props.getMeetings();
@@ -110,6 +125,11 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
     if (this.state.currStudent && prevState.currStudent.goal !== this.state.currStudent.goal){
       console.log(`TSV UPDATE CURR STUDENT GOAL ${this.state.currStudent.id} ${this.state.currStudent.goal}`)
       this.props.getGoals();
+    }
+
+    if (this.state.currStudent.tasks && prevState.currStudent.tasks !== this.state.currStudent.tasks){
+      console.log(`TSV UPDATE CURR STUDENT TASKS  ${this.state.currStudent.id} ${this.state.currStudent.tasks}`)
+      this.props.getTasks();
     }
   }
 
@@ -135,10 +155,13 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
         } )
         this.setState({allTeacherStudents: allStudents})
         console.log(this.state.allTeacherStudents)
+
+        // FIX? IS THIS NEEDED TO SET THE CURRENT STUDENT OR CAN THE SCS DO THAT BY DEFAULT CLICKING ON A STUDENT
         if(!this.state.mounted){
           let cStud = allStudents[0]; 
           cStud.meetings = this.getStudentMeetings(cStud.id)
           cStud.goal = this.getStudentGoal(cStud.id)
+          cStud.tasks = this.getStudentTasks(cStud.id)
           this.setState({currStudent: cStud})
           this.setState({mounted: true})
         }
@@ -160,12 +183,19 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
     return studentGoal
   }
 
+  getStudentTasks = (id: number) => {
+    let studentTasks: Array<Task> = 
+      this.props.tasks.filter((task: Task) => task.studentId === id)
+    return studentTasks
+  }
+
   renderStudentList = () => {
     return(
       this.state.allTeacherStudents.map((student: Student) => {
-        let studentMeetings = this.getStudentMeetings(student.id)
-        student.meetings = studentMeetings
+        student.meetings = this.getStudentMeetings(student.id)
         student.goal = this.getStudentGoal(student.id)
+        student.tasks = this.getStudentTasks(student.id)
+
         return(
           <StudentCardSmall
             student={student} 

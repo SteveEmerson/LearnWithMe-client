@@ -7,6 +7,7 @@ type Student = {
   availability: {}
   meetings?:Array<Meeting>
   goal?:Goal
+  tasks?: Array<Task>
 }
 
 
@@ -35,12 +36,24 @@ type Meeting= {
   updatedAt: Date
 }
 
+type Task = {
+  id: number
+  description: string
+  completed: boolean
+  createdAt: Date,
+  updatedAt: Date,
+  goalId: number,
+  studentId: number,
+  teacherId: number
+}
+
 class StudentCardSmall extends React.Component<SCSProps,{}>{
 
   setCurrStudent = () => {
     this.props.setTSVState({currStudent: this.props.student})
   }
 
+  // ADD DISPLAYING TASK INFO NEXT TO GOAL IE "T 2 3"
   render(){
     return(
       <div style={{border:'1px solid'}} onClick={()=> this.setCurrStudent()}>

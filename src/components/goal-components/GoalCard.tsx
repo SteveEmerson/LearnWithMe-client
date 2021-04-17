@@ -3,6 +3,7 @@ import * as React from 'react';
 type GCProps = {
   goal: Goal
   token: string
+  tasks?: Array<Task>
 }
 
 type Goal = {
@@ -23,27 +24,30 @@ type Task = {
   id: number
   description: string
   completed: boolean
-  goalId: number
+  createdAt: Date,
+  updatedAt: Date,
+  goalId: number,
+  studentId: number,
+  teacherId: number
 }
 
 class GoalCard extends React.Component<GCProps,GCState>{
-  constructor(props: GCProps){
-    super(props);
-    this.state = {
-      tasks: []
-    }
-  }
+  // constructor(props: GCProps){
+  //   super(props);
+  //   this.state = {
+  //     tasks: []
+  //   }
+  // }
 
   componentDidMount(){
     console.log(`GC MOUNTING`)
-    this.getTasks()
+
   }
 
   omponentDidUpdate(prevProps: GCProps){
     console.log(`GC UPDATED`)
     if(prevProps.goal.id !== this.props.goal.id ){
       console.log(`NEW GOAL HERE: ${this.props.goal.id}`)
-      this.getTasks()
     }
   }
 
@@ -51,37 +55,40 @@ class GoalCard extends React.Component<GCProps,GCState>{
     //Gonna edit a goal
   }
 
-  getTasks = () => {
-    const url: string = `http://localhost:3000/task/teacher_get/${this.props.goal.id}`
-    fetch(url,
-      {
-          method: 'GET',
-          headers: new Headers ({
-          'Content-Type': 'application/json',
-          'Authorization': this.props.token
-          })
-      })
-      .then((res) => res.json())
-      .then((data: Array<Task>) => {
-        this.setState({tasks: data})
-      })
-      .catch(err => {
-        console.log(`Error in fetch: ${err}`)
-      }) 
-  }
+  // getTasks = () => {
+  //   const url: string = `http://localhost:3000/task/teacher_get/${this.props.goal.id}`
+  //   fetch(url,
+  //     {
+  //         method: 'GET',
+  //         headers: new Headers ({
+  //         'Content-Type': 'application/json',
+  //         'Authorization': this.props.token
+  //         })
+  //     })
+  //     .then((res) => res.json())
+  //     .then((data: Array<Task>) => {
+  //       this.setState({tasks: data})
+  //     })
+  //     .catch(err => {
+  //       console.log(`Error in fetch: ${err}`)
+  //     }) 
+  // }
 
   renderTasks = () => {
     console.log(`I AM RENDERING TASKS`)
     return(
       <div>
-        {this.state.tasks.map((task) => {
-          return(
-            <div key={`Task${task.id}`}>
-              <p style={task.completed?{textDecoration:'line-through'}:undefined}>{task.description}</p>
-              <input type='checkbox' defaultChecked={task.completed}/>
-            </div>
-          )
-        })}
+        {(this.props.tasks) 
+          ? this.props.tasks.map((task) => {
+            return(
+              <div key={`Task${task.id}`}>
+                <p style={task.completed?{textDecoration:'line-through'}:undefined}>{task.description}</p>
+                <input type='checkbox' defaultChecked={task.completed}/>
+              </div>
+            )
+          })
+          : null
+      }
       </div>
     )
 
@@ -97,7 +104,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         <p>{goal.description}</p>
         <p>Target Date {String(goal.targetDate)}</p>
         <button id='edit-goal' onClick={this.editGoal}>Edit</button>
-        {this.state.tasks.length !== 0 ? this.renderTasks() : null}
+        {this.props.tasks ? this.renderTasks() : null}
       </div>
     )
   }

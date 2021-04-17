@@ -41,6 +41,18 @@ type Goal = {
 type TeacherState = {
   meetings: Array<Meeting>
   goals: Array<Goal>
+  tasks: Array<Task>
+}
+
+type Task = {
+  id: number
+  description: string
+  completed: boolean
+  createdAt: Date,
+  updatedAt: Date,
+  goalId: number,
+  studentId: number,
+  teacherId: number
 }
 
 class Teacher extends React.Component<TeacherProps, TeacherState> {
@@ -48,13 +60,15 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
     super(props);
     this.state = {
       meetings: [],
-      goals: []
+      goals: [],
+      tasks: []
     }
   }
 
   componentDidMount(){
     this.getMeetings();
     this.getGoals();
+    this.getTasks();
   }
 
   getMeetings = () => {
@@ -95,6 +109,26 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       }) 
   }
 
+  getTasks = () => {
+    const url: string = `http://localhost:3000/task/teacher_get`
+    fetch(url,
+      {
+          method: 'GET',
+          headers: new Headers ({
+          'Content-Type': 'application/json',
+          'Authorization': this.props.currUser.sessionToken
+          })
+      })
+      .then((res) => res.json())
+      .then((data: Array<Task>) => {
+        this.setState({tasks: data})
+      })
+      .catch(err => {
+        console.log(`Error in fetch: ${err}`)
+      }) 
+  }
+
+
   handleLogout = () => {
     localStorage.removeItem('sessionToken')
     this.props.setAppState(
@@ -130,8 +164,10 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                 user={this.props.currUser} 
                 meetings={this.state.meetings}
                 goals={this.state.goals}
+                tasks={this.state.tasks}
                 getMeetings={this.getMeetings}
                 getGoals={this.getGoals}
+                getTasks={this.getTasks}
               />
             </Route>
             <Route exact path='/teacher-meeting'><TeacherMeetingView user={this.props.currUser}/></Route>

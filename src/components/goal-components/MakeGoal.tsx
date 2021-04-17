@@ -7,6 +7,7 @@ type Student = {
   availability: {}
   meetings?:Array<Meeting>
   goal?:Goal
+  tasks?: Array<Task>
 }
 
 type Meeting= {
@@ -34,7 +35,7 @@ type MGProps = {
   student: Student
   setTSVState: Function
   sessionToken: string
-  setSCFState: Function
+  setSCFState: Function  //DO I NEED THIS?
 }
 
 type MGState = {
@@ -44,10 +45,14 @@ type MGState = {
 }
 
 type Task = {
-  id: number
+  id?: number
   description: string
   completed: boolean
-  goalId: number
+  createdAt?: Date,
+  updatedAt?: Date,
+  goalId: number,
+  studentId: number,
+  teacherId: number
 }
 
 class MakeGoal extends React.Component<MGProps,MGState>{
@@ -56,7 +61,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     this.state = {
       goalDescription: "",
       goalTargetDate: new Date(),
-      tasks: ""
+      tasks: "",
     }
   }
 
@@ -112,35 +117,27 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       })
       .then((res) => res.json())
       .then((newGoal: Goal) => {
-        let cStud: Student = {
-          id: this.props.student.id,
-          displayName: this.props.student.displayName,
-          email: this.props.student.email,
-          availability: this.props.student.availability,
-          meetings: this.props.student.meetings,
-          goal: newGoal
-        }
+        
         // Does this need to be asynchronous?
-        this.taskSubmit(newGoal.id);
-        this.props.setTSVState({currStudent: cStud});
+        this.taskSubmit(newGoal);
       })
       .catch(err => console.log(`Error posting new goal: ${err}`));
       
   }
 
-  taskSubmit = (goalId: number) => {
-    let newTaskList = this.state.tasks
-    .split("\n")
-    .filter((task) => task !== "")
-    .map((task) => {
-      let fullTask = {
+  taskSubmit = (newGoal: Goal) => {
+    let newTaskList: Array<Task> = this.state.tasks
+    .split("\n")   //ALSO NEED TO STRIP ENDING WHITESPACE?
+    .filter((task: string) => task !== "")
+    .map((task: string) => {
+      let shortTask: Task = {
         description: task,
         completed: false,
-        goalId: goalId,
+        goalId: newGoal.id,
         studentId: this.props.student.id,
         teacherId: this.props.teacherId
       }
-      return fullTask
+      return shortTask
     });
 
     console.log(JSON.stringify({taskList: newTaskList}))
@@ -156,7 +153,19 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       })
     })
     .then((res) => res.json())
-    .then((newTasks: Array<Task>) => console.log(newTasks))
+    .then((newTasks: Array<Task>) => {
+      let cStud: Student = {
+        id: this.props.student.id,
+        displayName: this.props.student.displayName,
+        email: this.props.student.email,
+        availability: this.props.student.availability,
+        meetings: this.props.student.meetings,
+        goal: newGoal,
+        tasks: newTasks
+      }
+
+      this.props.setTSVState({currStudent: cStud});
+    })
     .catch((err) => console.log(`Error posting new tasks ${err}`))
   }
 

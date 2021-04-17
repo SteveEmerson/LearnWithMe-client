@@ -11,6 +11,7 @@ type Student = {
   availability: {}
   meetings?:Array<Meeting>
   goal?:Goal
+  tasks?: Array<Task>
 }
 
 
@@ -41,6 +42,17 @@ type Meeting= {
   studentId: number,
   createdAt: Date,
   updatedAt: Date
+}
+
+type Task = {
+  id: number
+  description: string
+  completed: boolean
+  createdAt: Date,
+  updatedAt: Date,
+  goalId: number,
+  studentId: number,
+  teacherId: number
 }
 
 type SCFProps = {
@@ -114,13 +126,14 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               student={this.props.student}
               setTSVState={this.props.setTSVState}
               sessionToken={this.props.teacher.sessionToken}
-              setSCFState={this.setState}
+              setSCFState={this.setState} //NEED THIS ??
             /> 
           : null}
         {this.props.student.goal 
           ? <GoalCard 
               goal={this.props.student.goal} 
               token={this.props.token}
+              tasks={this.props.student.tasks}
             />
           : null}
         {this.props.student.meetings ? this.renderMeetingMinis() : null}
