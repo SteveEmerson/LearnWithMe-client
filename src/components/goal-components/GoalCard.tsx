@@ -17,7 +17,11 @@ type Goal = {
 }
 
 type GCState = {
-  tasks: Array<Task>
+  updatedTasks?: Array<Task>
+  showEditForm: boolean
+  showConfirmButton: boolean
+  newGoalDesc: string
+  newDate: Date
 }
 
 type Task = {
@@ -32,17 +36,21 @@ type Task = {
 }
 
 class GoalCard extends React.Component<GCProps,GCState>{
-  // constructor(props: GCProps){
-  //   super(props);
-  //   this.state = {
-  //     tasks: []
-  //   }
-  // }
+  constructor(props: GCProps){
+    super(props);
+    this.state = {
+      updatedTasks: this.props.tasks,
+      newGoalDesc: this.props.goal.description,
+      newDate: this.props.goal.targetDate,
+      showEditForm: false,
+      showConfirmButton: false
+    }
+  }
 
   componentDidMount(){
     console.log(`GC MOUNTING`)
-
   }
+
 
   componentDidUpdate(prevProps: GCProps){
     console.log(`GC UPDATED`)
@@ -51,28 +59,31 @@ class GoalCard extends React.Component<GCProps,GCState>{
     }
   }
 
-  editGoal = () => {
+  handleEditGoal = () => {
     //Gonna edit a goal
   }
 
-  // getTasks = () => {
-  //   const url: string = `http://localhost:3000/task/teacher_get/${this.props.goal.id}`
-  //   fetch(url,
-  //     {
-  //         method: 'GET',
-  //         headers: new Headers ({
-  //         'Content-Type': 'application/json',
-  //         'Authorization': this.props.token
-  //         })
-  //     })
-  //     .then((res) => res.json())
-  //     .then((data: Array<Task>) => {
-  //       this.setState({tasks: data})
-  //     })
-  //     .catch(err => {
-  //       console.log(`Error in fetch: ${err}`)
-  //     }) 
-  // }
+  handleDate = (e: React.FormEvent<HTMLInputElement>) => {
+    this.setState({newDate: new Date(e.currentTarget.value)})
+  }
+
+  getDateString = (d: Date): string => {
+    return d.toISOString().slice(0,10) + "T07:00"
+  }
+
+  toggleEditForm = () => {
+    this.setState({showEditForm: !this.state.showEditForm})
+  }
+
+  cancelEdit = () => {
+    this.toggleEditForm();
+    this.setState({newGoalDesc: this.props.goal.description})
+    this.setState({newDate: this.props.goal.targetDate})
+  }
+
+  updateGoal = () => {
+    
+  }
 
   renderTasks = () => {
     console.log(`I AM RENDERING TASKS`)
@@ -88,23 +99,51 @@ class GoalCard extends React.Component<GCProps,GCState>{
             )
           })
           : null
-      }
+        }
       </div>
     )
-
   }
 
   render(){
+    console.log(this.state.newDate)
     let goal: Goal = this.props.goal
     console.log(`GC RENDER CURRENT GOAL: ${goal.id}`)
     return(
       <div style={{border:'1px dashed'}}>
         <h4>GoalCard</h4>
-        <p>Id: {goal.id}</p>
-        <p>{goal.description}</p>
-        <p>Target Date {String(goal.targetDate)}</p>
-        <button id='edit-goal' onClick={this.editGoal}>Edit</button>
+        <div id="goal-info" onClick={this.toggleEditForm}>
+          <p>Id: {goal.id}</p>
+          <p>{goal.description}</p>
+          <p>Target Date {String(goal.targetDate)}</p>
+          <p>click goal to edit</p>
+        </div>
+        <div id="change-goal-info">
+          <p>Id: {goal.id}</p>
+          <input 
+            type='date' 
+            id="target-date" 
+            name="goal-target-date"
+            value={String(goal.targetDate)}
+            onChange={this.handleDate}
+          />
+          <textarea
+            onChange=
+            {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({newGoalDesc: e.currentTarget.value})}  id="goal-description"
+            name="goal-description"
+            cols={20}
+            rows={3}
+            defaultValue={goal.description}
+          />
+          <p onClick={this.updateGoal}>confirm changes</p>
+          <p onClick={this.cancelEdit}>cancel</p>
+        </div>
+        <hr/>
+        <h5>Tasks</h5>
         {this.props.tasks ? this.renderTasks() : null}
+        {this.state.showConfirmButton 
+          ? <button onClick={this.handleEditGoal}>Confirm Changes</button>
+          : null}
+
       </div>
     )
   }

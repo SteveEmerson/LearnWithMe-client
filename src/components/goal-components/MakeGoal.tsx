@@ -178,7 +178,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
           <textarea
             onChange=
             {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({goalDescription: e.currentTarget.value})}  id="goal-description"
-            name="meeting-time"
+            name="goal-description"
             cols={30}
             rows={8}>
           </textarea>
