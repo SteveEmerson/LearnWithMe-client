@@ -57,6 +57,8 @@ type SCFState = {
   makeGoal: boolean
 }
 
+/*********************************************************/
+
 class StudentCardFull extends React.Component<SCFProps,SCFState>{
   constructor(props: SCFProps){
     super(props);
@@ -108,9 +110,9 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
           ? <MakeGoal 
               teacherId={this.props.teacher.userId}
               teacherName = {this.props.teacher.displayName} 
-              studentId={this.props.student.id}
-              studentName={this.props.student.displayName}
+              student={this.props.student}
               setTSVState={this.props.setTSVState}
+              sessionToken={this.props.teacher.sessionToken}
             /> 
           : null}
         {this.props.student.goal ? <GoalCard goal={this.props.student.goal} token={this.props.token}/>: null}

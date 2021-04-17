@@ -41,14 +41,15 @@ type Goal = {
 type MGProps = {
   teacherId: number
   teacherName: string
-  studentId: number
-  studentName: string
+  student: Student
   setTSVState: Function
+  sessionToken: string
 }
 
 type MGState = {
   goalDescription: string
   goalTargetDate: Date
+  tasks: string
 }
 
 type Task = {
@@ -63,7 +64,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     super(props);
     this.state = {
       goalDescription: "",
-      goalTargetDate: new Date()
+      goalTargetDate: new Date(),
+      tasks: ""
     }
   }
 
@@ -99,6 +101,68 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const url: string = `http://localhost:3000/goal/teacher_create`;
+    fetch(url, 
+      {
+        method: 'POST',
+        body: JSON.stringify(
+          {
+            description: this.state.goalDescription,
+            targetDate: this.state.goalTargetDate, 
+            studentId: this.props.student.id,
+            teacherId: this.props.teacherId
+          }
+        ),
+        headers: new Headers ({
+            'Content-Type': 'application/json',
+            'Authorization': this.props.sessionToken
+          })
+      })
+      .then((res) => res.json())
+      .then((newGoal: Goal) => {
+        let cStud: Student = {
+          id: this.props.student.id,
+          displayName: this.props.student.displayName,
+          email: this.props.student.email,
+          availability: this.props.student.availability,
+          meetings: this.props.student.meetings,
+          goal: newGoal
+        }
+        // Does this need to be asynchronous?
+        this.taskSubmit(newGoal.id);
+        this.props.setTSVState({currStudent: cStud});
+      })
+      .catch(err => console.log(`Error posting new goal: ${err}`));
+      
+  }
+
+  taskSubmit = (goalId: number) => {
+    let taskList = this.state.tasks
+    .split("\n")
+    .filter((task) => task !== "")
+    .map((task) => {
+      let fullTask = {
+        description: task,
+        completed: false,
+        goalId: goalId,
+        studentId: this.props.student.id,
+        teacherId: this.props.teacherId
+      }
+      return fullTask
+    });
+    console.log(taskList)
+    const url = `http://localhost:3000/task/teacher_bulk`;
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({taskList: taskList}),
+      headers: new Headers({
+        'Content-Type': 'application.json',
+        'Authorization': this.props.sessionToken
+      })
+    })
+    .then((res) => res.json())
+    .then((newTasks: Array<Task>) => console.log(newTasks))
+    .catch((err) => console.log(`Error posting new tasks ${err}`))
   }
 
   render(){
@@ -122,6 +186,16 @@ class MakeGoal extends React.Component<MGProps,MGState>{
             value={this.getDateString(new Date())}
             onChange={this.handleDate}
           />
+          <label htmlFor="tasks">Enter tasks for this goal, one per line (optional)</label>
+          <textarea
+            onChange=
+            {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({tasks: e.currentTarget.value})}  
+            id="tasks"
+            name="tasks"
+            cols={30}
+            rows={8}>
+          </textarea>
+          <input type="submit" value="Submit"/>
         </form>
 
       </div>

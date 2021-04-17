@@ -25,6 +25,7 @@ type Task = {
   completed: boolean
   goalId: number
 }
+
 class GoalCard extends React.Component<GCProps,GCState>{
   constructor(props: GCProps){
     super(props);
@@ -36,7 +37,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
   componentDidMount(){
     this.getTasks()
   }
-
 
   componentDidUpdate(){
     this.getTasks()
