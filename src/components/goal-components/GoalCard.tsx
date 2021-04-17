@@ -44,16 +44,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
   }
 
-<<<<<<< HEAD
-  omponentDidUpdate(prevProps: GCProps){
+  componentDidUpdate(prevProps: GCProps){
     console.log(`GC UPDATED`)
     if(prevProps.goal.id !== this.props.goal.id ){
       console.log(`NEW GOAL HERE: ${this.props.goal.id}`)
     }
-=======
-  componentDidUpdate(){
-    // this.getTasks()
->>>>>>> fixing_fetch_error
   }
 
   editGoal = () => {
