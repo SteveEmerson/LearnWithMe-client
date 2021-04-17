@@ -9,16 +9,6 @@ type Student = {
   goal?:Goal
 }
 
-type User = {
-  email: string
-  userId: number
-  displayName: string
-  partnerList: number[]
-  role: string
-  availability: {}
-  sessionToken: string
-}
-
 type Meeting= {
   id: number,
   d_t: Date,
