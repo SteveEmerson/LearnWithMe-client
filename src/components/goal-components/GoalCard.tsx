@@ -35,11 +35,16 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   componentDidMount(){
+    console.log(`GC MOUNTING`)
     this.getTasks()
   }
 
-  componentDidUpdate(){
-    
+  omponentDidUpdate(prevProps: GCProps){
+    console.log(`GC UPDATED`)
+    if(prevProps.goal.id !== this.props.goal.id ){
+      console.log(`NEW GOAL HERE: ${this.props.goal.id}`)
+      this.getTasks()
+    }
   }
 
   editGoal = () => {
@@ -66,6 +71,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   renderTasks = () => {
+    console.log(`I AM RENDERING TASKS`)
     return(
       <div>
         {this.state.tasks.map((task) => {
@@ -83,6 +89,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
   render(){
     let goal: Goal = this.props.goal
+    console.log(`GC RENDER CURRENT GOAL: ${goal.id}`)
     return(
       <div style={{border:'1px dashed'}}>
         <h4>GoalCard</h4>

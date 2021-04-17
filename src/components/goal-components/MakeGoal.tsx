@@ -44,6 +44,7 @@ type MGProps = {
   student: Student
   setTSVState: Function
   sessionToken: string
+  setSCFState: Function
 }
 
 type MGState = {
@@ -101,6 +102,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    this.props.setSCFState({makeGoal: false})
     const url: string = `http://localhost:3000/goal/teacher_create`;
     fetch(url, 
       {
@@ -137,7 +139,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
   }
 
   taskSubmit = (goalId: number) => {
-    let taskList = this.state.tasks
+    let newTaskList = this.state.tasks
     .split("\n")
     .filter((task) => task !== "")
     .map((task) => {
@@ -150,13 +152,16 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       }
       return fullTask
     });
-    console.log(taskList)
+
+    console.log(JSON.stringify({taskList: newTaskList}))
+
     const url = `http://localhost:3000/task/teacher_bulk`;
+    
     fetch(url, {
       method: 'POST',
-      body: JSON.stringify({taskList: taskList}),
+      body: JSON.stringify({taskList: newTaskList}),
       headers: new Headers({
-        'Content-Type': 'application.json',
+        'Content-Type': 'application/json',
         'Authorization': this.props.sessionToken
       })
     })

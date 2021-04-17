@@ -66,6 +66,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
       makeMeeting: false,
       makeGoal: false
     }
+    this.setState = this.setState.bind(this)
   }
 
   toggleMakeMeeting = () => {
@@ -113,9 +114,15 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               student={this.props.student}
               setTSVState={this.props.setTSVState}
               sessionToken={this.props.teacher.sessionToken}
+              setSCFState={this.setState}
             /> 
           : null}
-        {this.props.student.goal ? <GoalCard goal={this.props.student.goal} token={this.props.token}/>: null}
+        {this.props.student.goal 
+          ? <GoalCard 
+              goal={this.props.student.goal} 
+              token={this.props.token}
+            />
+          : null}
         {this.props.student.meetings ? this.renderMeetingMinis() : null}
 
       </div>
