@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 type GCProps = {
+  rolePOV: string
   student: Student
   goal: Goal
   token: string
   tasks?: Array<Task>
-  setTSVState: Function
+  setParState: Function
 }
 
 type Student = {
@@ -161,7 +162,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
             tasks: this.state.updatedTasks
           }
 
-          this.props.setTSVState({currStudent: cStud});
+          this.props.setParState({currStudent: cStud});
         })
         .catch(err => console.log(`Error in updating tasks ${err}`))
       });
@@ -200,7 +201,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         tasks: this.props.student.tasks
       }
 
-      this.props.setTSVState({currStudent: cStud});
+      this.props.setParState({currStudent: cStud});
     })
     .catch(err => console.log(`Error in updating goal ${err}`))
   }

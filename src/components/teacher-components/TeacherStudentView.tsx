@@ -68,19 +68,20 @@ type TSVState = {
   mounted: boolean
 }
 
-type FetchUserData = {
+// CHANGED THIS DURING SMV CODING >>> WILL IT BREAK?
+type FetchStudentData = {
   id: number,
   email: string,
   passwordhash: string,
   name: string,
-  teacherList: number[]
+  teacherList: number[] | null
   role: string,
   availability: {},
   createdAt: string,
   updatedAt: string
 }
 
-type AllPartners = Array<FetchUserData>
+type AllPartners = Array<FetchStudentData>
 
 class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   constructor(props: TSVProps){
@@ -101,7 +102,6 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
           studentId: 0,
           teacherId: 0
         },
-        tasks: []
       },
       allTeacherStudents: [],
       mounted: false,
@@ -147,10 +147,10 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
       .then((res) => res.json())
       .then((data: AllPartners) => {
         let allStudents: Array<Student> = 
-        data.filter((partner:FetchUserData) => {
+        data.filter((partner:FetchStudentData) => {
           return this.props.user.partnerList.includes(partner.id)
         })
-        .map((partner: FetchUserData) => {
+        .map((partner: FetchStudentData) => {
           return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
         } )
         this.setState({allTeacherStudents: allStudents})

@@ -26,7 +26,19 @@ type MCFProps = {
   studentName: string
 }
 
-class MeetingCardFull extends React.Component<MCFProps,{}>{
+type MCFState = {
+  notes: Array<Note>
+
+}
+
+class MeetingCardFull extends React.Component<MCFProps, MCFState>{
+  constructor(props: MCFProps){
+    super(props);
+    this.state = {
+      notes: [],
+    }
+  }
+
 
   renderNotes = () => {
     return(

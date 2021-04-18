@@ -131,11 +131,12 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
           : null}
         {this.props.student.goal 
           ? <GoalCard
+              rolePOV= {'teacher'}
               student={this.props.student}
               goal={this.props.student.goal} 
               token={this.props.token}
               tasks={this.props.student.tasks}
-              setTSVState={this.props.setTSVState}
+              setParState={this.props.setTSVState}
             />
           : null}
         {this.props.student.meetings ? this.renderMeetingMinis() : null}
