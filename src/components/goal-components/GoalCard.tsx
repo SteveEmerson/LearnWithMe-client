@@ -1,4 +1,3 @@
-import { check } from 'prettier';
 import * as React from 'react';
 
 type GCProps = {
