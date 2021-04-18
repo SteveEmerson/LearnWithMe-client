@@ -40,9 +40,9 @@ type Goal = {
 type GCState = {
   updatedTasks?: Array<Task>
   showEditForm: boolean
-  showConfirmButton: boolean
   newGoalDesc: string
   newDate: Date
+  tasksChanged: boolean
 }
 
 type Task = {
@@ -64,19 +64,19 @@ class GoalCard extends React.Component<GCProps,GCState>{
       newGoalDesc: this.props.goal.description,
       newDate: this.props.goal.targetDate,
       showEditForm: false,
-      showConfirmButton: false
+      tasksChanged: false
     }
   }
 
   componentDidMount(){
-    console.log(`GC MOUNTING`)
+    //console.log(`GC MOUNTING`)
   }
 
 
-  componentDidUpdate(prevProps: GCProps){
-    console.log(`GC UPDATED`)
-    if(prevProps.goal.id !== this.props.goal.id ){
-      console.log(`NEW GOAL HERE: ${this.props.goal.id}`)
+  componentDidUpdate(prevProps: GCProps, prevState: GCState){
+    if(prevProps.student.id !== this.props.student.id ){
+      this.setState({updatedTasks: this.props.tasks})
+      this.setState({tasksChanged: false})
     }
   }
 
@@ -100,6 +100,73 @@ class GoalCard extends React.Component<GCProps,GCState>{
     this.toggleEditForm();
     this.setState({newGoalDesc: this.props.goal.description})
     this.setState({newDate: this.props.goal.targetDate})
+  }
+
+  handleTaskChange = (id: number) => {
+    let tempTasks: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
+    let currentTaskIndex = tempTasks.findIndex(task => task.id === id);
+    let currentTask = tempTasks[currentTaskIndex];
+    currentTask.completed = !currentTask.completed;
+    tempTasks[currentTaskIndex] = currentTask;
+    this.setState({updatedTasks: tempTasks})
+    this.checkTasksDiff()
+  }
+
+
+  checkTasksDiff = () => {
+    let uT = this.state.updatedTasks ? this.state.updatedTasks : [];
+    let pT = this.props.tasks ? this.props.tasks : [];
+
+    this.setState({tasksChanged :(uT?.length !== pT?.length || !this.compareArrays(uT, pT))})
+  }
+
+  compareArrays = (a: Array<Task>, b: Array<Task>) => {
+    for(let i = 0; i < a.length; i++){
+      if(a[i].description !== b[i].description || a[i].completed !== b[i].completed){
+        return false
+      }
+    }
+    return true
+  }
+
+  updateTasks = () => {
+    let changedTasks: Array<Task> | undefined = 
+      this.state.updatedTasks?.filter((task: Task) => !this.props.tasks?.includes(task));
+
+    if (changedTasks && changedTasks.length > 0) {
+      changedTasks.forEach((task: Task) => {
+        const url = `http://localhost:3000/task/teacher_update/${task.id}`
+        fetch(url, {
+          method: 'PUT',
+          body: JSON.stringify({
+            description: task.description,
+            completed: task.completed
+          }),
+          headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': this.props.token
+          })
+        })
+        .then(res => res.json())
+        .then((json: {data: number[]}) => {
+          console.log(json.data[0])
+
+          let cStud: Student = {
+            id: this.props.student.id,
+            displayName: this.props.student.displayName,
+            email: this.props.student.email,
+            availability: this.props.student.availability,
+            meetings: this.props.student.meetings,
+            goal: this.props.goal,
+            tasks: this.state.updatedTasks
+          }
+
+          this.props.setTSVState({currStudent: cStud});
+        })
+        .catch(err => console.log(`Error in updating tasks ${err}`))
+      });
+    }
+    
   }
 
   updateGoal = () => {
@@ -139,15 +206,19 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   renderTasks = () => {
-    console.log(`I AM RENDERING TASKS`)
+    //console.log(`I AM RENDERING TASKS`)
     return(
       <div>
-        {(this.props.tasks) 
-          ? this.props.tasks.map((task) => {
+        {(this.state.updatedTasks) 
+          ? this.state.updatedTasks.map((task) => {
             return(
-              <div key={`Task${task.id}`}>
-                <p style={task.completed?{textDecoration:'line-through'}:undefined}>{task.description}</p>
-                <input type='checkbox' defaultChecked={task.completed}/>
+              <div key={`T${task.id}`}>
+                <p 
+                  style={task.completed?{textDecoration:'line-through'}:undefined}
+                  onClick={(e: React.MouseEvent<HTMLElement>) => {this.handleTaskChange(task.id)}}
+                >
+                  {task.description}
+                </p>
               </div>
             )
           })
@@ -158,9 +229,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   render(){
-    console.log(this.state.newDate)
     let goal: Goal = this.props.goal
-    console.log(`GC RENDER CURRENT GOAL: ${goal.id}`)
+    //console.log(`GC RENDER CURRENT GOAL: ${goal.id}`)
     return(
       <div style={{border:'1px dashed'}}>
         <h4>GoalCard</h4>
@@ -193,8 +263,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
         <hr/>
         <h5>Tasks</h5>
         {this.props.tasks ? this.renderTasks() : null}
-        {this.state.showConfirmButton 
-          ? <button onClick={this.handleEditGoal}>Confirm Changes</button>
+        {this.state.tasksChanged 
+          ? <button onClick={this.updateTasks}>Confirm Changes</button>
           : null}
 
       </div>
