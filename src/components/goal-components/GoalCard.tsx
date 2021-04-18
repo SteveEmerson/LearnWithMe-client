@@ -1,3 +1,4 @@
+import { check } from 'prettier';
 import * as React from 'react';
 
 type GCProps = {
@@ -6,7 +7,7 @@ type GCProps = {
   goal: Goal
   token: string
   tasks?: Array<Task>
-  setParState: Function
+  setParState?: Function
 }
 
 type Student = {
@@ -61,7 +62,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   constructor(props: GCProps){
     super(props);
     this.state = {
-      updatedTasks: this.props.tasks,
+      updatedTasks: [],
       newGoalDesc: this.props.goal.description,
       newDate: this.props.goal.targetDate,
       showEditForm: false,
@@ -70,19 +71,23 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   componentDidMount(){
-    //console.log(`GC MOUNTING`)
+    // Setting the state to a props that is an doesnt work ... creates a reference
+    this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
   }
 
 
   componentDidUpdate(prevProps: GCProps, prevState: GCState){
-    if(prevProps.student.id !== this.props.student.id ){
+    
+    if(prevProps.goal.id !== this.props.goal.id ){
+      console.log("Got here")
       this.setState({updatedTasks: this.props.tasks})
       this.setState({tasksChanged: false})
     }
-  }
 
-  handleEditGoal = () => {
-    //Gonna edit a goal
+    if(prevProps.tasks !== this.props.tasks){
+      this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
+      this.setState({tasksChanged: false})
+    }
   }
 
   handleDate = (e: React.FormEvent<HTMLInputElement>) => {
@@ -104,25 +109,29 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   handleTaskChange = (id: number) => {
+    
     let tempTasks: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
-    let currentTaskIndex = tempTasks.findIndex(task => task.id === id);
-    let currentTask = tempTasks[currentTaskIndex];
+    let currentTaskIndex: number = tempTasks.findIndex(task => task.id === id);
+    let currentTask :Task = tempTasks[currentTaskIndex];
     currentTask.completed = !currentTask.completed;
     tempTasks[currentTaskIndex] = currentTask;
     this.setState({updatedTasks: tempTasks})
-    this.checkTasksDiff()
+    this.checkTasksSame()
+    console.log(`${this.props.tasks ? this.props.tasks[0].completed : undefined}`)
+    this.checkTasksSame()
   }
 
 
-  checkTasksDiff = () => {
-    let uT = this.state.updatedTasks ? this.state.updatedTasks : [];
-    let pT = this.props.tasks ? this.props.tasks : [];
-
-    this.setState({tasksChanged :(uT?.length !== pT?.length || !this.compareArrays(uT, pT))})
+  checkTasksSame = () => {
+    let uT: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
+    let pT: Array<Task> = this.props.tasks ? this.props.tasks : [];
+    //console.log(uT)
+    //console.log(pT)
+    this.setState({tasksChanged: uT?.length !== pT?.length || !this.compareArrays(uT, pT)}) 
   }
 
   compareArrays = (a: Array<Task>, b: Array<Task>) => {
-    for(let i = 0; i < a.length; i++){
+    for(let i: number = 0; i < a.length; i++){
       if(a[i].description !== b[i].description || a[i].completed !== b[i].completed){
         return false
       }
@@ -136,7 +145,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
     if (changedTasks && changedTasks.length > 0) {
       changedTasks.forEach((task: Task) => {
-        const url = `http://localhost:3000/task/teacher_update/${task.id}`
+        const url = `http://localhost:3000/task/${this.props.rolePOV}_update/${task.id}`
+   
         fetch(url, {
           method: 'PUT',
           body: JSON.stringify({
@@ -152,17 +162,23 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then((json: {data: number[]}) => {
           console.log(json.data[0])
 
-          let cStud: Student = {
-            id: this.props.student.id,
-            displayName: this.props.student.displayName,
-            email: this.props.student.email,
-            availability: this.props.student.availability,
-            meetings: this.props.student.meetings,
-            goal: this.props.goal,
-            tasks: this.state.updatedTasks
+          if(this.props.rolePOV === "teacher" && this.props.setParState){
+            let cStud: Student = {
+              id: this.props.student.id,
+              displayName: this.props.student.displayName,
+              email: this.props.student.email,
+              availability: this.props.student.availability,
+              meetings: this.props.student.meetings,
+              goal: this.props.goal,
+              tasks: this.state.updatedTasks
+            }
+            this.props.setParState({currStudent: cStud});
           }
 
-          this.props.setParState({currStudent: cStud});
+          if(this.props.rolePOV === "student" && this.props.setParState){
+            this.props.setParState({tasks: this.state.updatedTasks});
+          }
+
         })
         .catch(err => console.log(`Error in updating tasks ${err}`))
       });
@@ -172,7 +188,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
   updateGoal = () => {
     this.toggleEditForm()
-    const url = `http://localhost:3000/goal/teacher_update/${this.props.goal.id}`
+    const url = `http://localhost:3000/goal/${this.props.rolePOV}_update/${this.props.goal.id}`
+
     fetch(url, {
       method: 'PUT',
       body: JSON.stringify({
@@ -191,23 +208,24 @@ class GoalCard extends React.Component<GCProps,GCState>{
       newGoal.description = this.state.newGoalDesc;
       newGoal.targetDate = this.state.newDate;
 
-      let cStud: Student = {
-        id: this.props.student.id,
-        displayName: this.props.student.displayName,
-        email: this.props.student.email,
-        availability: this.props.student.availability,
-        meetings: this.props.student.meetings,
-        goal: newGoal,
-        tasks: this.props.student.tasks
+      if(this.props.rolePOV === "teacher" && this.props.setParState) {
+        let cStud: Student = {
+          id: this.props.student.id,
+          displayName: this.props.student.displayName,
+          email: this.props.student.email,
+          availability: this.props.student.availability,
+          meetings: this.props.student.meetings,
+          goal: newGoal,
+          tasks: this.props.student.tasks
+        }
+        this.props.setParState({currStudent: cStud});
       }
 
-      this.props.setParState({currStudent: cStud});
     })
     .catch(err => console.log(`Error in updating goal ${err}`))
   }
 
   renderTasks = () => {
-    //console.log(`I AM RENDERING TASKS`)
     return(
       <div>
         {(this.state.updatedTasks) 

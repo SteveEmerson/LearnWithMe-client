@@ -62,6 +62,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       goals: [],
       tasks: []
     }
+    this.setState = this.setState.bind(this)
   }
   
   handleLogout = () => {
@@ -165,6 +166,7 @@ class Student extends React.Component<StudentProps, StudentState> {
                 getMeetings={this.getMeetings}
                 getGoals={this.getGoals}
                 getTasks={this.getTasks}
+                setStudState={this.setState}
               />
             </Route>
             <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>

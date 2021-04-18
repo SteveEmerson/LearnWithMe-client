@@ -70,6 +70,7 @@ type SMVProps = {
   getMeetings: Function
   getGoals: Function
   getTasks: Function
+  setStudState?: Function
 }
 
 type SMVState = {
@@ -144,7 +145,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               goal={goal} 
               token={this.props.user.sessionToken}
               tasks={this.props.tasks.filter((task) => task.goalId === goal.id)}
-              setParState={this.setState}
+              setParState={this.props.setStudState}
               key={`GC${goal.id}`}
           />
         )
@@ -171,7 +172,6 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   }
 
   render(){
-    console.log(this.props.goals)
     return(
       <div>
         <h3>Student Meeting View</h3>
