@@ -12,15 +12,15 @@ type User = {
   sessionToken: string
 }
 
-type Student = {
-  id: number
-  displayName: string
-  email: string
-  availability: {}
-  meetings?:Array<Meeting>
-  goal?:Goal
-  tasks?: Array<Task>
-}
+// type Student = {
+//   id: number
+//   displayName: string
+//   email: string
+//   availability: {}
+//   meetings?:Array<Meeting>
+//   goal?:Goal
+//   tasks?: Array<Task>
+// }
 
 type Goal = {
   id: number
