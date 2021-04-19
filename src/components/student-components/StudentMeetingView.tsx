@@ -1,6 +1,7 @@
 import * as React from 'react';
 import GoalCard from '../goal-components/GoalCard';
 import MeetingCardSmall from '../meeting-components/MeetingCardSmall';
+import MakeGoal from '../goal-components/MakeGoal';
 
 type User = {
   email: string
@@ -12,15 +13,15 @@ type User = {
   sessionToken: string
 }
 
-// type Student = {
-//   id: number
-//   displayName: string
-//   email: string
-//   availability: {}
-//   meetings?:Array<Meeting>
-//   goal?:Goal
-//   tasks?: Array<Task>
-// }
+type Student = {
+  id: number
+  displayName: string
+  email: string
+  availability: {}
+  meetings?:Array<Meeting>
+  goal?:Goal
+  tasks?: Array<Task>
+}
 
 type Goal = {
   id: number
@@ -70,11 +71,13 @@ type SMVProps = {
   getMeetings: Function
   getGoals: Function
   getTasks: Function
-  setStudState?: Function
+  setStudState: Function
 }
 
 type SMVState = {
   allStudentTeachers: Array<Teacher>
+  makeGoal: boolean
+  student: Student
 }
 
 type FetchTeacherData = {
@@ -95,7 +98,14 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   constructor(props: SMVProps){
     super(props);
     this.state = {
-      allStudentTeachers: []
+      allStudentTeachers: [],
+      makeGoal: false,
+      student: {
+        id: this.props.user.userId,
+        displayName: this.props.user.displayName,
+        email: this.props.user.email,
+        availability: this.props.user.availability
+      }
     }
 
     this.setState = this.setState.bind(this)
@@ -176,6 +186,15 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
       <div>
         <h3>Student Meeting View</h3>
         <hr/>
+        <button onClick={() => this.setState({makeGoal: !this.state.makeGoal})}>Make Goal</button>
+        {this.state.makeGoal 
+          ? <MakeGoal 
+              student={this.state.student}
+              setGParState={this.props.setStudState}
+              sessionToken={this.props.user.sessionToken}
+              setParState={this.setState}
+            /> 
+          : null}
         <div className="GoalCardList">
           {this.props.goals.length !== 0 ? this.renderGoalList() : null}
         </div>

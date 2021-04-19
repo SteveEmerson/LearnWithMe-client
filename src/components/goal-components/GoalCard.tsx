@@ -220,6 +220,10 @@ class GoalCard extends React.Component<GCProps,GCState>{
         this.props.setParState({currStudent: cStud});
       }
 
+      if(this.props.rolePOV === "student" && this.props.setParState){
+        this.props.setParState({tasks: this.state.updatedTasks});
+      }
+
     })
     .catch(err => console.log(`Error in updating goal ${err}`))
   }
@@ -244,6 +248,21 @@ class GoalCard extends React.Component<GCProps,GCState>{
         }
       </div>
     )
+  }
+
+  handleDeleteGoal = () => {
+
+    const url=`http://localhost:3000/goal/${this.props.rolePOV}_delete/${this.props.goal.id}`
+    fetch(url, {
+      method: 'DELETE',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': this.props.token
+      })
+    })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.log(`Error deleting goal: ${err}`))
   }
 
   render(){
@@ -284,7 +303,10 @@ class GoalCard extends React.Component<GCProps,GCState>{
         {this.state.tasksChanged 
           ? <button onClick={this.updateTasks}>Confirm Changes</button>
           : null}
-
+        {(this.props.rolePOV === "teacher" || (this.props.rolePOV === "student" && !this.props.goal.teacherId))
+          ? <button onClick={()=>{this.handleDeleteGoal()}}>Delete Goal</button>
+          : null}
+        
       </div>
     )
   }

@@ -124,9 +124,9 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               teacherId={this.props.teacher.userId}
               teacherName = {this.props.teacher.displayName} 
               student={this.props.student}
-              setTSVState={this.props.setTSVState}
+              setGParState={this.props.setTSVState}
               sessionToken={this.props.teacher.sessionToken}
-              setSCFState={this.setState} //NEED THIS ??
+              setParState={this.setState} //NEED THIS ??
             /> 
           : null}
         {this.props.student.goal 

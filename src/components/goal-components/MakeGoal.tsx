@@ -30,12 +30,12 @@ type Goal = {
 }
 
 type MGProps = {
-  teacherId: number
-  teacherName: string
+  teacherId?: number
+  teacherName?: string
   student: Student
-  setTSVState: Function
+  setGParState: Function
   sessionToken: string
-  setSCFState: Function  //DO I NEED THIS?
+  setParState: Function  
 }
 
 type MGState = {
@@ -52,7 +52,7 @@ type Task = {
   updatedAt?: Date,
   goalId: number,
   studentId: number,
-  teacherId: number
+  teacherId?: number
 }
 
 class MakeGoal extends React.Component<MGProps,MGState>{
@@ -97,8 +97,11 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.setSCFState({makeGoal: false})
-    const url: string = `http://localhost:3000/goal/teacher_create`;
+    this.props.setParState({makeGoal: false})
+    const url: string = (this.props.teacherId) 
+    ? `http://localhost:3000/goal/teacher_create` 
+    : `http://localhost:3000/goal/student_create`
+    
     fetch(url, 
       {
         method: 'POST',
@@ -125,6 +128,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       
   }
 
+  //FIX THIS ... WILL BE A PROBLEM IF GOAL HAS NO TASKS?
+
   taskSubmit = (newGoal: Goal) => {
     let newTaskList: Array<Task> = this.state.tasks
     .split("\n")   //ALSO NEED TO STRIP ENDING WHITESPACE?
@@ -142,7 +147,9 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
     console.log(JSON.stringify({taskList: newTaskList}))
 
-    const url = `http://localhost:3000/task/teacher_bulk`;
+    const url: string = (this.props.teacherId) 
+    ? `http://localhost:3000/task/teacher_bulk` 
+    : `http://localhost:3000/goal/student_bulk`
     
     fetch(url, {
       method: 'POST',
@@ -154,17 +161,20 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     })
     .then((res) => res.json())
     .then((newTasks: Array<Task>) => {
-      let cStud: Student = {
-        id: this.props.student.id,
-        displayName: this.props.student.displayName,
-        email: this.props.student.email,
-        availability: this.props.student.availability,
-        meetings: this.props.student.meetings,
-        goal: newGoal,
-        tasks: newTasks
+      if(this.props.teacherId){
+        let cStud: Student = {
+          id: this.props.student.id,
+          displayName: this.props.student.displayName,
+          email: this.props.student.email,
+          availability: this.props.student.availability,
+          meetings: this.props.student.meetings,
+          goal: newGoal,
+          tasks: newTasks
+        }
+  
+        this.props.setGParState({currStudent: cStud});
       }
 
-      this.props.setTSVState({currStudent: cStud});
     })
     .catch((err) => console.log(`Error posting new tasks ${err}`))
   }
