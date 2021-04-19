@@ -16,7 +16,7 @@ type Student = {
   email: string
   availability: {}
   meetings?:Array<Meeting>
-  goal?:Goal
+  goal?:Goal | null
   tasks?: Array<Task>
 }
 
@@ -265,15 +265,33 @@ class GoalCard extends React.Component<GCProps,GCState>{
     .then((json) => {
       console.log(json)
       this.deleteTasks()
+
+      if(this.props.rolePOV === "teacher" && this.props.setGParState) {
+        let cStud: Student = {
+          id: this.props.student.id,
+          displayName: this.props.student.displayName,
+          email: this.props.student.email,
+          availability: this.props.student.availability,
+          meetings: this.props.student.meetings,
+          goal: null,
+          tasks: this.props.student.tasks
+        }
+        this.props.setGParState({currStudent: cStud});
+      }
+
+      if(this.props.rolePOV === "student" && this.props.getStudentGoals){
+        this.props.getStudentGoals();
+      }
     })
     .catch(err => console.log(`Error deleting goal: ${err}`));
   }
 
   // THIS IS NOT WORKING !!!!!!! FIX MONDAY 4/19 PM !!!!!!!!!!!!
   deleteTasks = () => {
+    console.log(this.props.rolePOV)
     if(this.props.tasks && this.props.tasks.length > 0){
       this.props.tasks.forEach((task: Task) => {
-        const url=`http://localhost:3000/goal/${this.props.rolePOV}_delete/${task.id}`
+        const url=`http://localhost:3000/task/${this.props.rolePOV}_delete/${task.id}`
         fetch(url, {
           method: 'DELETE',
           headers: new Headers({
@@ -284,6 +302,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then(res => res.json())
         .then((json) => {
           console.log(json)
+          this.setState({updatedTasks: []})
+
+          // if(this.props.rolePOV === "student" && this.props.setGParState){
+          //   this.props.setGParState({tasks: this.state.updatedTasks});
+          // }
         })
         .catch(err => console.log(`Error deleting task: ${err}`));
       });
