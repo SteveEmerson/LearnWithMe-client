@@ -35,7 +35,9 @@ type MGProps = {
   student: Student
   setGParState: Function
   sessionToken: string
-  setParState: Function  
+  setParState: Function
+  getStudentGoals?: Function
+  getStudentTasks?: Function
 }
 
 type MGState = {
@@ -121,8 +123,11 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       .then((res) => res.json())
       .then((newGoal: Goal) => {
         
-        // Does this need to be asynchronous?
-        this.taskSubmit(newGoal);
+        if(this.state.tasks.length > 0) {this.taskSubmit(newGoal)};
+
+        if(!this.props.teacherId && this.props.getStudentGoals){
+          this.props.getStudentGoals();
+        }
       })
       .catch(err => console.log(`Error posting new goal: ${err}`));
       
@@ -149,7 +154,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
     const url: string = (this.props.teacherId) 
     ? `http://localhost:3000/task/teacher_bulk` 
-    : `http://localhost:3000/goal/student_bulk`
+    : `http://localhost:3000/task/student_bulk`
     
     fetch(url, {
       method: 'POST',
@@ -173,6 +178,10 @@ class MakeGoal extends React.Component<MGProps,MGState>{
         }
   
         this.props.setGParState({currStudent: cStud});
+      }
+
+      if(!this.props.teacherId && this.props.getStudentTasks){
+        this.props.getStudentTasks();
       }
 
     })

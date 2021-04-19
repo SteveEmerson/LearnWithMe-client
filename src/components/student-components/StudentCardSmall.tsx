@@ -71,7 +71,9 @@ class StudentCardSmall extends React.Component<SCSProps,{}>{
           <p>M {this.props.student.meetings ? this.props.student.meetings.length : null}</p>
           <p>
             {this.props.student.goal ? 'G ' : null} 
-            {this.props.student.tasks ? this.taskInfo(this.props.student.tasks) : null}
+            {this.props.student.tasks && this.props.student.tasks.length > 0 
+            ? this.taskInfo(this.props.student.tasks) 
+            : null}
           </p>
         </div>
       </div>

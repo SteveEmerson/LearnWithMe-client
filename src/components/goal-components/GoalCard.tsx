@@ -6,7 +6,8 @@ type GCProps = {
   goal: Goal
   token: string
   tasks?: Array<Task>
-  setParState?: Function
+  setGParState?: Function
+  getStudentGoals?: Function
 }
 
 type Student = {
@@ -161,7 +162,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then((json: {data: number[]}) => {
           console.log(json.data[0])
 
-          if(this.props.rolePOV === "teacher" && this.props.setParState){
+          if(this.props.rolePOV === "teacher" && this.props.setGParState){
             let cStud: Student = {
               id: this.props.student.id,
               displayName: this.props.student.displayName,
@@ -171,11 +172,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
               goal: this.props.goal,
               tasks: this.state.updatedTasks
             }
-            this.props.setParState({currStudent: cStud});
+            this.props.setGParState({currStudent: cStud});
           }
 
-          if(this.props.rolePOV === "student" && this.props.setParState){
-            this.props.setParState({tasks: this.state.updatedTasks});
+          if(this.props.rolePOV === "student" && this.props.setGParState){
+            this.props.setGParState({tasks: this.state.updatedTasks});
           }
 
         })
@@ -207,7 +208,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
       newGoal.description = this.state.newGoalDesc;
       newGoal.targetDate = this.state.newDate;
 
-      if(this.props.rolePOV === "teacher" && this.props.setParState) {
+      if(this.props.rolePOV === "teacher" && this.props.setGParState) {
         let cStud: Student = {
           id: this.props.student.id,
           displayName: this.props.student.displayName,
@@ -217,11 +218,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
           goal: newGoal,
           tasks: this.props.student.tasks
         }
-        this.props.setParState({currStudent: cStud});
+        this.props.setGParState({currStudent: cStud});
       }
 
-      if(this.props.rolePOV === "student" && this.props.setParState){
-        this.props.setParState({tasks: this.state.updatedTasks});
+      if(this.props.rolePOV === "student" && this.props.getStudentGoals){
+        this.props.getStudentGoals();
       }
 
     })
@@ -250,7 +251,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     )
   }
 
-  handleDeleteGoal = () => {
+  deleteGoal = () => {
 
     const url=`http://localhost:3000/goal/${this.props.rolePOV}_delete/${this.props.goal.id}`
     fetch(url, {
@@ -261,8 +262,32 @@ class GoalCard extends React.Component<GCProps,GCState>{
       })
     })
     .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.log(`Error deleting goal: ${err}`))
+    .then((json) => {
+      console.log(json)
+      this.deleteTasks()
+    })
+    .catch(err => console.log(`Error deleting goal: ${err}`));
+  }
+
+  // THIS IS NOT WORKING !!!!!!! FIX MONDAY 4/19 PM !!!!!!!!!!!!
+  deleteTasks = () => {
+    if(this.props.tasks && this.props.tasks.length > 0){
+      this.props.tasks.forEach((task: Task) => {
+        const url=`http://localhost:3000/goal/${this.props.rolePOV}_delete/${task.id}`
+        fetch(url, {
+          method: 'DELETE',
+          headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': this.props.token
+          })
+        })
+        .then(res => res.json())
+        .then((json) => {
+          console.log(json)
+        })
+        .catch(err => console.log(`Error deleting task: ${err}`));
+      });
+    }
   }
 
   render(){
@@ -304,7 +329,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
           ? <button onClick={this.updateTasks}>Confirm Changes</button>
           : null}
         {(this.props.rolePOV === "teacher" || (this.props.rolePOV === "student" && !this.props.goal.teacherId))
-          ? <button onClick={()=>{this.handleDeleteGoal()}}>Delete Goal</button>
+          ? <button onClick={()=>{this.deleteGoal()}}>Delete Goal</button>
           : null}
         
       </div>

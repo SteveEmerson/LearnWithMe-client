@@ -155,7 +155,8 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               goal={goal} 
               token={this.props.user.sessionToken}
               tasks={this.props.tasks.filter((task) => task.goalId === goal.id)}
-              setParState={this.props.setStudState}
+              setGParState={this.props.setStudState}
+              getStudentGoals={this.props.getGoals}
               key={`GC${goal.id}`}
           />
         )
@@ -193,6 +194,8 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               setGParState={this.props.setStudState}
               sessionToken={this.props.user.sessionToken}
               setParState={this.setState}
+              getStudentGoals={this.props.getGoals}
+              getStudentTasks={this.props.getTasks}
             /> 
           : null}
         <div className="GoalCardList">
