@@ -127,7 +127,19 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
         if(!this.props.teacherId && this.props.getStudentGoals){
           this.props.getStudentGoals();
+        }else if(this.props.teacherId){
+          let cStud: Student = {
+            id: this.props.student.id,
+            displayName: this.props.student.displayName,
+            email: this.props.student.email,
+            availability: this.props.student.availability,
+            meetings: this.props.student.meetings,
+            goal: newGoal,
+          }
+          this.props.setGParState({currStudent: cStud});
         }
+
+
       })
       .catch(err => console.log(`Error posting new goal: ${err}`));
       
@@ -137,7 +149,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
   taskSubmit = (newGoal: Goal) => {
     let newTaskList: Array<Task> = this.state.tasks
-    .split("\n")   //ALSO NEED TO STRIP ENDING WHITESPACE?
+    .trim()
+    .split("\n")   
     .filter((task: string) => task !== "")
     .map((task: string) => {
       let shortTask: Task = {

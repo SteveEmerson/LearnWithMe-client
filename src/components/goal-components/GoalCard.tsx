@@ -44,19 +44,22 @@ type GCState = {
   showEditForm: boolean
   newGoalDesc: string
   newDate: Date
+  newTasks: Array<Task>
   tasksChanged: boolean
 }
 
 type Task = {
-  id: number
+  id?: number
   description: string
   completed: boolean
-  createdAt: Date,
-  updatedAt: Date,
+  createdAt?: Date,
+  updatedAt?: Date,
   goalId: number,
   studentId: number,
-  teacherId: number
+  teacherId?: number | null
 }
+
+
 
 class GoalCard extends React.Component<GCProps,GCState>{
   constructor(props: GCProps){
@@ -65,6 +68,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
       updatedTasks: [],
       newGoalDesc: this.props.goal.description,
       newDate: this.props.goal.targetDate,
+      newTasks: [],
       showEditForm: false,
       tasksChanged: false
     }
@@ -73,6 +77,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   componentDidMount(){
     // Setting the state to a props that is an doesnt work ... creates a reference
     this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
+   
   }
 
 
@@ -106,9 +111,10 @@ class GoalCard extends React.Component<GCProps,GCState>{
     this.toggleEditForm();
     this.setState({newGoalDesc: this.props.goal.description})
     this.setState({newDate: this.props.goal.targetDate})
+    this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
   }
 
-  handleTaskChange = (id: number) => {
+  handleTaskChange = (id: number | undefined) => {
     
     let tempTasks: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
     let currentTaskIndex: number = tempTasks.findIndex(task => task.id === id);
@@ -203,6 +209,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     })
     .then(res => res.json())
     .then((json: {data: number[]}) => {
+      
       console.log(json.data[0])
       let newGoal: Goal = this.props.goal;
       newGoal.description = this.state.newGoalDesc;
@@ -264,7 +271,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     .then(res => res.json())
     .then((json) => {
       console.log(json)
-      this.deleteTasks()
+      this.deleteAllTasks()
 
       if(this.props.rolePOV === "teacher" && this.props.setGParState) {
         let cStud: Student = {
@@ -286,8 +293,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     .catch(err => console.log(`Error deleting goal: ${err}`));
   }
 
-  // THIS IS NOT WORKING !!!!!!! FIX MONDAY 4/19 PM !!!!!!!!!!!!
-  deleteTasks = () => {
+  deleteAllTasks = () => {
     console.log(this.props.rolePOV)
     if(this.props.tasks && this.props.tasks.length > 0){
       this.props.tasks.forEach((task: Task) => {
@@ -313,9 +319,40 @@ class GoalCard extends React.Component<GCProps,GCState>{
     }
   }
 
+  renderEditTasks = () => {
+    return(
+      this.state.updatedTasks?.map((task) => {
+        return(
+          <div key={`ET${task.id}`}>
+            <p>{task.description}</p>
+            <button onClick={() => this.removeTask(task.id)}>X</button>
+          </div>
+        )
+      })
+    )
+  }
+
+  removeTask = (taskId: number | undefined) => {
+    this.setState({updatedTasks: this.state.updatedTasks?.filter(task => task.id !== taskId)})
+  }
+
+  addTask(e: React.FormEvent<HTMLInputElement>){
+    e.preventDefault();
+    let nt: Task = {
+      description: e.currentTarget.value, 
+      completed: false, 
+      goalId: this.props.goal.id,
+      studentId: this.props.student.id,
+      teacherId:  this.props.goal.teacherId 
+    }
+
+    let temp: Array<Task> = this.state.newTasks
+    temp.push(nt)
+    this.setState({newTasks: temp})
+  }
+
   render(){
     let goal: Goal = this.props.goal
-    //console.log(`GC RENDER CURRENT GOAL: ${goal.id}`)
     return(
       <div style={{border:'1px dashed'}}>
         <h4>GoalCard</h4>
@@ -342,6 +379,12 @@ class GoalCard extends React.Component<GCProps,GCState>{
             rows={3}
             defaultValue={goal.description}
           />
+          <div>
+            {this.renderEditTasks()}
+            <input type="text"/>
+            <button onClick={(e:React.FormEvent<HTMLInputElement>) => {this.addTask(e)}}>add</button>
+          </div>
+          
           <p onClick={this.updateGoal}>confirm changes</p>
           <p onClick={this.cancelEdit}>cancel</p>
         </div>
