@@ -45,6 +45,7 @@ type GCState = {
   newGoalDesc: string
   newDate: Date
   newTasks: Array<Task>
+  oldTasks: Array<Task>
   newTaskDescription: string
   tasksChanged: boolean
 }
@@ -71,13 +72,14 @@ class GoalCard extends React.Component<GCProps,GCState>{
       newDate: this.props.goal.targetDate,
       newTaskDescription: "",
       newTasks: [],
+      oldTasks: [],
       showEditForm: false,
       tasksChanged: false
     }
   }
 
   componentDidMount(){
-    // Setting the state to a props that is an doesnt work ... creates a reference
+    // Setting the state to a props that is an object doesnt work ... creates a reference
     this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
    
   }
@@ -87,14 +89,17 @@ class GoalCard extends React.Component<GCProps,GCState>{
     
     if(prevProps.goal.id !== this.props.goal.id ){
       console.log("Got here")
-      this.setState({updatedTasks: this.props.tasks})
-      this.setState({tasksChanged: false})
-    }
-
-    if(prevProps.tasks !== this.props.tasks){
       this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
       this.setState({tasksChanged: false})
     }
+
+    console.log(this.state.updatedTasks)
+    console.log(this.props.tasks)
+
+    // if(prevProps.tasks !== this.props.tasks){
+    //   this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
+    //   this.setState({tasksChanged: false})
+    // }
   }
 
   handleDate = (e: React.FormEvent<HTMLInputElement>) => {
@@ -114,6 +119,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     this.setState({newGoalDesc: this.props.goal.description})
     this.setState({newDate: this.props.goal.targetDate})
     this.setState({newTasks: []})
+    this.setState({oldTasks: []})
     this.setState({newTaskDescription: ""})
     this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
   }
@@ -126,8 +132,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
     currentTask.completed = !currentTask.completed;
     tempTasks[currentTaskIndex] = currentTask;
     this.setState({updatedTasks: tempTasks})
-    this.checkTasksSame()
-    console.log(`${this.props.tasks ? this.props.tasks[0].completed : undefined}`)
     this.checkTasksSame()
   }
 
@@ -197,12 +201,9 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   addTasks = () => {
-    let newTasks: Array<Task> | undefined = 
-      this.state.updatedTasks?.filter((task: Task) => task.id === 0);
+    let newTasks = this.state.newTasks
 
-    console.log(newTasks)
-
-    if (newTasks){
+    if (newTasks.length > 0){
       newTasks.forEach((task) => {
         const url = `http://localhost:3000/task/${this.props.rolePOV}_create`
     
@@ -228,15 +229,9 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   removeTasks = () => {
-    console.log(this.props.tasks)
-    let oldTasks: Array<Task> | null= 
-      this.props.tasks
-      ? this.props.tasks.filter((task: Task) => !this.state.updatedTasks?.includes(task))
-      : null;
-  
-    console.log(oldTasks)
+    let oldTasks: Array<Task> = this.state.oldTasks
 
-    if (oldTasks){
+    if (oldTasks.length > 0){
       oldTasks.forEach((task) => {
         const url = `http://localhost:3000/task/${this.props.rolePOV}_delete/${task.id}`
    
@@ -392,22 +387,20 @@ class GoalCard extends React.Component<GCProps,GCState>{
         return(
           <div key={`${task.description.slice(5)}${task.id}`}>
             <p>{task.description}</p>
-            <button onClick={() => this.removeStagedTask(task.id)}>X</button>
+            <button onClick={() => this.removeStagedTask(task)}>X</button>
           </div>
         )
       })
     )
   }
 
-  removeStagedTask = (taskId: number | undefined) => {
-    console.log(taskId)
-    console.log(this.props.tasks)
-    console.log(this.state.updatedTasks)
-    
-    let cTask: Task | undefined = this.state.updatedTasks?.findIndex(task => task.id === taskId)
-    if cTask
-    console.log(this.props.tasks)
-    console.log(this.state.updatedTasks)
+
+  
+  removeStagedTask = (remTask: Task) => {
+    let temp: Array<Task> | undefined= this.state.updatedTasks?.filter((task) => task.id !== remTask.id)
+    this.setState({updatedTasks: temp})
+
+    this.setState({oldTasks: [...this.state.oldTasks, remTask]})
   }
 
   addStagedTask(){
@@ -427,6 +420,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     } 
     
     this.setState({newTaskDescription: ""})
+    this.setState({newTasks: [...this.state.newTasks, nt]})
   }
 
   render(){
