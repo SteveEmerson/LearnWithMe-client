@@ -97,10 +97,6 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
     this.setState({newNote: ""})
   }
 
-  deleteNote = () => {
-    // only the one who made the note can edit or delete
-  }
-
   renderNotes = () => {
     return(
       this.props.notes.map((note) => {
@@ -108,6 +104,8 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
           <NoteCard 
             note={note}
             teacherName={this.props.teacherName}
+            teacherId={this.props.meeting.teacherId}
+            studentId={this.props.meeting.studentId}
             studentName={this.props.studentName}
             token={this.props.token}
             getNotes={this.props.getNotes}
@@ -125,7 +123,10 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
         <h5>
           {`Meeting between ${this.props.studentName} and ${this.props.teacherName} on ${this.props.meeting.d_t}`}
         </h5>
-        <button onClick={this.deleteMeeting}>Delete Meeting</button>
+        {new Date(this.props.meeting.d_t) > new Date() 
+          ? <button onClick={this.deleteMeeting}>Delete Meeting</button>
+          : null}
+        
         {this.renderNotes()}
         {this.state.showAddNote
           ? 
@@ -142,6 +143,7 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
               <button onClick={this.cancelAddNote}>Cancel</button>
             </div>
           : null}
+        <hr/>
         <p onClick={() => {this.setState({showAddNote:true})}}>+ Note</p>
         <p onClick={() => this.props.toggleMCF()}>Close</p>
       </div>

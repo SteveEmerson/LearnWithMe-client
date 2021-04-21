@@ -13,15 +13,18 @@ type Note = {
 type NCProps = {
   note: Note
   teacherName: string
+  teacherId: number
   studentName: string
+  studentId: number
   token: string
   getNotes: Function
   role: string
 }
 
 type NCState = {
-  showEditNote: Boolean
+  showEditNote: boolean
   newContent: string
+  allowEditNote: boolean
 }
 
 class NoteCard extends React.Component<NCProps, NCState> {
@@ -29,7 +32,8 @@ class NoteCard extends React.Component<NCProps, NCState> {
     super(props);
     this.state = {
       showEditNote: false,
-      newContent: ""
+      newContent: "",
+      allowEditNote: this.props.note.teacherId === this.props.teacherId || this.props.note.studentId === this.props.studentId
     }
   }
 
@@ -61,13 +65,33 @@ class NoteCard extends React.Component<NCProps, NCState> {
     this.setState({newContent: ""})
   }
 
+  deleteNote = () => {
+    const url: string = `http://localhost:3000/mtg_note/${this.props.role}_delete/${this.props.note.id}`
+
+    fetch(url, {
+      method: 'DELETE',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': this.props.token
+      })
+    })
+    .then(res => res.json())
+    .then((json: {message: string}) => {
+      console.log(`${json}`)
+      this.setState({showEditNote: false})
+      this.setState({newContent: ""})
+      this.props.getNotes()
+    })
+    .catch(err => console.log(`Failed to delete note: ${err}`))
+  }
+
   render() {
     let note = {...this.props.note}
     return(
       <div>
         <h5>Note Card</h5>
         <div key={`Note${note.id}`} >
-          {!this.state.showEditNote
+          {!this.state.showEditNote || !this.state.allowEditNote
             ?
             <div onClick={()=>this.setState({showEditNote: true})}>
               <p>{note.teacherId ? this.props.teacherName : this.props.studentName}</p>
@@ -77,24 +101,25 @@ class NoteCard extends React.Component<NCProps, NCState> {
             : null
           }
 
-            {this.state.showEditNote
-              ?  
-                <div>
-                  <textarea  
-                  name="task-description" 
-                  id="task" 
-                  cols={30}
-                  rows={10}
-                  defaultValue={note.content}
-                  onChange={(e)=>{this.setState({newContent: e.currentTarget.value})}}
-                  > 
-                  </textarea>
-                  <p onClick={this.updateNote}>Confirm</p>
-                  <p onClick={this.cancelEditNote}>Cancel</p>
-                </div>
-              :null
-              
-            }
+          {this.state.showEditNote && this.state.allowEditNote
+            ?  
+              <div>
+                <textarea  
+                name="task-description" 
+                id="task" 
+                cols={30}
+                rows={10}
+                defaultValue={note.content}
+                onChange={(e)=>{this.setState({newContent: e.currentTarget.value})}}
+                > 
+                </textarea>
+                <button onClick={this.updateNote}>Confirm Changes</button>
+                <button onClick={this.deleteNote}>Delete Note</button>
+                <p onClick={this.cancelEditNote}>Cancel</p>
+              </div>
+            :null
+            
+          }
             <div>
 
             </div>
