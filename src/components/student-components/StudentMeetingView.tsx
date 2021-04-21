@@ -190,6 +190,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
             token= {this.props.user.sessionToken}
             studentName= {this.props.user.displayName}
             teacherName= {teacherName}
+            getMeetings={this.props.getMeetings}
             key={`MCS${meeting.id}`}
           />
         )

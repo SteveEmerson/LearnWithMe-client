@@ -220,6 +220,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
               setTSVState={this.setState}
               token={this.props.user.sessionToken}
               teacher={this.props.user}
+              getMeetings={this.props.getMeetings}
             />
           : null}
           <br />

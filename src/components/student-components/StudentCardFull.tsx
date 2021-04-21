@@ -70,6 +70,7 @@ type SCFProps = {
   setTSVState: Function
   token: string
   teacher: User
+  getMeetings: Function
 }
 
 type SCFState = {
@@ -116,6 +117,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
             teacherName={this.props.teacher.displayName}
             studentName={this.props.student.displayName}
             key={`MCM${meeting.id}`}
+            getMeetings={this.props.getMeetings}
           />
         )
       })

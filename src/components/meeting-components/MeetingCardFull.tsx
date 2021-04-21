@@ -27,6 +27,7 @@ type MCFProps = {
   toggleMCF: Function
   role: string
   token: string
+  getMeetings: Function
 }
 
 type MCFState = {
@@ -68,8 +69,11 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
       })
     })
     .then(res => res.json())
-    .then(json => console.log(json.message))
-    .catch(err => console.log(`Failed to delete meetign ${err}`));
+    .then(json => {
+      console.log(json.message)
+      this.props.getMeetings()
+    })
+    .catch(err => console.log(`Failed to delete meeting ${err}`));
     
   }
 
