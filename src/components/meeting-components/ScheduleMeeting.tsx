@@ -31,15 +31,15 @@ type Task = {
   teacherId: number
 }
 
-type User = {
-  email: string
-  userId: number
-  displayName: string
-  partnerList: number[]
-  role: string
-  availability: {}
-  sessionToken: string
-}
+// type User = {
+//   email: string
+//   userId: number
+//   displayName: string
+//   partnerList: number[]
+//   role: string
+//   availability: {}
+//   sessionToken: string
+// }
 
 type Goal = {
   id: number
