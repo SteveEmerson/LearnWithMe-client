@@ -72,20 +72,24 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
 
   render(){
     return(
-      <div onClick={this.toggleMCF}>
-        <h4>MeetingCardSmall</h4>
-        <p>meeting id: {this.props.meeting.id}</p>
-        <p>{this.props.meeting.d_t}</p>
-        <p>N {this.state.notes.length}</p>
+      <div>
+        <div onClick={this.toggleMCF}>
+          <h4>MeetingCardSmall</h4>
+          <p>meeting id: {this.props.meeting.id}</p>
+          <p>{this.props.meeting.d_t}</p>
+          <p>N {this.state.notes.length}</p>
+        </div>
         {this.state.showMCF 
-        ? <MeetingCardFull 
-            meeting={this.props.meeting} 
-            notes={this.state.notes} 
-            teacherName={this.props.teacherName}
-            studentName={this.props.studentName}
-          /> 
-        : null}
+          ? <MeetingCardFull 
+              meeting={this.props.meeting} 
+              notes={this.state.notes} 
+              teacherName={this.props.teacherName}
+              studentName={this.props.studentName}
+              toggleMCF={this.toggleMCF}
+            /> 
+          : null}
       </div>
+
     )
   }
 }

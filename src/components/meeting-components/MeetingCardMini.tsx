@@ -72,17 +72,20 @@ class MeetingCardMini extends React.Component<MCMProps,MCMState>{
 
   render(){
     return(
-      <div onClick={this.toggleMCF}>
-        <h4>MeetingCardMini</h4>
-        <p>meeting id: {this.props.meeting.id}</p>
-        <p>{this.props.meeting.d_t}</p>
-        <p>N {this.state.notes.length}</p>
-        {this.state.showMCF 
+      <div>
+        <div onClick={this.toggleMCF}>
+          <h4>MeetingCardMini</h4>
+          <p>meeting id: {this.props.meeting.id}</p>
+          <p>{this.props.meeting.d_t}</p>
+          <p>N {this.state.notes.length}</p>
+      </div>
+      {this.state.showMCF 
         ? <MeetingCardFull 
             meeting={this.props.meeting} 
             notes={this.state.notes} 
             teacherName={this.props.teacherName}
             studentName={this.props.studentName}
+            toggleMCF={this.toggleMCF}
           /> 
         : null}
       </div>

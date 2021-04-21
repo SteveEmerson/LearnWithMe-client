@@ -24,6 +24,7 @@ type MCFProps = {
   notes: Array<Note>
   teacherName: string
   studentName: string
+  toggleMCF: Function
 }
 
 type MCFState = {
@@ -54,11 +55,20 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
     )
   }
 
+  deleteMeeting = () => {
+    this.props.toggleMCF()  //probaly wont need this later
+  }
+
   render(){
     return(
       <div style={{backgroundColor:'grey'}}>
         <h4>MeetingCardFull</h4>
+        <h5>
+          {`Meeting between ${this.props.studentName} and ${this.props.teacherName} on ${this.props.meeting.d_t}`}
+        </h5>
+        <button onClick={this.deleteMeeting}>Delete Meeting</button>
         {this.renderNotes()}
+        <p onClick={() => this.props.toggleMCF()}>Close</p>
       </div>
     )
   }
