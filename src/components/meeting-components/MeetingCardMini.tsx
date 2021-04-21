@@ -89,6 +89,7 @@ class MeetingCardMini extends React.Component<MCMProps,MCMState>{
             toggleMCF={this.toggleMCF}
             role={'teacher'}
             getMeetings={this.props.getMeetings}
+            getNotes={this.getNotes}
             token={this.props.token}
           /> 
         : null}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import NoteCard from '../note-components/NoteCard'
 
 type Meeting = {
   id: number,
@@ -28,33 +29,23 @@ type MCFProps = {
   role: string
   token: string
   getMeetings: Function
+  getNotes: Function
 }
 
 type MCFState = {
   notes: Array<Note>
+  showAddNote: boolean
+  newNote: string
 }
 
 class MeetingCardFull extends React.Component<MCFProps, MCFState>{
   constructor(props: MCFProps){
     super(props);
     this.state = {
-      notes: []
+      notes: [],
+      showAddNote: false,
+      newNote: ""
     }
-  }
-
-
-  renderNotes = () => {
-    return(
-      this.props.notes.map((note) => {
-        return(
-          <div key={`Note${note.id}`}>
-            <p>{note.teacherId ? this.props.teacherName : this.props.studentName}</p>
-            <p>{note.content}</p>
-            <p>{note.createdAt}</p>
-          </div>
-        )
-      })  
-    )
   }
 
   deleteMeeting = () => {
@@ -77,12 +68,54 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
     
   }
 
-  editNote = () => {
-    // only the one who made the note can edit or delete
+  addNote = () => {
+    const url: string = `http://localhost:3000/mtg_note/${this.props.role}_create`
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        content: this.state.newNote,
+        meetingId: this.props.meeting.id
+      }),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': this.props.token
+      })
+    })
+    .then(res => res.json())
+    .then((note: Note) => {
+      console.log(note)
+      this.setState({showAddNote: false})
+      this.setState({newNote: ""})
+      this.props.getNotes()
+    })
+    .catch(err => console.log(`Failed to create note: ${err}`))
+  }
+
+  cancelAddNote = () => {
+    this.setState({showAddNote: false})
+    this.setState({newNote: ""})
   }
 
   deleteNote = () => {
     // only the one who made the note can edit or delete
+  }
+
+  renderNotes = () => {
+    return(
+      this.props.notes.map((note) => {
+        return(
+          <NoteCard 
+            note={note}
+            teacherName={this.props.teacherName}
+            studentName={this.props.studentName}
+            token={this.props.token}
+            getNotes={this.props.getNotes}
+            role={this.props.role}
+          />
+        )
+      })  
+    )
   }
 
   render(){
@@ -94,6 +127,22 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
         </h5>
         <button onClick={this.deleteMeeting}>Delete Meeting</button>
         {this.renderNotes()}
+        {this.state.showAddNote
+          ? 
+            <div>
+              <textarea  
+                name="task-description" 
+                id="task" 
+                cols={30}
+                rows={10}
+                onChange={(e)=>{this.setState({newNote: e.currentTarget.value})}}
+              > 
+              </textarea>
+              <button onClick={this.addNote}>Add Note</button>
+              <button onClick={this.cancelAddNote}>Cancel</button>
+            </div>
+          : null}
+        <p onClick={() => {this.setState({showAddNote:true})}}>+ Note</p>
         <p onClick={() => this.props.toggleMCF()}>Close</p>
       </div>
     )
