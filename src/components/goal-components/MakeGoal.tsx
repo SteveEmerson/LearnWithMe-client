@@ -38,6 +38,7 @@ type MGProps = {
   setParState: Function
   getStudentGoals?: Function
   getStudentTasks?: Function
+  toggleMakeGoal: Function
 }
 
 type MGState = {
@@ -138,6 +139,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
           }
           this.props.setGParState({currStudent: cStud});
         }
+
+        //this.props.toggleMakeGoal()
 
 
       })

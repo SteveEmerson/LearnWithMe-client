@@ -2,6 +2,7 @@ import * as React from 'react';
 import GoalCard from '../goal-components/GoalCard';
 import MeetingCardSmall from '../meeting-components/MeetingCardSmall';
 import MakeGoal from '../goal-components/MakeGoal';
+import ScheduleMeeting from '../meeting-components/ScheduleMeeting';
 
 type User = {
   email: string
@@ -77,6 +78,7 @@ type SMVProps = {
 type SMVState = {
   allStudentTeachers: Array<Teacher>
   makeGoal: boolean
+  scheduleMeeting: boolean
   student: Student
 }
 
@@ -100,6 +102,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
     this.state = {
       allStudentTeachers: [],
       makeGoal: false,
+      scheduleMeeting: false,
       student: {
         id: this.props.user.userId,
         displayName: this.props.user.displayName,
@@ -109,6 +112,18 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
     }
 
     this.setState = this.setState.bind(this)
+  }
+
+  componentDidMount(){
+    this.getTeacherList()
+  }
+
+  toggleScheduleMeeting = () => {
+    this.setState({scheduleMeeting: !this.state.scheduleMeeting})
+  }
+
+  toggleMakeGoal = () => {
+    this.setState({makeGoal: !this.state.makeGoal})
   }
 
   getTeacherList = () => {
@@ -187,7 +202,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
       <div>
         <h3>Student Meeting View</h3>
         <hr/>
-        <button onClick={() => this.setState({makeGoal: !this.state.makeGoal})}>Make Goal</button>
+        <button onClick={this.toggleMakeGoal}>Make Goal</button>
         {this.state.makeGoal 
           ? <MakeGoal 
               student={this.state.student}
@@ -196,6 +211,20 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               setParState={this.setState}
               getStudentGoals={this.props.getGoals}
               getStudentTasks={this.props.getTasks}
+              toggleMakeGoal={this.toggleMakeGoal}
+            /> 
+          : null}
+
+        <button onClick={this.toggleScheduleMeeting}>Schedule Meeting</button>
+        {this.state.scheduleMeeting
+          ? <ScheduleMeeting
+              teacher={null}
+              student={this.state.student}
+              setGParState={this.props.setStudState}
+              token={this.props.user.sessionToken}
+              allTeachers={this.state.allStudentTeachers}
+              getStudentMeetings={this.props.getMeetings}
+              toggleScheduleMeeting={this.toggleScheduleMeeting}
             /> 
           : null}
         <div className="GoalCardList">

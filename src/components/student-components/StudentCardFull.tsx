@@ -14,6 +14,16 @@ type Student = {
   tasks?: Array<Task>
 }
 
+type Teacher = {
+  id: number
+  displayName: string
+  email: string
+  availability: {}
+  meetings?:Array<Meeting>
+  goal?:Goal
+  tasks?: Array<Task>
+}
+
 
 type User = {
   email: string
@@ -65,8 +75,9 @@ type SCFProps = {
 type SCFState = {
   // newGoal: Goal
   // newMeeting: Meeting
-  makeMeeting: boolean
+  scheduleMeeting: boolean
   makeGoal: boolean
+  teacher: Teacher
 }
 
 /*********************************************************/
@@ -75,14 +86,20 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
   constructor(props: SCFProps){
     super(props);
     this.state = {
-      makeMeeting: false,
-      makeGoal: false
+      scheduleMeeting: false,
+      makeGoal: false,
+      teacher: {
+        id: this.props.teacher.userId,
+        displayName: this.props.teacher.displayName,
+        email: this.props.teacher.email,
+        availability: {...this.props.teacher.availability}
+      }
     }
     this.setState = this.setState.bind(this)
   }
 
-  toggleMakeMeeting = () => {
-    this.setState({makeMeeting: !this.state.makeMeeting})
+  toggleScheduleMeeting = () => {
+    this.setState({scheduleMeeting: !this.state.scheduleMeeting})
   }
 
   toggleMakeGoal = () => {
@@ -110,13 +127,16 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
       <div style={{border:'2px solid'}}>
         <h4>Student Card Full</h4>
         <p>{this.props.student.displayName}</p>
-        <button id="schedule-meeting" onClick={this.toggleMakeMeeting}>New Meeting</button>
+        <button id="schedule-meeting" onClick={this.toggleScheduleMeeting}>New Meeting</button>
         {!this.props.student.goal ? <button id="make-goal" onClick={this.toggleMakeGoal}>New Goal</button> : null}
-        {this.state.makeMeeting 
+        {this.state.scheduleMeeting 
           ? <ScheduleMeeting 
-              teacher={this.props.teacher} 
+              teacher={this.state.teacher} 
               student={this.props.student}
-              setTSVState={this.props.setTSVState}
+              setGParState={this.props.setTSVState}
+              token={this.props.token}
+              allTeachers={null}
+              toggleScheduleMeeting={this.toggleScheduleMeeting}
             /> 
           : null}
         {this.state.makeGoal 
@@ -127,6 +147,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               setGParState={this.props.setTSVState}
               sessionToken={this.props.teacher.sessionToken}
               setParState={this.setState} //NEED THIS ??
+              toggleMakeGoal={this.toggleMakeGoal}
             /> 
           : null}
         {this.props.student.goal 
