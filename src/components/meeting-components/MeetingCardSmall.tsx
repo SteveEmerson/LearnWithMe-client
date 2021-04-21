@@ -37,7 +37,7 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
     super(props);
     this.state = {
       notes: [],
-      showMCF: false
+      showMCF: false,
     }
   }
 
@@ -86,6 +86,8 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
               teacherName={this.props.teacherName}
               studentName={this.props.studentName}
               toggleMCF={this.toggleMCF}
+              role={"student"}
+              token={this.props.token}
             /> 
           : null}
       </div>
