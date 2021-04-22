@@ -8,6 +8,7 @@ type Student = {
   availability: {}
   meetings?:Array<Meeting>
   goal?:Goal
+  tasks?: Array<Task>
 }
 
 type Teacher = {
@@ -62,17 +63,21 @@ type Meeting= {
 
 type SMProps = {
   teacher: Teacher | null
-  student: Student
+  student: Student | null
   setGParState: Function
   token: string
   allTeachers: Array<Teacher> | null
+  allStudents: Array<Student> | null
   getStudentMeetings?: Function
+  getTeacherMeetings?: Function
   toggleScheduleMeeting:Function
+  mountingFrom: string
 }
 
 type SMState = {
   d_t: Date
   teacher: Teacher
+  student: Student
 }
 
 class ScheduleMeeting extends React.Component<SMProps,SMState>{
@@ -81,6 +86,12 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     this.state = {
       d_t: new Date(),
       teacher: {
+        id: 0,
+        displayName: "",
+        email: "",
+        availability: {}
+      },
+      student: {
         id: 0,
         displayName: "",
         email: "",
@@ -127,7 +138,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
             {
               d_t: this.state.d_t, 
               teacherId: this.props.teacher ? this.props.teacher.id: this.state.teacher.id,
-              studentId: this.props.student.id
+              studentId: this.props.student ? this.props.student.id: this.state.student.id
             }
           ),
           headers: new Headers ({
@@ -137,20 +148,24 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
       })
       .then((res) => res.json())
       .then((data: Meeting) => {
-        let meetings:  Array<Meeting> = 
-        this.props.student.meetings ? this.props.student.meetings : [];
+        let meetings:  Array<Meeting> | undefined = 
+        this.props.student ? this.props.student.meetings : [];
         
-        if(role === "teacher") {
+        if(this.props.student && role === "teacher" && this.props.mountingFrom === "SCF") {
           let cStud: Student = {
             id: this.props.student.id,
             displayName: this.props.student.displayName,
             email: this.props.student.email,
             availability: this.props.student.availability,
-            meetings: [...meetings, data],
+            meetings: meetings ? [...meetings, data] : [data],
             goal:this.props.student.goal
           }
         
           this.props.setGParState({currStudent: cStud})
+        }
+
+        if(role === "teacher" && this.props.getTeacherMeetings){
+          this.props.getTeacherMeetings()
         }
 
         if(role === "student" && this.props.getStudentMeetings){
@@ -185,6 +200,23 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     )
   }
 
+  renderStudentSelect = () => {
+    return(
+      <select 
+        name="students" 
+        id='student-select'
+        onChange={(e) => this.handleStudentSelect(e.currentTarget.value)}
+      >
+        <option defaultValue="Select">Select a student</option>
+        {this.props.allStudents?.map((student: Student) => {
+          return(
+            <option value={student.id}>{student.displayName}</option>
+          )
+        })}
+      </select>
+    )
+  }
+
   handleTeacherSelect = (idString: string) => {
     let id: number = Number(idString)
     console.log(id)
@@ -193,15 +225,23 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     console.log(selectedTeacher)
   }
 
+  handleStudentSelect = (idString: string) => {
+    let id: number = Number(idString)
+    console.log(id)
+    let selectedStudent: Student | undefined = this.props.allStudents?.find(student => student.id === id)
+    if (selectedStudent) this.setState({student: selectedStudent});
+    console.log(selectedStudent)
+  }
+
   render(){
     console.log(this.getDateString(new Date()))
     console.log(this.getDateString(this.getMaxDate()))
     return(
       <div>
         <h4>Schedule Meeting</h4>
-        {this.props.teacher
+        {this.props.teacher && this.props.student
           ? <p>Schedule a new meeting with {this.props.student.displayName}</p>
-          : this.renderTeacherSelect()
+          : this.props.student ? this.renderTeacherSelect() : this.renderStudentSelect
         }
         
         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>

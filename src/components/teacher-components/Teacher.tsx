@@ -63,6 +63,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       goals: [],
       tasks: []
     }
+    this.setState = this.setState.bind(this);
   }
 
   componentDidMount(){
@@ -170,7 +171,14 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                 getTasks={this.getTasks}
               />
             </Route>
-            <Route exact path='/teacher-meeting'><TeacherMeetingView user={this.props.currUser}/></Route>
+            <Route exact path='/teacher-meeting'>
+              <TeacherMeetingView 
+                user={this.props.currUser}
+                meetings={this.state.meetings}
+                getMeetings={this.getMeetings}
+                setTeacherState={this.setState}
+              />
+            </Route>
             <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>
           </Switch>
         </Router>

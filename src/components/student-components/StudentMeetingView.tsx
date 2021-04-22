@@ -64,6 +64,18 @@ type Task = {
   teacherId: number
 }
 
+type FetchTeacherData = {
+  id: number,
+  email: string,
+  passwordhash: string,
+  name: string,
+  studentList: number[]
+  role: string,
+  availability: {},
+  createdAt: string,
+  updatedAt: string
+}
+
 type SMVProps = {
   user: User
   meetings: Array<Meeting>
@@ -82,17 +94,6 @@ type SMVState = {
   student: Student
 }
 
-type FetchTeacherData = {
-  id: number,
-  email: string,
-  passwordhash: string,
-  name: string,
-  studentList: number[]
-  role: string,
-  availability: {},
-  createdAt: string,
-  updatedAt: string
-}
 
 type AllPartners = Array<FetchTeacherData>
 
@@ -224,8 +225,10 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               setGParState={this.props.setStudState}
               token={this.props.user.sessionToken}
               allTeachers={this.state.allStudentTeachers}
+              allStudents={null}
               getStudentMeetings={this.props.getMeetings}
               toggleScheduleMeeting={this.toggleScheduleMeeting}
+              mountingFrom={"SMV"}
             /> 
           : null}
         <div className="GoalCardList">

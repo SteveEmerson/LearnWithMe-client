@@ -138,7 +138,9 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               setGParState={this.props.setTSVState}
               token={this.props.token}
               allTeachers={null}
+              allStudents={null}
               toggleScheduleMeeting={this.toggleScheduleMeeting}
+              mountingFrom={"SCF"}
             /> 
           : null}
         {this.state.makeGoal 
