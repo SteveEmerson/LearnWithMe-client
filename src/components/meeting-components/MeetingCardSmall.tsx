@@ -26,6 +26,7 @@ type MCSProps = {
   teacherName: string
   studentName: string
   getMeetings: Function
+  role: string
 }
 
 type MCSState = {
@@ -87,7 +88,7 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
               teacherName={this.props.teacherName}
               studentName={this.props.studentName}
               toggleMCF={this.toggleMCF}
-              role={"student"}
+              role={this.props.role}
               getMeetings={this.props.getMeetings}
               getNotes={this.getNotes}
               token={this.props.token}

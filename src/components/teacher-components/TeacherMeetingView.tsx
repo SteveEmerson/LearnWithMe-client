@@ -152,6 +152,7 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
             studentName= {studentName}
             getMeetings={this.props.getMeetings}
             key={`MCS${meeting.id}`}
+            role={'teacher'}
           />
         )
       })

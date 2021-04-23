@@ -192,6 +192,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
             studentName= {this.props.user.displayName}
             teacherName= {teacherName}
             getMeetings={this.props.getMeetings}
+            role={"student"}
             key={`MCS${meeting.id}`}
           />
         )
