@@ -48,6 +48,7 @@ type GCState = {
   oldTasks: Array<Task>
   newTaskDescription: string
   tasksChanged: boolean
+  canEdit: boolean | number
 }
 
 type Task = {
@@ -74,7 +75,9 @@ class GoalCard extends React.Component<GCProps,GCState>{
       newTasks: [],
       oldTasks: [],
       showEditForm: false,
-      tasksChanged: false
+      tasksChanged: false,
+      canEdit: ((this.props.rolePOV === "teacher" && this.props.goal.teacherId) || 
+      (this.props.rolePOV === "student" && !this.props.goal.teacherId))
     }
   }
 
@@ -111,7 +114,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   toggleEditForm = () => {
-    this.setState({showEditForm: !this.state.showEditForm})
+    if(this.state.canEdit){this.setState({showEditForm: !this.state.showEditForm})}
   }
 
   cancelEdit = () => {
@@ -432,7 +435,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
           <p>Id: {goal.id}</p>
           <p>{goal.description}</p>
           <p>Target Date {String(goal.targetDate).slice(0,10)}</p>
-          <p>click goal to edit</p>
+          {this.state.canEdit ?  <p>click goal to edit</p> : null}
         </div>
         <div hidden={!this.state.showEditForm} id="change-goal-info">
           <p>Id: {goal.id}</p>
