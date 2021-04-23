@@ -96,13 +96,13 @@ class GoalCard extends React.Component<GCProps,GCState>{
       this.setState({tasksChanged: false})
     }
 
-    console.log(this.state.updatedTasks)
-    console.log(this.props.tasks)
+    if(this.props.tasks && this.state.updatedTasks){
+      console.log(this.compareTaskArrays(this.props.tasks, this.state.updatedTasks))
+    }
 
-    // if(prevProps.tasks !== this.props.tasks){
-    //   this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
-    //   this.setState({tasksChanged: false})
-    // }
+    console.log(this.props.tasks);
+    console.log(this.state.updatedTasks)
+
   }
 
   handleDate = (e: React.FormEvent<HTMLInputElement>) => {
@@ -144,26 +144,56 @@ class GoalCard extends React.Component<GCProps,GCState>{
     let pT: Array<Task> = this.props.tasks ? this.props.tasks : [];
     //console.log(uT)
     //console.log(pT)
-    this.setState({tasksChanged: uT?.length !== pT?.length || !this.compareArrays(uT, pT)}) 
+    this.setState({tasksChanged: uT?.length !== pT?.length || !this.compareTaskArrays(uT, pT)}) 
   }
 
-  compareArrays = (a: Array<Task>, b: Array<Task>) => {
+  compareTaskArrays = (a: Array<Task>, b: Array<Task>) => {
     for(let i: number = 0; i < a.length; i++){
-      if(a[i].description !== b[i].description || a[i].completed !== b[i].completed){
+      let inB: number = b.findIndex(task => task.id === a[i].id)
+      if(inB >= 0){
+        if (!this.compareTasks(a[i], b[inB])) return false
+      }else{
         return false
       }
     }
     return true
   }
 
+  compareTasks = (task1: Task, task2: Task): boolean => {
+
+    if(task1.description !== task2.description){
+      return false
+    }
+
+    if(task1.completed !== task2.completed){
+      return false
+    }
+
+    return true
+  }
+
   updateTasks = () => {
-    let changedTasks: Array<Task> | undefined = 
-      this.state.updatedTasks?.filter((task: Task) => !this.props.tasks?.includes(task));
+    let changedTasks: Array<Task> | undefined;
+    if(this.props.tasks && this.state.updatedTasks){
+      changedTasks = 
+      this.state.updatedTasks.filter((task: Task) => {
+        let inProps = this.props.tasks?.findIndex(pTask => pTask.id === task.id);
+          if(inProps && inProps >= 0 && this.props.tasks){
+            return !this.compareTasks(task, this.props.tasks[inProps])
+          }else{
+            return true
+          }
+      });
+    }else{
+      changedTasks = undefined
+    }
 
     if (changedTasks && changedTasks.length > 0) {
       changedTasks.forEach((task: Task) => {
+        console.log(task)
+        console.log(this.props.student.id, task.studentId)
         const url = `http://localhost:3000/task/${this.props.rolePOV}_update/${task.id}`
-   
+        console.log(url)
         fetch(url, {
           method: 'PUT',
           body: JSON.stringify({
