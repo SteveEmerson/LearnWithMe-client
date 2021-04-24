@@ -241,7 +241,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         <h4>Schedule Meeting</h4>
         {this.props.teacher && this.props.student
           ? <p>Schedule a new meeting with {this.props.student.displayName}</p>
-          : this.props.student ? this.renderTeacherSelect() : this.renderStudentSelect
+          : this.props.student ? this.renderTeacherSelect() : this.renderStudentSelect()
         }
         
         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>
