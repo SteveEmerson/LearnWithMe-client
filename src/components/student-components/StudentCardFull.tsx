@@ -71,6 +71,8 @@ type SCFProps = {
   token: string
   teacher: User
   getMeetings: Function
+  getGoals: Function
+  getTasks: Function
 }
 
 type SCFState = {
@@ -136,6 +138,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               teacher={this.state.teacher} 
               student={this.props.student}
               setGParState={this.props.setTSVState}
+              getTeacherMeetings={this.props.getMeetings}
               token={this.props.token}
               allTeachers={null}
               allStudents={null}
@@ -152,6 +155,8 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               sessionToken={this.props.teacher.sessionToken}
               setParState={this.setState} //NEED THIS ??
               toggleMakeGoal={this.toggleMakeGoal}
+              getGoals={this.props.getGoals}
+              getTasks={this.props.getTasks}
             /> 
           : null}
         {this.props.student.goal 
@@ -162,6 +167,8 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               token={this.props.token}
               tasks={this.props.student.tasks}
               setGParState={this.props.setTSVState}
+              getGoals={this.props.getGoals}
+              getTasks={this.props.getTasks}
             />
           : null}
         {this.props.student.meetings ? this.renderMeetingMinis() : null}

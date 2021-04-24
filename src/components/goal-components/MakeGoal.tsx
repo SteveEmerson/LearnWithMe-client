@@ -36,8 +36,10 @@ type MGProps = {
   setGParState: Function
   sessionToken: string
   setParState: Function
-  getStudentGoals?: Function
-  getStudentTasks?: Function
+  // getStudentGoals?: Function
+  // getStudentTasks?: Function
+  getGoals: Function
+  getTasks: Function
   toggleMakeGoal: Function
 }
 
@@ -126,18 +128,19 @@ class MakeGoal extends React.Component<MGProps,MGState>{
         
         if(this.state.tasks.length > 0) {this.taskSubmit(newGoal)};
 
-        if(!this.props.teacherId && this.props.getStudentGoals){
-          this.props.getStudentGoals();
+        if(!this.props.teacherId){
+          this.props.getGoals();
         }else if(this.props.teacherId){
-          let cStud: Student = {
-            id: this.props.student.id,
-            displayName: this.props.student.displayName,
-            email: this.props.student.email,
-            availability: this.props.student.availability,
-            meetings: this.props.student.meetings,
-            goal: newGoal,
-          }
-          this.props.setGParState({currStudent: cStud});
+          // let cStud: Student = {
+          //   id: this.props.student.id,
+          //   displayName: this.props.student.displayName,
+          //   email: this.props.student.email,
+          //   availability: this.props.student.availability,
+          //   meetings: this.props.student.meetings,
+          //   goal: newGoal,
+          // }
+          // this.props.setGParState({currStudent: cStud});
+          this.props.getGoals()
         }
 
         //this.props.toggleMakeGoal()
@@ -183,21 +186,22 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     .then((res) => res.json())
     .then((newTasks: Array<Task>) => {
       if(this.props.teacherId){
-        let cStud: Student = {
-          id: this.props.student.id,
-          displayName: this.props.student.displayName,
-          email: this.props.student.email,
-          availability: this.props.student.availability,
-          meetings: this.props.student.meetings,
-          goal: newGoal,
-          tasks: newTasks
-        }
+        // let cStud: Student = {
+        //   id: this.props.student.id,
+        //   displayName: this.props.student.displayName,
+        //   email: this.props.student.email,
+        //   availability: this.props.student.availability,
+        //   meetings: this.props.student.meetings,
+        //   goal: newGoal,
+        //   tasks: newTasks
+        // }
   
-        this.props.setGParState({currStudent: cStud});
+        // this.props.setGParState({currStudent: cStud});
+        this.props.getTasks()
       }
 
-      if(!this.props.teacherId && this.props.getStudentTasks){
-        this.props.getStudentTasks();
+      if(!this.props.teacherId){
+        this.props.getTasks();
       }
 
     })

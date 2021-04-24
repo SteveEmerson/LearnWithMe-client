@@ -212,8 +212,8 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               setGParState={this.props.setStudState}
               sessionToken={this.props.user.sessionToken}
               setParState={this.setState}
-              getStudentGoals={this.props.getGoals}
-              getStudentTasks={this.props.getTasks}
+              getGoals={this.props.getGoals}
+              getTasks={this.props.getTasks}
               toggleMakeGoal={this.toggleMakeGoal}
             /> 
           : null}

@@ -8,6 +8,8 @@ type GCProps = {
   tasks?: Array<Task>
   setGParState?: Function
   getStudentGoals?: Function
+  getGoals?: Function
+  getTasks?: Function
 }
 
 type Student = {
@@ -61,8 +63,6 @@ type Task = {
   studentId: number,
   teacherId?: number | null
 }
-
-
 
 class GoalCard extends React.Component<GCProps,GCState>{
   constructor(props: GCProps){
@@ -210,26 +210,35 @@ class GoalCard extends React.Component<GCProps,GCState>{
         })
         .then(res => res.json())
         .then((json: {data: number[]}) => {
-          console.log(json.data[0])
+          // console.log(json.data[0])
 
-          let updatedTasksDeepCopy = JSON.parse(JSON.stringify(this.state.updatedTasks));
+          // let updatedTasksDeepCopy = JSON.parse(JSON.stringify(this.state.updatedTasks));
 
-          if(this.props.rolePOV === "teacher" && this.props.setGParState){
-            let cStud: Student = {
-              id: this.props.student.id,
-              displayName: this.props.student.displayName,
-              email: this.props.student.email,
-              availability: this.props.student.availability,
-              meetings: this.props.student.meetings,
-              goal: this.props.goal,
-              tasks: updatedTasksDeepCopy
-            }
-            this.props.setGParState({currStudent: cStud});
+          // if(this.props.rolePOV === "teacher" && this.props.setGParState){
+          //   let cStud: Student = {
+          //     id: this.props.student.id,
+          //     displayName: this.props.student.displayName,
+          //     email: this.props.student.email,
+          //     availability: this.props.student.availability,
+          //     meetings: this.props.student.meetings,
+          //     goal: this.props.goal,
+          //     tasks: updatedTasksDeepCopy
+          //   }
+          //   this.props.setGParState({currStudent: cStud});
+          // }
+
+          if(this.props.rolePOV === "teacher" && this.props.getTasks){
+            this.props.getTasks();
           }
 
-          if(this.props.rolePOV === "student" && this.props.setGParState){
-            this.props.setGParState({tasks: updatedTasksDeepCopy});
+          // if(this.props.rolePOV === "student" && this.props.setGParState){
+          //   this.props.setGParState({tasks: updatedTasksDeepCopy});
+          // }
+
+          if(this.props.rolePOV === "student" && this.props.getTasks){
+            this.props.getTasks();
           }
+          
           this.setState({tasksChanged: false});
 
         })
@@ -261,6 +270,14 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then(res => res.json())
         .then((task: Task) => {
           console.log(task)
+
+          // Redundant ... just call getTasks
+          if(this.props.rolePOV === "teacher" && this.props.getTasks){
+            this.props.getTasks();
+          }
+          if(this.props.rolePOV === "student" && this.props.getTasks){
+            this.props.getTasks();
+          }
         })
         .catch(err => console.log(`Error in adding tasks ${err}`))
       });
@@ -284,6 +301,12 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then(res => res.json())
         .then((json: {message: string}) => {
           console.log(json)
+          if(this.props.rolePOV === "teacher" && this.props.getTasks){
+            this.props.getTasks();
+          }
+          if(this.props.rolePOV === "student" && this.props.getTasks){
+            this.props.getTasks();
+          }
         })
         .catch(err => console.log(`Error in removing tasks ${err}`))
       });
@@ -309,29 +332,38 @@ class GoalCard extends React.Component<GCProps,GCState>{
     .then((json: {data: number[]}) => {
       
       console.log(json.data[0])
-      let newGoal: Goal = this.props.goal;
-      newGoal.description = this.state.newGoalDesc;
-      newGoal.targetDate = this.state.newDate;
+      // let newGoal: Goal = this.props.goal;
+      // newGoal.description = this.state.newGoalDesc;
+      // newGoal.targetDate = this.state.newDate;
 
-      if(this.props.rolePOV === "teacher" && this.props.setGParState) {
-        let cStud: Student = {
-          id: this.props.student.id,
-          displayName: this.props.student.displayName,
-          email: this.props.student.email,
-          availability: this.props.student.availability,
-          meetings: this.props.student.meetings,
-          goal: newGoal,
-          tasks: this.state.updatedTasks
-        }
-        this.props.setGParState({currStudent: cStud});
+      // if(this.props.rolePOV === "teacher" && this.props.setGParState) {
+      //   let cStud: Student = {
+      //     id: this.props.student.id,
+      //     displayName: this.props.student.displayName,
+      //     email: this.props.student.email,
+      //     availability: this.props.student.availability,
+      //     meetings: this.props.student.meetings,
+      //     goal: newGoal,
+      //     tasks: this.state.updatedTasks
+      //   }
+      //   this.props.setGParState({currStudent: cStud});
+      // }
+
+      // REDUNDANT! JUST getGOALS
+      if(this.props.rolePOV === "teacher" && this.props.getGoals){
+        this.props.getGoals();
       }
 
-      if(this.props.rolePOV === "student" && this.props.getStudentGoals){
-        this.props.getStudentGoals();
+      // if(this.props.rolePOV === "student" && this.props.getStudentGoals){
+      //   this.props.getStudentGoals();
+      // }
+
+      if(this.props.rolePOV === "student" && this.props.getGoals){
+        this.props.getGoals();
       }
 
-      this.addTasks()
-      this.removeTasks()
+      // this.addTasks()
+      // this.removeTasks()
 
     })
     .catch(err => console.log(`Error in updating goal ${err}`))
@@ -374,22 +406,23 @@ class GoalCard extends React.Component<GCProps,GCState>{
       console.log(json)
       this.deleteAllTasks()
 
-      if(this.props.rolePOV === "teacher" && this.props.setGParState) {
-        let cStud: Student = {
-          id: this.props.student.id,
-          displayName: this.props.student.displayName,
-          email: this.props.student.email,
-          availability: this.props.student.availability,
-          meetings: this.props.student.meetings,
-          goal: null,
-          tasks: this.props.student.tasks
-        }
-        this.props.setGParState({currStudent: cStud});
+      // if(this.props.rolePOV === "teacher" && this.props.setGParState) {
+      //   let cStud: Student = {
+      //     id: this.props.student.id,
+      //     displayName: this.props.student.displayName,
+      //     email: this.props.student.email,
+      //     availability: this.props.student.availability,
+      //     meetings: this.props.student.meetings,
+      //     goal: null,
+      //     tasks: this.props.student.tasks
+      //   }
+      //   this.props.setGParState({currStudent: cStud});
+      // }
+
+      if(this.props.getGoals){
+        this.props.getGoals();
       }
 
-      if(this.props.rolePOV === "student" && this.props.getStudentGoals){
-        this.props.getStudentGoals();
-      }
     })
     .catch(err => console.log(`Error deleting goal: ${err}`));
   }
@@ -414,6 +447,10 @@ class GoalCard extends React.Component<GCProps,GCState>{
           // if(this.props.rolePOV === "student" && this.props.setGParState){
           //   this.props.setGParState({tasks: this.state.updatedTasks});
           // }
+
+          if(this.props.getTasks){
+            this.props.getTasks();
+          }
         })
         .catch(err => console.log(`Error deleting task: ${err}`));
       });

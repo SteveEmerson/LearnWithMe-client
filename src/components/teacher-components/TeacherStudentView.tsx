@@ -57,6 +57,7 @@ type TSVProps = {
   meetings: Array<Meeting>
   goals: Array<Goal>
   tasks: Array<Task>
+  students: Array<Student>
   getMeetings: Function
   getGoals: Function
   getTasks: Function
@@ -64,46 +65,28 @@ type TSVProps = {
 
 type TSVState = {
   currStudent: Student
-  allTeacherStudents: Array<Student>
   mounted: boolean
 }
 
 // CHANGED THIS DURING SMV CODING >>> WILL IT BREAK?
-type FetchStudentData = {
-  id: number,
-  email: string,
-  passwordhash: string,
-  name: string,
-  teacherList: number[] | null
-  role: string,
-  availability: {},
-  createdAt: string,
-  updatedAt: string
-}
+// type FetchStudentData = {
+//   id: number,
+//   email: string,
+//   passwordhash: string,
+//   name: string,
+//   teacherList: number[] | null
+//   role: string,
+//   availability: {},
+//   createdAt: string,
+//   updatedAt: string
+// }
 
-type AllPartners = Array<FetchStudentData>
 
 class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   constructor(props: TSVProps){
     super(props)
     this.state = {
-      currStudent: {
-        id: 0,
-        displayName: "",
-        email: "",
-        availability: {},
-        meetings:[],
-        goal: {
-          id: 0,
-          description: "",
-          targetDate: new Date(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          studentId: 0,
-          teacherId: 0
-        },
-      },
-      allTeacherStudents: [],
+      currStudent: this.props.students[0],
       mounted: false,
     }
 
@@ -111,7 +94,6 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   componentDidMount(){
-    this.getStudentList();
     
   }
 
@@ -127,44 +109,6 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
         this.props.getTasks();
       
       }
-  }
-
-
-  getStudentList = () => {
-    const url: string = `http://localhost:3000/student/`
-    fetch(url,
-      {
-          method: 'GET',
-          headers: new Headers ({
-          'Content-Type': 'application/json',
-          'Authorization': this.props.user.sessionToken
-          })
-      })
-      .then((res) => res.json())
-      .then((data: AllPartners) => {
-        let allStudents: Array<Student> = 
-        data.filter((partner:FetchStudentData) => {
-          return this.props.user.partnerList.includes(partner.id)
-        })
-        .map((partner: FetchStudentData) => {
-          return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
-        } )
-        this.setState({allTeacherStudents: allStudents})
-        console.log(this.state.allTeacherStudents)
-
-        // FIX? IS THIS NEEDED TO SET THE CURRENT STUDENT OR CAN THE SCS DO THAT BY DEFAULT CLICKING ON A STUDENT
-        if(!this.state.mounted){
-          let cStud = allStudents[0]; 
-          cStud.meetings = this.getStudentMeetings(cStud.id)
-          cStud.goal = this.getStudentGoal(cStud.id)
-          cStud.tasks = this.getStudentTasks(cStud.id)
-          this.setState({currStudent: cStud})
-          this.setState({mounted: true})
-        }
-      })
-      .catch(err => {
-        console.log(`Error in fetch: ${err}`)
-      }) 
   }
 
   getStudentMeetings = (id: number) => {
@@ -187,7 +131,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
 
   renderStudentList = () => {
     return(
-      this.state.allTeacherStudents.map((student: Student) => {
+      this.props.students.map((student: Student) => {
         student.meetings = this.getStudentMeetings(student.id)
         student.goal = this.getStudentGoal(student.id)
         student.tasks = this.getStudentTasks(student.id)
@@ -217,12 +161,14 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
               token={this.props.user.sessionToken}
               teacher={this.props.user}
               getMeetings={this.props.getMeetings}
+              getGoals={this.props.getGoals}
+              getTasks={this.props.getTasks}
             />
           : null}
           <br />
         </div>
         <div className="StudentCardSmallList">
-          {this.state.allTeacherStudents.length !== 0 ? this.renderStudentList() : null}
+          {this.props.students.length !== 0 ? this.renderStudentList() : null}
         </div>
         <hr/>
       </div>

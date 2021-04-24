@@ -19,6 +19,16 @@ type User = {
   sessionToken: string
 }
 
+type Student = {
+  id: number
+  displayName: string
+  email: string
+  availability: {}
+  meetings?:Array<Meeting>
+  goal?:Goal
+  tasks?: Array<Task>
+}
+
 type Meeting= {
   id: number,
   d_t: Date,
@@ -42,6 +52,7 @@ type TeacherState = {
   meetings: Array<Meeting>
   goals: Array<Goal>
   tasks: Array<Task>
+  students: Array<Student>
 }
 
 type Task = {
@@ -55,13 +66,26 @@ type Task = {
   teacherId: number
 }
 
+type FetchStudentData = {
+  id: number,
+  email: string,
+  passwordhash: string,
+  name: string,
+  teacherList: number[] | null
+  role: string,
+  availability: {},
+  createdAt: string,
+  updatedAt: string
+}
+
 class Teacher extends React.Component<TeacherProps, TeacherState> {
   constructor(props: TeacherProps){
     super(props);
     this.state = {
       meetings: [],
       goals: [],
-      tasks: []
+      tasks: [],
+      students: [],
     }
     this.setState = this.setState.bind(this);
   }
@@ -70,6 +94,37 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
     this.getMeetings();
     this.getGoals();
     this.getTasks();
+    this.getStudents();
+  }
+
+  getStudents = () => {
+    const url: string = `http://localhost:3000/student/`
+    fetch(url,
+      {
+          method: 'GET',
+          headers: new Headers ({
+          'Content-Type': 'application/json',
+          'Authorization': this.props.currUser.sessionToken
+          })
+      })
+      .then((res) => res.json())
+      .then((data: Array<FetchStudentData>) => {
+        let allStudents: Array<Student> = 
+        data.filter((partner:FetchStudentData) => {
+          return this.props.currUser.partnerList.includes(partner.id)
+        })
+        .map((partner: FetchStudentData) => {
+          return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
+        } )
+        this.setState({students: allStudents})
+        console.log(this.state.students)
+
+        // FIX? IS THIS NEEDED TO SET THE CURRENT STUDENT OR CAN THE SCS DO THAT BY DEFAULT CLICKING ON A STUDENT
+       
+      })
+      .catch(err => {
+        console.log(`Error in fetch: ${err}`)
+      }) 
   }
 
   getMeetings = () => {
@@ -166,6 +221,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                 meetings={this.state.meetings}
                 goals={this.state.goals}
                 tasks={this.state.tasks}
+                students={this.state.students}
                 getMeetings={this.getMeetings}
                 getGoals={this.getGoals}
                 getTasks={this.getTasks}

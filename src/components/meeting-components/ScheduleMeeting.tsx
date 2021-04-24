@@ -148,21 +148,21 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
       })
       .then((res) => res.json())
       .then((data: Meeting) => {
-        let meetings:  Array<Meeting> | undefined = 
-        this.props.student ? this.props.student.meetings : [];
+        // let meetings:  Array<Meeting> | undefined = 
+        // this.props.student ? this.props.student.meetings : [];
         
-        if(this.props.student && role === "teacher" && this.props.mountingFrom === "SCF") {
-          let cStud: Student = {
-            id: this.props.student.id,
-            displayName: this.props.student.displayName,
-            email: this.props.student.email,
-            availability: this.props.student.availability,
-            meetings: meetings ? [...meetings, data] : [data],
-            goal:this.props.student.goal
-          }
+        // if(this.props.student && role === "teacher" && this.props.mountingFrom === "SCF") {
+        //   let cStud: Student = {
+        //     id: this.props.student.id,
+        //     displayName: this.props.student.displayName,
+        //     email: this.props.student.email,
+        //     availability: this.props.student.availability,
+        //     meetings: meetings ? [...meetings, data] : [data],
+        //     goal:this.props.student.goal
+        //   }
         
-          this.props.setGParState({currStudent: cStud})
-        }
+        //   this.props.setGParState({currStudent: cStud})
+        // }
 
         if(role === "teacher" && this.props.getTeacherMeetings){
           this.props.getTeacherMeetings()
