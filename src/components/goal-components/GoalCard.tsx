@@ -97,11 +97,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
     }
 
     if(this.props.tasks && this.state.updatedTasks){
-      console.log(this.compareTaskArrays(this.props.tasks, this.state.updatedTasks))
+      //console.log(this.compareTaskArrays(this.props.tasks, this.state.updatedTasks))
     }
 
-    console.log(this.props.tasks);
-    console.log(this.state.updatedTasks)
+    //console.log(this.props.tasks);
+    //console.log(this.state.updatedTasks)
 
   }
 
@@ -128,22 +128,25 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   handleTaskChange = (id: number | undefined) => {
-    
+    console.log("Got handle task change");
     let tempTasks: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
     let currentTaskIndex: number = tempTasks.findIndex(task => task.id === id);
     let currentTask :Task = tempTasks[currentTaskIndex];
     currentTask.completed = !currentTask.completed;
     tempTasks[currentTaskIndex] = currentTask;
     this.setState({updatedTasks: tempTasks})
-    this.checkTasksSame()
+    this.checkTasksChanged()
   }
 
 
-  checkTasksSame = () => {
+  checkTasksChanged = () => {
+
     let uT: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
     let pT: Array<Task> = this.props.tasks ? this.props.tasks : [];
-    //console.log(uT)
-    //console.log(pT)
+
+    console.log('Tasks changed? ', uT?.length !== pT?.length || !this.compareTaskArrays(uT, pT))
+    console.log(uT)
+    console.log(pT)
     this.setState({tasksChanged: uT?.length !== pT?.length || !this.compareTaskArrays(uT, pT)}) 
   }
 
@@ -209,6 +212,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then((json: {data: number[]}) => {
           console.log(json.data[0])
 
+          let updatedTasksDeepCopy = JSON.parse(JSON.stringify(this.state.updatedTasks));
+
           if(this.props.rolePOV === "teacher" && this.props.setGParState){
             let cStud: Student = {
               id: this.props.student.id,
@@ -217,14 +222,15 @@ class GoalCard extends React.Component<GCProps,GCState>{
               availability: this.props.student.availability,
               meetings: this.props.student.meetings,
               goal: this.props.goal,
-              tasks: this.state.updatedTasks
+              tasks: updatedTasksDeepCopy
             }
             this.props.setGParState({currStudent: cStud});
           }
 
           if(this.props.rolePOV === "student" && this.props.setGParState){
-            this.props.setGParState({tasks: this.state.updatedTasks});
+            this.props.setGParState({tasks: updatedTasksDeepCopy});
           }
+          this.setState({tasksChanged: false});
 
         })
         .catch(err => console.log(`Error in updating tasks ${err}`))

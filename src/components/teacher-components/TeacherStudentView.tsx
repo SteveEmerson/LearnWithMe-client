@@ -116,21 +116,17 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   componentDidUpdate(prevProps: TSVProps, prevState: TSVState){
-    // FIX THIS ... SEEMS LIKE ALL OF THIS IS TRIGGERING WHEN THE GOAL IS UPDATED
-    if (this.state.currStudent.meetings && prevState.currStudent.meetings !== this.state.currStudent.meetings){
-      console.log(`TSV UPDATE CURR STUDENT MEETINGS  ${this.state.currStudent.id} ${this.state.currStudent.meetings}`)
-      this.props.getMeetings();
-    }
-    
-    if (this.state.currStudent && prevState.currStudent.goal !== this.state.currStudent.goal){
-      console.log(`TSV UPDATE CURR STUDENT GOAL ${this.state.currStudent.id} ${this.state.currStudent.goal}`)
-      this.props.getGoals();
-    }
+      console.log("GOT TO UPDATE TSV")
+      if(prevState.currStudent.id !== this.state.currStudent.id){
+        // console.log(`TSV UPDATE CURR STUDENT`)
 
-    if (this.state.currStudent.tasks && prevState.currStudent.tasks !== this.state.currStudent.tasks){
-      console.log(`TSV UPDATE CURR STUDENT TASKS  ${this.state.currStudent.id} ${this.state.currStudent.tasks}`)
-      this.props.getTasks();
-    }
+        this.props.getMeetings();
+  
+        this.props.getGoals();
+      
+        this.props.getTasks();
+      
+      }
   }
 
 
