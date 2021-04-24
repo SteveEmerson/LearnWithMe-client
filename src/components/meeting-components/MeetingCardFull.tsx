@@ -110,6 +110,7 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
             token={this.props.token}
             getNotes={this.props.getNotes}
             role={this.props.role}
+            key={`N${note.id}`}
           />
         )
       })  

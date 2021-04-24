@@ -193,7 +193,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         <option defaultValue="Select">Select a teacher</option>
         {this.props.allTeachers?.map((teacher: Teacher) => {
           return(
-            <option value={teacher.id}>{teacher.displayName}</option>
+            <option value={teacher.id} key={`TOP${teacher.id}`}>{teacher.displayName}</option>
           )
         })}
       </select>
