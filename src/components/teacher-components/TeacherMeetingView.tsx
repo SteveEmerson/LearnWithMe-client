@@ -17,6 +17,7 @@ type Student = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -27,6 +28,7 @@ type Teacher = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -97,7 +99,8 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
         id: this.props.user.userId,
         displayName: this.props.user.displayName,
         email: this.props.user.email,
-        availability: this.props.user.availability
+        availability: this.props.user.availability,
+        partners: this.props.user.partnerList
       }
 
     }
@@ -128,7 +131,13 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
           return this.props.user.partnerList.includes(partner.id)
         })
         .map((partner: FetchStudentData) => {
-          return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
+          return {
+            id: partner.id, 
+            displayName: partner.name, 
+            email:partner.email, 
+            availability:partner.availability,
+            partners: partner.studentList
+          }
         } )
         this.setState({allTeacherStudents: allStudents})
         console.log(this.state.allTeacherStudents)

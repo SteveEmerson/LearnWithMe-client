@@ -60,7 +60,8 @@ class Student extends React.Component<StudentProps, StudentState> {
     this.state = {
       meetings: [],
       goals: [],
-      tasks: []
+      tasks: [],
+      
     }
     this.setState = this.setState.bind(this)
   }

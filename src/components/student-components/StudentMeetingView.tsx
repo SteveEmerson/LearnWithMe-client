@@ -19,6 +19,7 @@ type Student = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -39,6 +40,7 @@ type Teacher = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -108,7 +110,8 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
         id: this.props.user.userId,
         displayName: this.props.user.displayName,
         email: this.props.user.email,
-        availability: this.props.user.availability
+        availability: this.props.user.availability,
+        partners: this.props.user.partnerList
       }
     }
 
@@ -144,7 +147,13 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
           return this.props.user.partnerList.includes(partner.id)
         })
         .map((partner: FetchTeacherData) => {
-          return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
+          return {
+            id: partner.id, 
+            displayName: partner.name, 
+            email:partner.email, 
+            availability:partner.availability,
+            partners: partner.studentList
+          }
         } )
         this.setState({allStudentTeachers: allTeachers})
         console.log(this.state.allStudentTeachers)
@@ -165,7 +174,8 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
                   id: this.props.user.userId,
                   displayName: this.props.user.displayName,
                   email: this.props.user.email,
-                  availability: this.props.user.availability
+                  availability: this.props.user.availability,
+                  partners: this.props.user.partnerList
                 }
               }
               goal={goal} 

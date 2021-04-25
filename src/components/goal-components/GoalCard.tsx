@@ -17,6 +17,7 @@ type Student = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal | null
   tasks?: Array<Task>

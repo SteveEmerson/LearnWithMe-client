@@ -5,6 +5,7 @@ type Student = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -36,8 +37,6 @@ type MGProps = {
   setGParState: Function
   sessionToken: string
   setParState: Function
-  // getStudentGoals?: Function
-  // getStudentTasks?: Function
   getGoals: Function
   getTasks: Function
   toggleMakeGoal: Function
@@ -226,7 +225,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
             type='date' 
             id="target-date" 
             name="goal-target-date"
-            value={this.getDateString(new Date())}
+            value={this.state.goalTargetDate.toISOString().slice(0,10)}
             onChange={this.handleDate}
           />
           <label htmlFor="tasks">Enter tasks for this goal, one per line (optional)</label>

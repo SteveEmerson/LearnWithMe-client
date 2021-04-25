@@ -24,6 +24,7 @@ type Student = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -71,7 +72,7 @@ type FetchStudentData = {
   email: string,
   passwordhash: string,
   name: string,
-  teacherList: number[] | null
+  teacherList: number[]
   role: string,
   availability: {},
   createdAt: string,
@@ -114,7 +115,13 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
           return this.props.currUser.partnerList.includes(partner.id)
         })
         .map((partner: FetchStudentData) => {
-          return {id: partner.id, displayName: partner.name, email:partner.email, availability:partner.availability}
+          return {
+            id: partner.id, 
+            displayName: partner.name, 
+            email:partner.email, 
+            availability:partner.availability,
+            partners: partner.teacherList
+          }
         } )
         this.setState({students: allStudents})
         console.log(this.state.students)

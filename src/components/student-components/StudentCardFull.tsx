@@ -9,6 +9,7 @@ type Student = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -19,6 +20,7 @@ type Teacher = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -95,7 +97,8 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
         id: this.props.teacher.userId,
         displayName: this.props.teacher.displayName,
         email: this.props.teacher.email,
-        availability: {...this.props.teacher.availability}
+        availability: {...this.props.teacher.availability},
+        partners: this.props.teacher.partnerList
       }
     }
     this.setState = this.setState.bind(this)

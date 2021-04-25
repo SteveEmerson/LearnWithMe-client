@@ -6,6 +6,7 @@ type Student = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -16,6 +17,7 @@ type Teacher = {
   displayName: string
   email: string
   availability: {}
+  partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
@@ -89,13 +91,15 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         id: 0,
         displayName: "",
         email: "",
-        availability: {}
+        availability: {},
+        partners: []
       },
       student: {
         id: 0,
         displayName: "",
         email: "",
-        availability: {}
+        availability: {},
+        partners: []
       }
     }
   }
@@ -180,7 +184,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   componentDidUpdate(){
-    console.log(this.state.d_t)
+    
   }
 
   renderTeacherSelect = () => {
@@ -193,7 +197,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         <option defaultValue="Select">Select a teacher</option>
         {this.props.allTeachers?.map((teacher: Teacher) => {
           return(
-            <option value={teacher.id} key={`TOP${teacher.id}`}>{teacher.displayName}</option>
+            <option 
+              value={teacher.id}
+              key={`TOP${teacher.id}`}
+              >{teacher.displayName}
+            </option>
           )
         })}
       </select>
@@ -234,8 +242,8 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   render(){
-    console.log(this.getDateString(new Date()))
-    console.log(this.getDateString(this.getMaxDate()))
+    console.log(this.props.student?.partners)
+    //console.log(this.props.teacher?.partners)
     return(
       <div>
         <h4>Schedule Meeting</h4>
