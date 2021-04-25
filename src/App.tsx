@@ -39,16 +39,10 @@ class App extends React.Component<{}, AppState> {
   render() {
     return (
       <div className="App">
-        {
-        this.state.user.role === "" ? 
-          <Splash setAppState={this.setState}/> 
-        :
-        this.state.user.role === "teacher" ? 
-          <Teacher currUser={this.state.user} setAppState={this.setState}/> 
-        :
-          <Student currUser={this.state.user} setAppState={this.setState}/>
-        }
-            
+        {this.state.user.role === "" && <Splash setAppState={this.setState}/>}
+        {this.state.user.role === "teacher" && <Teacher currUser={this.state.user} setAppState={this.setState}/>}
+        {this.state.user.role === "student" && <Student currUser={this.state.user} setAppState={this.setState}/>}
+     
         <div>
           <h1>Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>
