@@ -197,12 +197,12 @@ class MakeGoal extends React.Component<MGProps,MGState>{
         // }
   
         // this.props.setGParState({currStudent: cStud});
-        this.props.getTasks()
+        //this.props.getTasks()
       }
 
-      if(!this.props.teacherId){
+        
         this.props.getTasks();
-      }
+      
 
     })
     .catch((err) => console.log(`Error posting new tasks ${err}`))

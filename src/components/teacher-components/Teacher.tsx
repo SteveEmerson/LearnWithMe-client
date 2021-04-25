@@ -166,6 +166,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getTasks = () => {
+    
     const url: string = `http://localhost:3000/task/teacher_get`
     fetch(url,
       {
@@ -177,6 +178,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       })
       .then((res) => res.json())
       .then((data: Array<Task>) => {
+        console.log('GOT TO HERE IN NEW TASK SUBMIT')
         this.setState({tasks: data})
       })
       .catch(err => {

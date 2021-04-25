@@ -96,12 +96,14 @@ class GoalCard extends React.Component<GCProps,GCState>{
       this.setState({tasksChanged: false})
     }
 
-    if(this.props.tasks && this.state.updatedTasks){
-      //console.log(this.compareTaskArrays(this.props.tasks, this.state.updatedTasks))
+    if(this.state.updatedTasks && this.props.tasks && this.props.tasks.length > 0){
+      if(this.state.updatedTasks.length !== this.props.tasks.length){
+        this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
+      }
     }
 
-    //console.log(this.props.tasks);
-    //console.log(this.state.updatedTasks)
+    console.log(this.props.tasks);
+    console.log(this.state.updatedTasks)
 
   }
 
@@ -370,6 +372,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   renderTasks = () => {
+    console.log(this.state.updatedTasks)
     return(
       <div>
         {(this.state.updatedTasks) 
