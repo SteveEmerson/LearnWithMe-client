@@ -16,6 +16,7 @@ type SignupState = {
   password: string
   role: string
   displayName: string
+  signinError: boolean
 }
 
 // type FormData = {
@@ -32,26 +33,28 @@ class Signup extends React.Component<SignupProps, SignupState> {
       password: "",
       role: "",
       displayName: "",
+      signinError: false
     }
   }
   
   handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if(this.state.role === ""){
-      console.log("Error: No Role Given")
-    }else{
-      const url: string = `http://localhost:3000/${this.state.role}/register`
-      fetch(url,
-      {
-          method: 'POST',
-          body: JSON.stringify({email: this.state.email, password: this.state.password, name:this.state.displayName}),
-          headers: new Headers ({
-          'Content-Type': 'application/json',
-          })
-      })
-      .then((res) => res.json())
-      .then((user: User) => {
-          console.log(user); 
+
+    const url: string = `http://localhost:3000/${this.state.role}/register`
+    fetch(url,
+    {
+        method: 'POST',
+        body: JSON.stringify({email: this.state.email, password: this.state.password, name:this.state.displayName}),
+        headers: new Headers ({
+        'Content-Type': 'application/json',
+        })
+    })
+    .then((res) => res.json())
+    .then((user: User) => {
+      console.log(user);
+        if(user.hasOwnProperty('error')){
+          this.setState({signinError: true})
+        }else{
           this.props.setAppState(
             {
               user:{
@@ -63,22 +66,13 @@ class Signup extends React.Component<SignupProps, SignupState> {
                 sessionToken: user.sessionToken
               }
             })
-      })
-      .catch(err => {
-        console.log(`Error in fetch: ${err}`)
-      })
-    }
+          this.setState({signinError: false})
+        }
+    })
+    .catch(err => {
+      console.log(`Error in fetch: ${err}`)
+    })
   }
-
-  // testSetAppState = () :void =>  {
-  //   this.props.setAppState(this.state.sessionToken, 
-  //       {
-  //         role:this.state.role,
-  //         displayName: this.state.displayName,
-  //         userId: this.state.userId
-  //       }
-  //     )
-  // }
 
   nameChange = (e: React.FormEvent<HTMLInputElement>) : void => {
     this.setState({displayName: e.currentTarget.value})
@@ -106,11 +100,11 @@ class Signup extends React.Component<SignupProps, SignupState> {
             <p>Role:</p>
             <div>
               <label htmlFor="student"> Student</label>
-              <input type="radio" name="role" id="student" value="student" onChange={this.roleChange}/>
+              <input type="radio" name="role" id="student" value="student" required onChange={this.roleChange}/>
             </div>
             <div>
               <label htmlFor="teacher"> Teacher</label>
-              <input type="radio" name="role" id="teacher" value="teacher" onChange={this.roleChange}/>
+              <input type="radio" name="role" id="teacher" value="teacher" required onChange={this.roleChange}/>
             </div>
           </div>
           <div>
@@ -128,11 +122,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
           <input type="submit" value="Submit" />
         </form>
 
-        {/* <h1> Current Signin State</h1>
-        <p>displayName: {this.state.displayName}</p>
-        <p>email: {this.state.email}</p>
-        <p>password: {this.state.password}</p>
-        <p>role: {this.state.role}</p> */}
+        {this.state.signinError ? <h5>Email not available.</h5> : null}
       </div>
     )
   }

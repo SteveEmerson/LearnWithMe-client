@@ -9,6 +9,7 @@ type LoginState = {
   email: string
   password: string
   role: string
+  signinError: boolean
 }
 
 class Login extends React.Component<LoginProps, LoginState> {
@@ -18,6 +19,7 @@ class Login extends React.Component<LoginProps, LoginState> {
       email: "",
       password: "",
       role: "",
+      signinError: false
     }
   }
 
@@ -39,21 +41,26 @@ class Login extends React.Component<LoginProps, LoginState> {
         })
         .then((res) => res.json())
         .then((user) => {
-          //console.log(user);
-          let partners: number[] = (user.studentList) ? user.studentList: user.teacherList;
-          //console.log(partners)
-          this.props.setAppState(
-            {
-              user:{
-                email: user.email,
-                role: user.role,
-                displayName: user.displayName,
-                userId: user.userId,
-                partnerList: partners,
-                availability: user.availability,
-                sessionToken: user.sessionToken
-              }
-            })
+          console.log(user);
+          if(user.hasOwnProperty('error')){
+            this.setState({signinError: true})
+          }else{
+            let partners: number[] = (user.studentList) ? user.studentList: user.teacherList;
+            //console.log(partners)
+            this.props.setAppState(
+              {
+                user:{
+                  email: user.email,
+                  role: user.role,
+                  displayName: user.displayName,
+                  userId: user.userId,
+                  partnerList: partners,
+                  availability: user.availability,
+                  sessionToken: user.sessionToken
+                }
+              })
+          }
+          
           })
           .catch(err => {
             console.log(`Error in fetch: ${err}`)
@@ -83,11 +90,11 @@ class Login extends React.Component<LoginProps, LoginState> {
             <p>Role:</p>
             <div>
               <label htmlFor="student"> Student</label>
-              <input type="radio" name="role" id="student" value="student" onChange={this.roleChange}/>
+              <input type="radio" name="role" id="student" value="student" required onChange={this.roleChange}/>
             </div>
             <div>
               <label htmlFor="teacher"> Teacher</label>
-              <input type="radio" name="role" id="teacher" value="teacher" onChange={this.roleChange}/>
+              <input type="radio" name="role" id="teacher" value="teacher" required onChange={this.roleChange}/>
             </div>
           </div>
           <div>
@@ -100,6 +107,8 @@ class Login extends React.Component<LoginProps, LoginState> {
           </div>
           <input type="submit" value="Submit" />
         </form>
+
+        {this.state.signinError ? <h5>Login error. User not found.</h5> : null}
 
         {/* <h1> Current Login State</h1>
         <p>email: {this.state.email}</p>
