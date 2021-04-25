@@ -188,6 +188,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   renderTeacherSelect = () => {
+    console.log(this.props.allTeachers)
     return(
       <select 
         name="teachers" 
@@ -200,7 +201,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
             <option 
               value={teacher.id}
               key={`TOP${teacher.id}`}
-              >{teacher.displayName}
+              disabled = {this.props.student 
+                ? !teacher.partners.includes(this.props.student.id)
+                : undefined}
+              >
+                {teacher.displayName}
             </option>
           )
         })}
@@ -209,6 +214,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   renderStudentSelect = () => {
+    console.log(this.props.allStudents)
     return(
       <select 
         name="students" 
@@ -218,7 +224,15 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         <option defaultValue="Select">Select a student</option>
         {this.props.allStudents?.map((student: Student) => {
           return(
-            <option value={student.id}>{student.displayName}</option>
+            <option 
+              value={student.id}
+              key={`SOP${student.id}`}
+              disabled = {this.props.teacher
+                ? !student.partners.includes(this.props.teacher.id)
+                : undefined}
+            >
+              {student.displayName}
+            </option>
           )
         })}
       </select>
@@ -242,8 +256,6 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   render(){
-    console.log(this.props.student?.partners)
-    //console.log(this.props.teacher?.partners)
     return(
       <div>
         <h4>Schedule Meeting</h4>

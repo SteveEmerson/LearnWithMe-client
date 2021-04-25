@@ -69,7 +69,7 @@ type FetchStudentData = {
   email: string,
   passwordhash: string,
   name: string,
-  studentList: number[]
+  teacherList: number[]
   role: string,
   availability: {},
   createdAt: string,
@@ -136,7 +136,7 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
             displayName: partner.name, 
             email:partner.email, 
             availability:partner.availability,
-            partners: partner.studentList
+            partners: partner.teacherList
           }
         } )
         this.setState({allTeacherStudents: allStudents})
