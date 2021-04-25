@@ -106,7 +106,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
             <p>Role:</p>
             <div>
               <label htmlFor="student"> Student</label>
-              <input type="radio" name="role" id="student" value="student" defaultChecked onChange={this.roleChange}/>
+              <input type="radio" name="role" id="student" value="student" onChange={this.roleChange}/>
             </div>
             <div>
               <label htmlFor="teacher"> Teacher</label>
