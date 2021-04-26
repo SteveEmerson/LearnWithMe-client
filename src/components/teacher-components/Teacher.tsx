@@ -227,10 +227,10 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   render() {
     //console.log(this.props.currUser)
     return(
-      <div style={{textAlign:'left', marginLeft:'50px'}}>
+      <div>
         <h1> Teacher </h1>
         <Router>
-          <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+          <div >
             <Link to='/teacher-student'><h4>View Students</h4></Link>
             <Link to='/teacher-meeting'><h4>View Meetings</h4></Link>
             <h4><button onClick={this.handleLogout}>Logout</button></h4>

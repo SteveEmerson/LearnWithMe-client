@@ -121,7 +121,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
 
   render() {
     return(
-      <div style={{textAlign:'left', marginLeft:'50px'}}>
+      <div>
         <h1>Update Settings</h1>
         <h3>Update Personal Information</h3>
         <UpdatePersonalInfo passwordhash={this.state.passwordhash} user={this.props.user} setSettingsState={this.setState}/>

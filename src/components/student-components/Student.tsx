@@ -72,7 +72,6 @@ class Student extends React.Component<StudentProps, StudentState> {
   }
   
   handleLogout = () => {
-    localStorage.removeItem('sessionToken')
     this.props.setAppState(
       {
         user: {
@@ -157,10 +156,10 @@ class Student extends React.Component<StudentProps, StudentState> {
 
   render() {
     return(
-      <div style={{textAlign:'left', marginLeft:'50px'}}>
+      <div>
         <h1> Student </h1>
         <Router>
-          <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+          <div>
             <Link to='/student-meeting'><h4>LearnWithMe</h4></Link>
             <h4><button onClick={this.handleLogout}>Logout</button></h4>
             <Link to='/settings'><h4>Settings</h4></Link>

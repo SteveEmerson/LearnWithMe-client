@@ -13,9 +13,8 @@ class Splash extends React.Component<SplashProps, {}> {
   render(){
     return (
       <div>
-        <h1>Splash</h1>
         <Router>
-          <div className="navbar" style={{margin:'40px', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+          <div>
               <Link to='/home'><h4> LearnWithMe </h4></Link>
               <Link to='/login'><h4> Login </h4></Link>
               <Link to='/signup'><h4> Signup </h4></Link>
@@ -29,16 +28,7 @@ class Splash extends React.Component<SplashProps, {}> {
             <Route exact path='/signup'><Signup setAppState={this.props.setAppState}/></Route>
           </Switch>
         </Router>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <hr/>
-        <div className='footer'> <p>&copy; 2021 LearnWithMe All rights reserved.</p></div>
+        <div> <p>&copy; 2021 LearnWithMe All rights reserved.</p></div>
       </div>
     );
   }
