@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './App.css';
+
 import Splash from './components/splash-components/Splash';
 import Teacher from './components/teacher-components/Teacher';
 import Student from './components/student-components/Student';
@@ -38,13 +38,13 @@ class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <div className="App">
+      <div className="App bg-gray-300">
         {this.state.user.role === "" && <Splash setAppState={this.setState}/>}
         {this.state.user.role === "teacher" && <Teacher currUser={this.state.user} setAppState={this.setState}/>}
         {this.state.user.role === "student" && <Student currUser={this.state.user} setAppState={this.setState}/>}
      
-        <div>
-          <h1>Current App State</h1>
+        <div className="bg-white flex flex-row space-x-4">
+          <h1 className="font-semibold" >Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>
           <p>email: {this.state.user.email}</p>
           <p>role: {this.state.user.role}</p>
