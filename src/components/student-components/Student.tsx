@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom';
 import UpdateSettings from '../settings-components/UpdateSettings'
 import StudentMeetingView from './StudentMeetingView';
 
@@ -41,6 +41,9 @@ type StudentState = {
   meetings: Array<Meeting>
   goals: Array<Goal>
   tasks: Array<Task>
+  gotMeetings: boolean
+  gotGoals: boolean
+  gotTasks: boolean
 }
 
 type Task = {
@@ -61,7 +64,9 @@ class Student extends React.Component<StudentProps, StudentState> {
       meetings: [],
       goals: [],
       tasks: [],
-      
+      gotMeetings: false,
+      gotGoals: false,
+      gotTasks: false,
     }
     this.setState = this.setState.bind(this)
   }
@@ -102,6 +107,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       .then((res) => res.json())
       .then((data: Array<Meeting>) => {
         this.setState({meetings: data})
+        this.setState({gotMeetings: true})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -121,6 +127,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       .then((res) => res.json())
       .then((data: Array<Goal>) => {
         this.setState({goals: data})
+        this.setState({gotGoals: true})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -140,6 +147,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       .then((res) => res.json())
       .then((data: Array<Task>) => {
         this.setState({tasks: data})
+        this.setState({gotTasks: true})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -172,6 +180,9 @@ class Student extends React.Component<StudentProps, StudentState> {
             </Route>
             <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>
           </Switch>
+          {this.state.gotMeetings && this.state.gotGoals && this.state.gotTasks
+          ? <Redirect to="/student-meeting"/> 
+          : null}
         </Router>
       </div>
     )

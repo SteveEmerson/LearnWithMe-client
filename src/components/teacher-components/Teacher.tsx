@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom';
 import UpdateSettings from '../settings-components/UpdateSettings'
 import TeacherStudentView from './TeacherStudentView';
 import TeacherMeetingView from './TeacherMeetingView';
@@ -54,6 +54,10 @@ type TeacherState = {
   goals: Array<Goal>
   tasks: Array<Task>
   students: Array<Student>
+  gotMeetings: boolean
+  gotGoals: boolean
+  gotTasks: boolean
+  gotStudents: boolean
 }
 
 type Task = {
@@ -87,6 +91,10 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       goals: [],
       tasks: [],
       students: [],
+      gotMeetings: false,
+      gotGoals: false,
+      gotTasks: false,
+      gotStudents: false
     }
     this.setState = this.setState.bind(this);
   }
@@ -96,7 +104,10 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
     this.getGoals();
     this.getTasks();
     this.getStudents();
+   
   }
+
+
 
   getStudents = () => {
     const url: string = `http://localhost:3000/student/`
@@ -124,9 +135,8 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
           }
         } )
         this.setState({students: allStudents})
+        this.setState({gotStudents: true})
         console.log(this.state.students)
-
-        // FIX? IS THIS NEEDED TO SET THE CURRENT STUDENT OR CAN THE SCS DO THAT BY DEFAULT CLICKING ON A STUDENT
        
       })
       .catch(err => {
@@ -147,6 +157,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       .then((res) => res.json())
       .then((data: Array<Meeting>) => {
         this.setState({meetings: data})
+        this.setState({gotMeetings: true})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -166,6 +177,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       .then((res) => res.json())
       .then((data: Array<Goal>) => {
         this.setState({goals: data})
+        this.setState({gotGoals: true})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -187,6 +199,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       .then((data: Array<Task>) => {
         console.log('GOT TO HERE IN NEW TASK SUBMIT')
         this.setState({tasks: data})
+        this.setState({gotTasks: true})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -246,6 +259,9 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
             </Route>
             <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>
           </Switch>
+          {this.state.gotMeetings && this.state.gotGoals && this.state.gotTasks && this.state.gotStudents
+          ? <Redirect to="/teacher-student"/> 
+          : null}
         </Router>
       </div>
     )
