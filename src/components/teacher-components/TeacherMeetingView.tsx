@@ -170,7 +170,7 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
 
   render(){
     return(
-      <div>
+      <div >
         <h4>TeacherMeetingView</h4>
         <hr/>
         <button onClick={this.toggleScheduleMeeting}>Schedule Meeting</button>

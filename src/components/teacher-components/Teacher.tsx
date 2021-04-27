@@ -236,6 +236,8 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
             <h4><button onClick={this.handleLogout}>Logout</button></h4>
             <Link to='/settings'><h4>Settings</h4></Link>
           </div>
+
+          
           <Switch>
             <Route exact path='/teacher-student'>
               <TeacherStudentView 

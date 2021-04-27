@@ -25,7 +25,7 @@ class Splash extends React.Component<SplashProps, SplashState> {
       <div className="bg-black text-gray-50 h-screen">
         <Router>
 
-          {/* Nav elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
+          {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
 
           <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-black mb-3">
             <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
@@ -54,20 +54,17 @@ class Splash extends React.Component<SplashProps, SplashState> {
                     <Link to='/login' >
                       <button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Login</button>
                     </Link>
-                  
                   </li>
-
                   <li className="nav-item">
                     <Link to='/signup' >
                       <button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-blue-500 rounded hover:opacity-75">SignUp</button>
                     </Link>
-            
                   </li>
                 </ul>
               </div>
             </div>
           </nav>
-          {/* END ATTRIBUTION */}
+          {/* NAV END ATTRIBUTION */}
           <Switch>
             <Route exact path='/'><Redirect to='/home' /></Route>
             <Route exact path='/home'><Home /></Route>
@@ -75,10 +72,6 @@ class Splash extends React.Component<SplashProps, SplashState> {
             <Route exact path='/signup'><Signup setAppState={this.props.setAppState}/></Route>
           </Switch>
         </Router>
-        <div> 
-          <p>&copy; 2021 LearnWithMe by Steve Emerson</p>
-          <p></p>
-        </div>
       </div>
     );
   }

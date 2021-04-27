@@ -3,6 +3,7 @@ import * as React from 'react';
 import Splash from './components/splash-components/Splash';
 import Teacher from './components/teacher-components/Teacher';
 import Student from './components/student-components/Student';
+import Footer from './components/head_foot-components/Footer';
 
 type User = {
   email: string
@@ -42,7 +43,7 @@ class App extends React.Component<{}, AppState> {
         {this.state.user.role === "" && <Splash setAppState={this.setState}/>}
         {this.state.user.role === "teacher" && <Teacher currUser={this.state.user} setAppState={this.setState}/>}
         {this.state.user.role === "student" && <Student currUser={this.state.user} setAppState={this.setState}/>}
-     
+        <Footer/>
         {/* <div className="bg-white flex flex-row space-x-4">
           <h1 className="font-semibold" >Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>
