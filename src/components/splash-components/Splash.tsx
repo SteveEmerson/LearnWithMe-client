@@ -12,8 +12,10 @@ class Splash extends React.Component<SplashProps, {}> {
 
   render(){
     return (
-      <div className="text-gray-50">
+      <div className="bg-black text-gray-50">
         <Router>
+
+          
           <div>
               <Link to='/home' ><h4 > (LOGO) </h4></Link>
               <Link to='/login'><h4> Login </h4></Link>

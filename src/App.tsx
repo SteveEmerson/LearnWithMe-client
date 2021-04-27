@@ -38,7 +38,7 @@ class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <div className="App bg-black ">
+      <div>
         {this.state.user.role === "" && <Splash setAppState={this.setState}/>}
         {this.state.user.role === "teacher" && <Teacher currUser={this.state.user} setAppState={this.setState}/>}
         {this.state.user.role === "student" && <Student currUser={this.state.user} setAppState={this.setState}/>}
