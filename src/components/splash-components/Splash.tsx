@@ -12,10 +12,10 @@ class Splash extends React.Component<SplashProps, {}> {
 
   render(){
     return (
-      <div>
+      <div className="text-gray-50">
         <Router>
           <div>
-              <Link to='/home'><h4> LearnWithMe </h4></Link>
+              <Link to='/home' ><h4 > (LOGO) </h4></Link>
               <Link to='/login'><h4> Login </h4></Link>
               <Link to='/signup'><h4> Signup </h4></Link>
           </div>

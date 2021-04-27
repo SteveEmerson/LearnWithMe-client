@@ -38,12 +38,12 @@ class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <div className="App bg-gray-300">
+      <div className="App bg-black ">
         {this.state.user.role === "" && <Splash setAppState={this.setState}/>}
         {this.state.user.role === "teacher" && <Teacher currUser={this.state.user} setAppState={this.setState}/>}
         {this.state.user.role === "student" && <Student currUser={this.state.user} setAppState={this.setState}/>}
      
-        <div className="bg-white flex flex-row space-x-4">
+        {/* <div className="bg-white flex flex-row space-x-4">
           <h1 className="font-semibold" >Current App State</h1>
           <p>displayName: {this.state.user.displayName}</p>
           <p>email: {this.state.user.email}</p>
@@ -52,7 +52,7 @@ class App extends React.Component<{}, AppState> {
           <p>sessionToken: {this.state.user.sessionToken}</p>
           <p>partnerList: {this.state.user.partnerList}</p>
           <p>availability: {String(this.state.user.availability)}</p>
-        </div>
+        </div> */}
       </div>
     );
   }
