@@ -8,21 +8,66 @@ type SplashProps = {
   setAppState: Function
 }
 
-class Splash extends React.Component<SplashProps, {}> {
+type SplashState = {
+  navBarOpen: boolean
+}
+
+class Splash extends React.Component<SplashProps, SplashState> {
+  constructor(props: SplashProps){
+    super(props);
+    this.state = {
+      navBarOpen: false
+    }
+  }
 
   render(){
     return (
-      <div className="bg-black text-gray-50">
+      <div className="bg-black text-gray-50 h-screen">
         <Router>
 
-          
-          <div>
-              <Link to='/home' ><h4 > (LOGO) </h4></Link>
-              <Link to='/login'><h4> Login </h4></Link>
-              <Link to='/signup'><h4> Signup </h4></Link>
-          </div>
-          <br/>
-          <br/>
+          {/* Nav elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
+
+          <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-black mb-3">
+            <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+              <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
+                
+                <Link to='/home' ><p className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"> (LOGO) </p></Link>
+
+                <button
+                  className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+                  type="button"
+                  onClick={() => this.setState({navBarOpen: !this.state.navBarOpen})}
+                >
+                  <i className="fas fa-bars"></i>
+                </button>
+              </div>
+              <div
+                className={
+                  "lg:flex flex-grow items-center" +
+                  (this.state.navBarOpen ? " flex" : " hidden")
+                }
+                // id="example-navbar-danger"
+              >
+                <ul className="flex flex-col lg:flex-row list-none lg:ml-auto space-x-4">
+                  <li className="nav-item">
+
+                    <Link to='/login' >
+                      <button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Login</button>
+                    </Link>
+                  
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to='/signup' >
+                      <button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-blue-500 rounded hover:opacity-75">SignUp</button>
+                    </Link>
+            
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+          {/* END ATTRIBUTION */}
           <Switch>
             <Route exact path='/'><Redirect to='/home' /></Route>
             <Route exact path='/home'><Home /></Route>
@@ -30,7 +75,10 @@ class Splash extends React.Component<SplashProps, {}> {
             <Route exact path='/signup'><Signup setAppState={this.props.setAppState}/></Route>
           </Switch>
         </Router>
-        <div> <p>&copy; 2021 LearnWithMe All rights reserved.</p></div>
+        <div> 
+          <p>&copy; 2021 LearnWithMe by Steve Emerson</p>
+          <p></p>
+        </div>
       </div>
     );
   }
