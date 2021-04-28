@@ -152,26 +152,27 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
 
   render() {
     return(
-      <div> 
-        <h3>Teacher Student View</h3>
-        <div className="StudentCardFull">
-          {this.state.currStudent.id !== 0
-          ? <StudentCardFull 
-              student={this.state.currStudent}
-              setTSVState={this.setState}
-              token={this.props.user.sessionToken}
-              teacher={this.props.user}
-              getMeetings={this.props.getMeetings}
-              getGoals={this.props.getGoals}
-              getTasks={this.props.getTasks}
-            />
-          : null}
-          <br />
+      <div className="p-10"> 
+        <p className="font-bold text-2xl text-blue-500">{this.props.user.displayName}</p>
+        {/* Contents ... SCF left  SCS grid right*/}
+        <div className="grid grid-cols-3 gap-6" >
+          <div className="col-span-1">
+            {this.state.currStudent.id !== 0
+            ? <StudentCardFull 
+                student={this.state.currStudent}
+                setTSVState={this.setState}
+                token={this.props.user.sessionToken}
+                teacher={this.props.user}
+                getMeetings={this.props.getMeetings}
+                getGoals={this.props.getGoals}
+                getTasks={this.props.getTasks}
+              />
+            : null}
+          </div>
+          <div className="col-span-2 grid grid-cols-3 gap-3">
+            {this.props.students.length !== 0 ? this.renderStudentList() : null}
+          </div>
         </div>
-        <div className="StudentCardSmallList">
-          {this.props.students.length !== 0 ? this.renderStudentList() : null}
-        </div>
-        <hr/>
       </div>
       
     )

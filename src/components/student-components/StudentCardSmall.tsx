@@ -53,28 +53,41 @@ class StudentCardSmall extends React.Component<SCSProps,{}>{
     this.props.setTSVState({currStudent: this.props.student})
   }
 
-  taskInfo = (taskList: Array<Task>): string => {
+  taskInfo = (taskList: Array<Task>) => {
     let complete = 0;
     let incomplete = 0;
     for(let i = 0; i < taskList.length; i++){
       taskList[i].completed ? complete++: incomplete++;
     }
 
-    return `T ${complete} ${incomplete}`
+    return(
+      <div className="flex space-x-2"> 
+        <span>Tasks </span>
+        <span className="text-green-700"> {complete}</span> 
+        <span className="text-red-700">{incomplete}</span>
+      </div>
+    ) 
   }
   render(){
     return(
-      <div style={{border:'1px solid'}} onClick={()=> this.setCurrStudent()}>
-        <h4>Student Card Small</h4>
+      <div  className="bg-white text-black border-l-8 border-blue-500 max-h-20 p-2"
+        onClick={()=> this.setCurrStudent()}
+      >
         <div >
-          <p>{this.props.student.displayName}</p>
-          <p>M {this.props.student.meetings ? this.props.student.meetings.length : null}</p>
-          <p>
-            {this.props.student.goal ? 'G ' : null} 
-            {this.props.student.tasks && this.props.student.tasks.length > 0 
-            ? this.taskInfo(this.props.student.tasks) 
-            : null}
-          </p>
+          <p className="font-bold text-l">{this.props.student.displayName}</p>
+          <div className="flex flex-row justify-start space-x-4 ">
+            <p>Meetings {this.props.student.meetings ? this.props.student.meetings.length : null}</p>
+            <p>
+              {this.props.student.goal ? 'Goal' : null} 
+              
+            </p>
+            <p>
+              {this.props.student.tasks && this.props.student.tasks.length > 0 
+                ? this.taskInfo(this.props.student.tasks) 
+                : null}
+            </p>
+          </div>
+
         </div>
       </div>
     ) 

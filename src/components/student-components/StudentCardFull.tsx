@@ -131,11 +131,28 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
 
   render(){
     return(
-      <div style={{border:'2px solid'}}>
-        <h4>Student Card Full</h4>
-        <p>{this.props.student.displayName}</p>
-        <button id="schedule-meeting" onClick={this.toggleScheduleMeeting}>New Meeting</button>
-        {!this.props.student.goal ? <button id="make-goal" onClick={this.toggleMakeGoal}>New Goal</button> : null}
+      <div className="bg-white text-black p-3">
+        <div className="flex flex-row justify-between">
+          <p className="font-bold text-xl">{this.props.student.displayName}</p>
+          <div className="flex flex-row space-x-4">
+            <button
+              className="px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
+              id="schedule-meeting" 
+              onClick={this.toggleScheduleMeeting}>
+                New Meeting
+            </button>
+            {!this.props.student.goal 
+            ? <button
+                className="px-2 py-2 flex items-center text-xs uppercase font-bold text-white bg-gray-500 rounded hover:opacity-75"
+                id="make-goal" 
+                onClick={this.toggleMakeGoal}>
+                  New Goal
+              </button> 
+            : null}
+          </div>
+          
+        </div>
+        
         {this.state.scheduleMeeting 
           ? <ScheduleMeeting 
               teacher={this.state.teacher} 
