@@ -375,13 +375,12 @@ class GoalCard extends React.Component<GCProps,GCState>{
   renderTasks = () => {
     console.log(this.state.updatedTasks)
     return(
-      <div>
+      <div className="text-base pl-2">
         {(this.state.updatedTasks) 
           ? this.state.updatedTasks.map((task) => {
             return(
               <div key={`T${task.description.slice(5)}${task.id}`}>
-                <p 
-                  style={task.completed?{textDecoration:'line-through'}:undefined}
+                <p className={(task.completed?"line-through":"no-underline")}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {this.handleTaskChange(task.id)}}
                 >
                   {task.description}
@@ -503,59 +502,74 @@ class GoalCard extends React.Component<GCProps,GCState>{
     this.setState({newTasks: [...this.state.newTasks, nt]})
   }
 
-  render(){
-    let goal: Goal = this.props.goal
+  renderEditGoal = () => {
+    let goal = this.props.goal
     return(
-      <div style={{border:'1px dashed'}}>
-        <h4>GoalCard</h4>
-        <div hidden={this.state.showEditForm} id="goal-info" onClick={this.toggleEditForm}>
-          <p>Id: {goal.id}</p>
-          <p>{goal.description}</p>
-          <p>Target Date {String(goal.targetDate).slice(0,10)}</p>
-          {this.state.canEdit ?  <p>click goal to edit</p> : null}
+      <div hidden={!this.state.showEditForm} id="change-goal-info">
+        <input  
+          type='date' 
+          id="target-date" 
+          name="goal-target-date"
+          value={String(goal.targetDate)}
+          onChange={this.handleDate}
+        />
+        <textarea
+          onChange=
+          {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({newGoalDesc: e.currentTarget.value})}  id="goal-description"
+          name="goal-description"
+          cols={20}
+          rows={3}
+          defaultValue={goal.description}
+        />
+        <div>
+          {this.renderEditTasks()}
+          <input 
+            type="text" 
+            value={this.state.newTaskDescription}
+            onChange={(e: React.FormEvent<HTMLInputElement>)=>
+              {this.setState({newTaskDescription:e.currentTarget.value})}}/>
+          <button onClick={() => {this.addStagedTask()}}>add</button>
         </div>
-        <div hidden={!this.state.showEditForm} id="change-goal-info">
-          <p>Id: {goal.id}</p>
-          <input  
-            type='date' 
-            id="target-date" 
-            name="goal-target-date"
-            value={String(goal.targetDate)}
-            onChange={this.handleDate}
-          />
-          <textarea
-            onChange=
-            {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({newGoalDesc: e.currentTarget.value})}  id="goal-description"
-            name="goal-description"
-            cols={20}
-            rows={3}
-            defaultValue={goal.description}
-          />
-          <div>
-            {this.renderEditTasks()}
-            <input 
-              type="text" 
-              value={this.state.newTaskDescription}
-              onChange={(e: React.FormEvent<HTMLInputElement>)=>
-                {this.setState({newTaskDescription:e.currentTarget.value})}}/>
-            <button onClick={() => {this.addStagedTask()}}>add</button>
-          </div>
-          
-          <p onClick={this.updateGoal}>confirm changes</p>
-          <p onClick={this.cancelEdit}>cancel</p>
-        </div>
-        <hr/>
-        <h5>Tasks</h5>
-        <div hidden={this.state.showEditForm}>
-          {this.props.tasks ? this.renderTasks() : null}
-          {this.state.tasksChanged 
-            ? <button onClick={this.updateTasks}>Confirm Changes</button>
-            : null}
-        </div>
+        
+        <p onClick={this.updateGoal}>confirm changes</p>
+        <p onClick={this.cancelEdit}>cancel</p>
         {(this.props.rolePOV === "teacher" || (this.props.rolePOV === "student" && !this.props.goal.teacherId))
           ? <button onClick={()=>{this.deleteGoal()}}>Delete Goal</button>
           : null}
         
+      </div>
+    )
+  }
+
+  render(){
+    let goal: Goal = this.props.goal;
+    let date: Date = new Date(goal.targetDate);
+    console.log(date)
+    return(
+      <div className="bg-white text-black border p-2">
+        <p className="font-bold text-2xl">Goal</p>
+        <div className=" bg-gray-300 px-2" hidden={this.state.showEditForm} id="goal-info" onClick={this.toggleEditForm}>
+          <p className="font-bold text-xl ">{goal.description}</p>
+          <p className="font-bold">Complete by: {date.toDateString().slice(0,10)}</p>
+          {this.state.canEdit ?  <p className="text-xs text-right">edit</p> : null}
+        </div>
+
+        {this.renderEditGoal()}
+        
+        <div hidden={this.state.showEditForm}>
+          {this.props.tasks ? this.renderTasks() : null}
+          <div className="flex flex-row justify-end">
+            {this.state.tasksChanged 
+              ? <button
+                className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" 
+                onClick={this.updateTasks}>
+                  confirm
+                </button>
+              : null}
+          </div>
+ 
+        </div>
+
       </div>
     )
   }

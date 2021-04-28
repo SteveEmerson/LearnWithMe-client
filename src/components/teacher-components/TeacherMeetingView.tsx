@@ -171,7 +171,7 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
   render(){
     return(
       <div >
-        <p className="font-bold text-2xl text-blue-500">{this.props.user.displayName}</p>
+        <p className="font-bold text-3xl text-blue-500 mb-3">{this.props.user.displayName}</p>
         <hr/>
         <button onClick={this.toggleScheduleMeeting}>Schedule Meeting</button>
         {this.state.scheduleMeeting

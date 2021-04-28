@@ -72,27 +72,29 @@ class MeetingCardMini extends React.Component<MCMProps,MCMState>{
   }
 
   render(){
+    let date = new Date(this.props.meeting.d_t);
+    let mtg_d = date.toString().slice(0,10);
     return(
-      <div>
-        <div onClick={this.toggleMCF}>
-          <h4>MeetingCardMini</h4>
-          <p>meeting id: {this.props.meeting.id}</p>
-          <p>{this.props.meeting.d_t}</p>
-          <p>N {this.state.notes.length}</p>
-      </div>
-      {this.state.showMCF 
-        ? <MeetingCardFull 
-            meeting={this.props.meeting} 
-            notes={this.state.notes} 
-            teacherName={this.props.teacherName}
-            studentName={this.props.studentName}
-            toggleMCF={this.toggleMCF}
-            role={'teacher'}
-            getMeetings={this.props.getMeetings}
-            getNotes={this.getNotes}
-            token={this.props.token}
-          /> 
-        : null}
+      
+      <div className="">
+        <div className="flex flex-row space-x-3 my-3" onClick={this.toggleMCF}>
+          <p className="font-bold">{mtg_d}</p>
+          <p>Notes {this.state.notes.length}</p>
+        </div>
+        {this.state.showMCF 
+          ? <MeetingCardFull 
+              meeting={this.props.meeting} 
+              notes={this.state.notes} 
+              teacherName={this.props.teacherName}
+              studentName={this.props.studentName}
+              toggleMCF={this.toggleMCF}
+              role={'teacher'}
+              getMeetings={this.props.getMeetings}
+              getNotes={this.getNotes}
+              token={this.props.token}
+            /> 
+          : null
+        }
       </div>
     )
   }

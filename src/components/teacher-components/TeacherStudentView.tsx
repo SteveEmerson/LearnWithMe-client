@@ -152,8 +152,8 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
 
   render() {
     return(
-      <div className="p-10"> 
-        <p className="font-bold text-2xl text-blue-500">{this.props.user.displayName}</p>
+      <div className="px-10"> 
+        <p className="font-bold text-5xl text-blue-500 mb-5 ml-4">{this.props.user.displayName}</p>
         {/* Contents ... SCF left  SCS grid right*/}
         <div className="grid grid-cols-3 gap-6" >
           <div className="col-span-1">
@@ -169,7 +169,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
               />
             : null}
           </div>
-          <div className="col-span-2 grid grid-cols-3 gap-3">
+          <div className="col-span-2 grid grid-cols-3 content-start gap-3">
             {this.props.students.length !== 0 ? this.renderStudentList() : null}
           </div>
         </div>

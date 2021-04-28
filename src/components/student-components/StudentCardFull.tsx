@@ -116,14 +116,14 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
     return(
       this.props.student.meetings?.map((meeting) => {
         return(
-          <MeetingCardMini 
-            meeting={meeting} 
-            token={this.props.token} 
-            teacherName={this.props.teacher.displayName}
-            studentName={this.props.student.displayName}
-            key={`MCM${meeting.id}`}
-            getMeetings={this.props.getMeetings}
-          />
+            <MeetingCardMini 
+              meeting={meeting} 
+              token={this.props.token} 
+              teacherName={this.props.teacher.displayName}
+              studentName={this.props.student.displayName}
+              key={`MCM${meeting.id}`}
+              getMeetings={this.props.getMeetings}
+            />
         )
       })
     )
@@ -133,20 +133,20 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
     return(
       <div className="bg-white text-black p-3">
         <div className="flex flex-row justify-between">
-          <p className="font-bold text-xl">{this.props.student.displayName}</p>
-          <div className="flex flex-row space-x-4">
+          <p className="font-bold text-3xl mb-4">{this.props.student.displayName}</p>
+          <div className="flex flex-row space-x-1">
             <button
-              className="px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
+              className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
               id="schedule-meeting" 
               onClick={this.toggleScheduleMeeting}>
-                New Meeting
+                meet
             </button>
             {!this.props.student.goal 
             ? <button
-                className="px-2 py-2 flex items-center text-xs uppercase font-bold text-white bg-gray-500 rounded hover:opacity-75"
+                className="max-h-5 px-2 py-2 flex items-center text-xs uppercase font-bold text-white bg-gray-500 rounded hover:opacity-75"
                 id="make-goal" 
                 onClick={this.toggleMakeGoal}>
-                  New Goal
+                  goal
               </button> 
             : null}
           </div>
@@ -191,7 +191,13 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               getTasks={this.props.getTasks}
             />
           : null}
-        {this.props.student.meetings ? this.renderMeetingMinis() : null}
+        <div className="bg-white text-black border p-2 mt-3">
+          <p className="font-bold text-2xl"> Meetings</p>
+          <div className="">
+            {this.props.student.meetings ? this.renderMeetingMinis() : null}
+          </div>
+          
+        </div>
 
       </div>
     )
