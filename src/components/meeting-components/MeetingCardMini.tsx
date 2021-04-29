@@ -77,7 +77,7 @@ class MeetingCardMini extends React.Component<MCMProps,MCMState>{
     return(
       
       <div className="">
-        <div className="flex flex-row space-x-3 my-3 hover:text-blue-800" onClick={this.toggleMCF}>
+        <div className="flex flex-row space-x-3 my-3 hover:text-blue-500" onClick={this.toggleMCF}>
           <p className="font-bold">{mtg_d}</p>
           <p>Notes {this.state.notes.length}</p>
         </div>

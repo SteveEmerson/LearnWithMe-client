@@ -97,14 +97,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
       this.setState({tasksChanged: false})
     }
 
-    if(this.state.updatedTasks && this.props.tasks && this.props.tasks.length > 0){
-      if(this.state.updatedTasks.length !== this.props.tasks.length){
-        this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
-      }
-    }
-
-    console.log(this.props.tasks);
-    console.log(this.state.updatedTasks)
+    // if(this.state.updatedTasks && this.props.tasks && this.props.tasks.length > 0){
+    //   if(this.state.updatedTasks.length !== this.props.tasks.length){
+    //     this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
+    //   }
+    // }
 
   }
 
@@ -357,30 +354,22 @@ class GoalCard extends React.Component<GCProps,GCState>{
         this.props.getGoals();
       }
 
-      // if(this.props.rolePOV === "student" && this.props.getStudentGoals){
-      //   this.props.getStudentGoals();
-      // }
-
       if(this.props.rolePOV === "student" && this.props.getGoals){
         this.props.getGoals();
       }
-
-      // this.addTasks()
-      // this.removeTasks()
 
     })
     .catch(err => console.log(`Error in updating goal ${err}`))
   }
 
   renderTasks = () => {
-    console.log(this.state.updatedTasks)
     return(
       <div className="text-base font-semibold pl-2">
         {(this.state.updatedTasks) 
           ? this.state.updatedTasks.map((task) => {
             return(
               <div key={`T${task.description.slice(5)}${task.id}`}>
-                <p className={` hover:text-blue-800 ${task.completed?"line-through":"no-underline"}`}
+                <p className={` hover:text-blue-500 ${task.completed?"line-through":"no-underline"}`}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {this.handleTaskChange(task.id)}}
                 >
                   {task.description}
@@ -409,19 +398,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
       console.log(json)
       this.deleteAllTasks()
 
-      // if(this.props.rolePOV === "teacher" && this.props.setGParState) {
-      //   let cStud: Student = {
-      //     id: this.props.student.id,
-      //     displayName: this.props.student.displayName,
-      //     email: this.props.student.email,
-      //     availability: this.props.student.availability,
-      //     meetings: this.props.student.meetings,
-      //     goal: null,
-      //     tasks: this.props.student.tasks
-      //   }
-      //   this.props.setGParState({currStudent: cStud});
-      // }
-
       if(this.props.getGoals){
         this.props.getGoals();
       }
@@ -447,10 +423,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
           console.log(json)
           this.setState({updatedTasks: []})
 
-          // if(this.props.rolePOV === "student" && this.props.setGParState){
-          //   this.props.setGParState({tasks: this.state.updatedTasks});
-          // }
-
           if(this.props.getTasks){
             this.props.getTasks();
           }
@@ -459,27 +431,15 @@ class GoalCard extends React.Component<GCProps,GCState>{
       });
     }
   }
-
-  renderEditTasks = () => {
-    return(
-      this.state.updatedTasks?.map((task) => {
-        return(
-          <div key={`${task.description.slice(5)}${task.id}`}>
-            <p>{task.description}</p>
-            <button onClick={() => this.removeStagedTask(task)}>X</button>
-          </div>
-        )
-      })
-    )
-  }
-
-
   
   removeStagedTask = (remTask: Task) => {
+    console.log(remTask.id)
     let temp: Array<Task> | undefined= this.state.updatedTasks?.filter((task) => task.id !== remTask.id)
+    console.log("Temp ", temp)
     this.setState({updatedTasks: temp})
-
+    console.log("Update ", this.state.updatedTasks)
     this.setState({oldTasks: [...this.state.oldTasks, remTask]})
+    console.log("Old ", this.state.oldTasks)
   }
 
   addStagedTask(){
@@ -505,15 +465,25 @@ class GoalCard extends React.Component<GCProps,GCState>{
   renderEditGoal = () => {
     let goal = this.props.goal
     return(
-      <div hidden={!this.state.showEditForm} id="change-goal-info">
-        <input  
-          type='date' 
-          id="target-date" 
-          name="goal-target-date"
-          value={String(goal.targetDate)}
-          onChange={this.handleDate}
-        />
+      <div
+        className={`flex flex-col ${!this.state.showEditForm? "hidden" : null}` }
+        id="change-goal-info"
+      >
+        {(this.props.rolePOV === "teacher" || (this.props.rolePOV === "student" && !this.props.goal.teacherId))
+        ? <div className="flex flex-row justify-end">
+            <button
+              className="max-h-5  px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-red-500
+              rounded hover:opacity-75"
+              onClick={()=>{this.deleteGoal()}}
+            >
+              delete
+            </button>
+          </div>
+
+        : null}
+        <label className="font-semibold" htmlFor="goal-description">Description</label>
         <textarea
+          className="bg-gray-100"
           onChange=
           {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({newGoalDesc: e.currentTarget.value})}  id="goal-description"
           name="goal-description"
@@ -521,30 +491,76 @@ class GoalCard extends React.Component<GCProps,GCState>{
           rows={3}
           defaultValue={goal.description}
         />
-        <div>
+        <label className="font-semibold mt-4" htmlFor="target-date">Target Date</label>
+        <input  
+          type='date' 
+          id="target-date" 
+          name="goal-target-date"
+          value={String(goal.targetDate)}
+          onChange={this.handleDate}
+        />
+
+        <div className="my-2">
+          <label className="font-semibold mt-2" htmlFor="tasks">Tasks</label>
           {this.renderEditTasks()}
-          <input 
-            type="text" 
-            value={this.state.newTaskDescription}
-            onChange={(e: React.FormEvent<HTMLInputElement>)=>
-              {this.setState({newTaskDescription:e.currentTarget.value})}}/>
-          <button onClick={() => {this.addStagedTask()}}>add</button>
+          <div className="flex flex-row justify-start space-x-4">
+            <input
+              className="bg-gray-100" 
+              type="text"
+              value={this.state.newTaskDescription}
+              onChange={(e: React.FormEvent<HTMLInputElement>)=>
+                {this.setState({newTaskDescription:e.currentTarget.value})}}/>
+            <button
+              className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" 
+              onClick={() => {this.addStagedTask()}}
+            >
+              add
+            </button>
+          </div>
         </div>
         
-        <p onClick={this.updateGoal}>confirm changes</p>
-        <p onClick={this.cancelEdit}>cancel</p>
-        {(this.props.rolePOV === "teacher" || (this.props.rolePOV === "student" && !this.props.goal.teacherId))
-          ? <button onClick={()=>{this.deleteGoal()}}>Delete Goal</button>
-          : null}
-        
+        <div className="flex flex-row justify-start">
+          <button
+            className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  rounded hover:opacity-75"
+            onClick={this.cancelEdit}
+          >
+            cancel
+          </button>
+          <button
+            className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" 
+            onClick={this.updateGoal}
+          >
+            confirm
+          </button>
+        </div>  
       </div>
+    )
+  }
+
+  renderEditTasks = () => {
+    return(
+      this.state.updatedTasks?.map((task) => {
+        return(
+          <div
+            className="flex flex-row space-x-4"
+            key={`${task.description.slice(5)}${task.id}`}
+          >
+            <p className="text-sm">{task.description}</p>
+            <button
+              className="text-sm font-bold flex items-center"
+              onClick={() => this.removeStagedTask(task)}
+            >
+              x
+            </button>
+          </div>
+        )
+      })
     )
   }
 
   render(){
     let goal: Goal = this.props.goal;
     let date: Date = new Date(goal.targetDate);
-    console.log(date)
     return(
       <div className="bg-white text-black border p-2">
        

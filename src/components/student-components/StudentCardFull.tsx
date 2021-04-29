@@ -133,7 +133,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
     let num_meetings = this.props.student.meetings ? this.props.student.meetings.length : 0;
     return(
       <div className="bg-white text-black p-3">
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between border-b-2 border-blue-500">
           <p className="font-bold text-3xl mb-4">{this.props.student.displayName}</p>
           <div className="flex flex-row space-x-1">
             <button
@@ -184,7 +184,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
           : null}
           </div>
        
-        <p className="font-bold text-2xl">Goal</p>
+        <p className="font-bold text-2xl mt-2">Goal</p>
         {this.props.student.goal 
           ? <GoalCard
               rolePOV= {'teacher'}
