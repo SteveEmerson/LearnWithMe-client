@@ -257,20 +257,28 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
 
   render(){
     return(
-      <div>
-        <h4>Schedule Meeting</h4>
+      <div className="absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl">
+        <p className="font-bold text-xl text-blue-500">Schedule Meeting</p>
         {this.props.teacher && this.props.student
-          ? <p>Schedule a new meeting with {this.props.student.displayName}</p>
+          ? <p className="font-semibold mt-2">Meet with {this.props.student.displayName}</p>
           : this.props.student ? this.renderTeacherSelect() : this.renderStudentSelect()
         }
         
         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>
-          <label htmlFor="meeting-time">Meeting Time:</label>
-          <input onChange={this.handleDate} type="datetime-local" id="meeting-time"
+          <label className="font-semibold mt-2" htmlFor="meeting-time">Time </label>
+          <input className=" mt-2 mb-2" onChange={this.handleDate} type="datetime-local" id="meeting-time"
             name="meeting-time" value={this.getDateString(new Date())}
             min={this.getDateString(new Date())} max={this.getDateString(this.getMaxDate())}>
           </input>
-          <input type='submit' value='Submit'/>
+          <div className="flex flex-row justify-start mt-2">
+            <button 
+              className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold hover:opacity-75"
+              onClick={() => this.props.toggleScheduleMeeting()}>
+                cancel
+              </button>
+            <button className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" type="submit" value="Submit">submit</button>
+          </div>
+          {/* <input type='submit' value='Submit'/> */}
         </form>
 
       </div>

@@ -375,12 +375,12 @@ class GoalCard extends React.Component<GCProps,GCState>{
   renderTasks = () => {
     console.log(this.state.updatedTasks)
     return(
-      <div className="text-base pl-2">
+      <div className="text-base font-semibold pl-2">
         {(this.state.updatedTasks) 
           ? this.state.updatedTasks.map((task) => {
             return(
               <div key={`T${task.description.slice(5)}${task.id}`}>
-                <p className={(task.completed?"line-through":"no-underline")}
+                <p className={` hover:text-blue-800 ${task.completed?"line-through":"no-underline"}`}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {this.handleTaskChange(task.id)}}
                 >
                   {task.description}
@@ -547,7 +547,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     console.log(date)
     return(
       <div className="bg-white text-black border p-2">
-        <p className="font-bold text-2xl">Goal</p>
+       
         <div className=" bg-gray-300 px-2" hidden={this.state.showEditForm} id="goal-info" onClick={this.toggleEditForm}>
           <p className="font-bold text-xl ">{goal.description}</p>
           <p className="font-bold">Complete by: {date.toDateString().slice(0,10)}</p>
@@ -555,7 +555,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         </div>
 
         {this.renderEditGoal()}
-        
+
         <div hidden={this.state.showEditForm}>
           {this.props.tasks ? this.renderTasks() : null}
           <div className="flex flex-row justify-end">

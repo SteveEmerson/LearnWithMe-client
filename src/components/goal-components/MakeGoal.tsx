@@ -209,35 +209,48 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
   render(){
     return(
-      <div>
-        <h4>MakeGoal</h4>
-        <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>
-          <label htmlFor="goal-description">Description</label>
+      <div className="absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl">
+        <p className="font-bold text-xl text-blue-500">New Goal</p>
+        <form className="flex flex-col" onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>
+          
+          <label className="font-semibold" htmlFor="goal-description">Description</label>
           <textarea
+            className="bg-gray-100"
+            required
             onChange=
             {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({goalDescription: e.currentTarget.value})}  id="goal-description"
             name="goal-description"
             cols={30}
-            rows={8}>
+            rows={4}>
           </textarea>
-          <label htmlFor="target-date">Target Date</label>
-          <input 
+          <label className="font-semibold mt-2" htmlFor="target-date">Target Date</label>
+          <input
+            required
             type='date' 
             id="target-date" 
             name="goal-target-date"
             value={this.state.goalTargetDate.toISOString().slice(0,10)}
             onChange={this.handleDate}
           />
-          <label htmlFor="tasks">Enter tasks for this goal, one per line (optional)</label>
+          <label className="font-semibold mt-2" htmlFor="tasks">Tasks one per line (optional)</label>
           <textarea
+            className="bg-gray-100 mb-2"
             onChange=
             {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({tasks: e.currentTarget.value})}  
             id="tasks"
             name="tasks"
-            cols={30}
-            rows={8}>
+            cols={20}
+            rows={4}>
           </textarea>
-          <input type="submit" value="Submit"/>
+          <div className="flex flex-row justify-start">
+            <button 
+              className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold hover:opacity-75"
+              onClick={() => this.props.toggleMakeGoal()}>
+                cancel
+              </button>
+            <button className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" type="submit" value="Submit">submit</button>
+          </div>
+
         </form>
 
       </div>

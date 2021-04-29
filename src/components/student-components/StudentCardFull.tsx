@@ -130,6 +130,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
   }
 
   render(){
+    let num_meetings = this.props.student.meetings ? this.props.student.meetings.length : 0;
     return(
       <div className="bg-white text-black p-3">
         <div className="flex flex-row justify-between">
@@ -166,8 +167,10 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               mountingFrom={"SCF"}
             /> 
           : null}
-        {this.state.makeGoal 
-          ? <MakeGoal 
+
+          <div>
+          {this.state.makeGoal 
+          ? <MakeGoal
               teacherId={this.props.teacher.userId}
               teacherName = {this.props.teacher.displayName} 
               student={this.props.student}
@@ -179,6 +182,9 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               getTasks={this.props.getTasks}
             /> 
           : null}
+          </div>
+       
+        <p className="font-bold text-2xl">Goal</p>
         {this.props.student.goal 
           ? <GoalCard
               rolePOV= {'teacher'}
@@ -191,8 +197,11 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
               getTasks={this.props.getTasks}
             />
           : null}
-        <div className="bg-white text-black border p-2 mt-3">
-          <p className="font-bold text-2xl"> Meetings</p>
+
+        <p className="font-bold text-2xl  mt-3"> Meetings</p>
+        <div className={`bg-white text-black 
+                      ${num_meetings > 0 ? "border" : null} 
+                        p-2 mt-1`}>
           <div className="">
             {this.props.student.meetings ? this.renderMeetingMinis() : null}
           </div>
