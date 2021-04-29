@@ -107,18 +107,39 @@ class NoteCard extends React.Component<NCProps, NCState> {
           {this.state.showEditNote && this.state.allowEditNote
             ?  
               <div>
-                <textarea  
+                <div className="flex flex-row justify-end">
+                  <button
+                    className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-red-500 rounded hover:opacity-75"
+                    onClick={this.deleteNote}
+                  >
+                    delete
+                  </button>
+                </div>
+                
+                <textarea
+                className="mt-2"  
                 name="task-description" 
                 id="task" 
-                cols={30}
-                rows={10}
+                cols={65}
+                rows={3}
                 defaultValue={note.content}
                 onChange={(e)=>{this.setState({newContent: e.currentTarget.value})}}
                 > 
                 </textarea>
-                <button onClick={this.updateNote}>Confirm Changes</button>
-                <button onClick={this.deleteNote}>Delete Note</button>
-                <p onClick={this.cancelEditNote}>Cancel</p>
+                <div className="flex flex-row justify-start">
+                  <button
+                    className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold rounded hover:opacity-75" 
+                    onClick={this.cancelEditNote}
+                  >
+                    cancel
+                  </button>
+                  <button
+                    className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
+                    onClick={this.updateNote}
+                  >
+                    confirm
+                  </button>
+                </div>
               </div>
             :null
             

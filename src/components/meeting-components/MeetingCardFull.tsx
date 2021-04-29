@@ -144,26 +144,41 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
         {this.renderNotes()}
         {this.state.showAddNote
           ? 
-            <div>
+            <div className="bg-gray-200 p-4">
               <textarea  
                 name="task-description" 
                 id="task" 
-                cols={30}
-                rows={10}
+                cols={65}
+                rows={4}
                 onChange={(e)=>{this.setState({newNote: e.currentTarget.value})}}
               > 
               </textarea>
-              <button onClick={this.addNote}>Add Note</button>
-              <button onClick={this.cancelAddNote}>Cancel</button>
+              <div className="flex flex-row justify-start">
+                <button
+                  className="self-center max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold rounded hover:opacity-75"  
+                  onClick={this.cancelAddNote}
+                >
+                  cancel
+                </button>
+                <button
+                  className="self-center max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"  
+                  onClick={this.addNote}
+                >
+                  confirm
+                </button>
+              </div>
             </div>
           : null}
         <div className="flex flex-col">
-          <button
-            className="self-center max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" 
-            onClick={() => {this.setState({showAddNote:true})}}
-          >
-            add note
-          </button>
+          {!this.state.showAddNote
+           ? <button
+              className="self-center max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" 
+              onClick={() => {this.setState({showAddNote:true})}}
+            >
+              add note
+            </button>
+          : null
+          }
           <button
             className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  rounded hover:opacity-75"
             onClick={() => this.props.toggleMCF()}
