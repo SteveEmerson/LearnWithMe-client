@@ -36,6 +36,7 @@ type MCFState = {
   notes: Array<Note>
   showAddNote: boolean
   newNote: string
+  upcoming: boolean
 }
 
 class MeetingCardFull extends React.Component<MCFProps, MCFState>{
@@ -44,7 +45,8 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
     this.state = {
       notes: [],
       showAddNote: false,
-      newNote: ""
+      newNote: "",
+      upcoming: new Date(this.props.meeting.d_t) > new Date()
     }
   }
 
@@ -118,15 +120,26 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
   }
 
   render(){
+    let date = new Date(this.props.meeting.d_t);
+    let mtgDate = date.toString()
+
     return(
-      <div style={{backgroundColor:'grey'}}>
-        <h4>MeetingCardFull</h4>
-        <h5>
-          {`Meeting between ${this.props.studentName} and ${this.props.teacherName} on ${this.props.meeting.d_t}`}
-        </h5>
-        {new Date(this.props.meeting.d_t) > new Date() 
-          ? <button onClick={this.deleteMeeting}>Delete Meeting</button>
+      <div className="absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl">
+        <div className="flex flex-row justify-between">
+          <p className="font-bold text-xl">{`${mtgDate.slice(0,16)} at ${mtgDate.slice(16,21)}`}</p>
+          {this.state.upcoming
+          ? <button
+              className="max-h-5  px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-red-500
+              rounded hover:opacity-75"
+              onClick={this.deleteMeeting}
+            >
+              delete
+            </button>
           : null}
+        </div>
+        <p className="font-bold">
+          {`${this.state.upcoming ? "Upcoming meeting" : "Meeting"} between ${this.props.studentName} and ${this.props.teacherName}.`}
+        </p>
         
         {this.renderNotes()}
         {this.state.showAddNote
@@ -144,9 +157,20 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
               <button onClick={this.cancelAddNote}>Cancel</button>
             </div>
           : null}
-        <hr/>
-        <p onClick={() => {this.setState({showAddNote:true})}}>+ Note</p>
-        <p onClick={() => this.props.toggleMCF()}>Close</p>
+        <div className="flex flex-col">
+          <button
+            className="self-center max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75" 
+            onClick={() => {this.setState({showAddNote:true})}}
+          >
+            add note
+          </button>
+          <button
+            className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  rounded hover:opacity-75"
+            onClick={() => this.props.toggleMCF()}
+          >
+            close
+          </button>
+        </div>
       </div>
     )
   }

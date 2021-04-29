@@ -87,16 +87,19 @@ class NoteCard extends React.Component<NCProps, NCState> {
 
   render() {
     let note = {...this.props.note}
+    let noteDate = new Date(this.props.note.createdAt)
+    let date = noteDate.toString().slice(0,16)
     return(
-      <div>
-        <h5>Note Card</h5>
+      <div className="bg-gray-200 my-4 p-2 font-semibold">
         <div key={`Note${note.id}`} >
           {!this.state.showEditNote || !this.state.allowEditNote
             ?
             <div onClick={()=>this.setState({showEditNote: true})}>
-              <p>{note.teacherId ? this.props.teacherName : this.props.studentName}</p>
+              <div className="flex flex-row justify-end space-x-2 text-xs">
+                <p>{note.teacherId ? this.props.teacherName : this.props.studentName}</p>
+                <p>{date}</p>
+              </div>
               <p>{note.content}</p>
-              <p>{note.createdAt}</p>
             </div>
             : null
           }
