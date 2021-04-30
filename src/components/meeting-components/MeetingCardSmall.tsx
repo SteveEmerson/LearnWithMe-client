@@ -73,13 +73,23 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
   }
 
   render(){
+    let date = new Date(this.props.meeting.d_t);
+    let mtg_d = date.toString().slice(0,24);
     return(
-      <div>
+      <div className="bg-white text-black border-l-8 border-blue-500 p-3 m-6 h-20">
         <div onClick={this.toggleMCF}>
-          <h4>MeetingCardSmall</h4>
-          <p>meeting id: {this.props.meeting.id}</p>
-          <p>{this.props.meeting.d_t}</p>
-          <p>N {this.state.notes.length}</p>
+          <div className="flex flex-row justify-between">
+            <p className="font-bold text-xl">{this.props.studentName}</p>
+            <p className="font-bold text-base">{mtg_d}</p>
+          </div>
+          <div className="flex flex-row justify-between mt-2">
+            {this.state.notes.length > 0
+            ? <p className="italic">
+                {`${this.state.notes[0].content.slice(0,30)}...`}
+              </p>
+            : <p></p>}
+            <p className="text-xs pb-0"> view </p>
+          </div>
         </div>
         {this.state.showMCF 
           ? <MeetingCardFull 

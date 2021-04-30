@@ -87,6 +87,8 @@ type TMVState = {
   allTeacherStudents: Array<Student>
   scheduleMeeting: boolean
   teacher: Teacher
+  pastMeetings: Array<Meeting>
+  futureMeetings: Array<Meeting>
 }
 
 class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
@@ -101,13 +103,33 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
         email: this.props.user.email,
         availability: this.props.user.availability,
         partners: this.props.user.partnerList
-      }
-
+      },
+      pastMeetings: [],
+      futureMeetings: []
     }
   }
 
   componentDidMount(){
     this.getStudentList()
+    this.sortMeetings()
+  }
+
+  sortMeetings = () => {
+    let today = new Date()
+    let tempPast: Array<Meeting> = this.props.meetings.filter((meeting) => {
+      let mtg_d = new Date(meeting.d_t);
+      return mtg_d < today
+    })
+    tempPast.sort((m1, m2) => (m1.d_t > m2.d_t) ? -1 : 1)
+
+    let tempFuture: Array<Meeting> = this.props.meetings.filter((meeting) => {
+      let mtg_d = new Date(meeting.d_t);
+      return mtg_d >= today
+    })
+    tempFuture.sort((m1, m2) => (m1.d_t > m2.d_t) ? -1 : 1)
+
+    this.setState({pastMeetings: tempPast})
+    this.setState({futureMeetings: tempFuture})
   }
 
   toggleScheduleMeeting = () => {
@@ -148,9 +170,9 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
   }
 
 
-  renderMeetingList = () => {
+  renderMeetingList = (mtgs: Array<Meeting>) => {
     return (
-      this.props.meetings.map((meeting) => {
+      mtgs.map((meeting) => {
         let student = this.state.allTeacherStudents.find(student => student.id === meeting.studentId)
         let studentName = student ? student.displayName : "no student"
         return (
@@ -170,10 +192,20 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
 
   render(){
     return(
-      <div >
-        <p className="font-bold text-3xl text-blue-500 mb-3">{this.props.user.displayName}</p>
-        <hr/>
-        <button onClick={this.toggleScheduleMeeting}>Schedule Meeting</button>
+      <div className="px-10">
+        <div className="flex flex-row justify-between">
+          <p className="font-bold text-5xl text-blue-500 mb-3">
+            {this.props.user.displayName}
+          </p>
+          <hr/>
+          <button
+            className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center ml-10"
+            id="schedule-meeting" 
+            onClick={this.toggleScheduleMeeting}
+          >
+            new meeting
+          </button>
+        </div>
         {this.state.scheduleMeeting
           ? <ScheduleMeeting
               teacher={this.state.teacher}
@@ -187,8 +219,13 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
               mountingFrom= {"TMV"}
             /> 
           : null}
-        <div className="MeetingCardSmallList">
-          {this.props.meetings.length !== 0 ? this.renderMeetingList() : null}
+        <div className="grid grid-cols-2 gap-6">
+          <div>
+            {this.state.pastMeetings.length !== 0 ? this.renderMeetingList(this.state.pastMeetings) : null}
+          </div>
+          <div>
+            {this.state.futureMeetings.length !== 0 ? this.renderMeetingList(this.state.futureMeetings) : null}
+          </div>
         </div>
       </div>
     )

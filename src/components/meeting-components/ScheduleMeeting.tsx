@@ -216,7 +216,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   renderStudentSelect = () => {
     console.log(this.props.allStudents)
     return(
-      <select 
+      <select
         name="students" 
         id='student-select'
         onChange={(e) => this.handleStudentSelect(e.currentTarget.value)}

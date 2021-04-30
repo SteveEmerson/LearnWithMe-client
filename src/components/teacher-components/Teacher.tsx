@@ -257,7 +257,12 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
               </div>
 
               <div className="lg:flex flex-grow items-center lg:justify-end">
-                <button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-blue-500 rounded hover:opacity-75" onClick={this.handleLogout}>Logout</button>
+                <button 
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-gray-500 rounded hover:opacity-75" 
+                  onClick={this.handleLogout}
+                >
+                  Logout
+                </button>
                 <Link to='/settings'>
                   <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Settings</p>
                 </Link>
