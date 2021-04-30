@@ -237,7 +237,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
 
   render(){
     return(
-      <div className="px-10">
+      <div className="px-10 pt-20">
         <p className="font-bold text-5xl text-blue-500 mb-3">
           {this.props.user.displayName}
         </p>

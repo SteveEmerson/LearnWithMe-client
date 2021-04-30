@@ -93,31 +93,31 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   render() {
     return(
-      <div className="p-10 text-3xl flex flex-col space-y-4 items-center">
+      <div className="px-10 py-40 text-3xl flex flex-col space-y-4 items-center">
         <p className="text-blue-500 font-bold text-5xl">Welcome to LearnWithMe</p>
         <form className="flex flex-col space-y-6" onSubmit={this.handleSubmit}>
           <div className="flex flex-row space-x-5 self-center">
             <p className="font-bold">Role</p>
             <div>
-              <label className="p-4" htmlFor="student"> Student</label>
-              <input  type="radio" name="role" id="student" value="student" required onChange={this.roleChange}/>
+              <label className="p-4" htmlFor="student">Student</label>
+              <input type="radio" name="role" id="student" value="student" required onChange={this.roleChange}/>
             </div>
             <div>
-              <label className="p-4" htmlFor="teacher"> Teacher</label>
+              <label className="p-4" htmlFor="teacher">Teacher</label>
               <input type="radio" name="role" id="teacher" value="teacher" required onChange={this.roleChange}/>
             </div>
           </div>
           <div className="self-center space-x-4">
-            <label className="font-bold" htmlFor="name"> Display Name</label>
-            <input type="text" name="name" id="name" required onChange={this.nameChange}/>
+            <label className="font-bold" htmlFor="name">Display Name</label>
+            <input className="text-xl text-black px-2 py-1" type="text" name="name" id="name" required onChange={this.nameChange}/>
           </div>
           <div className="self-center space-x-4">
-            <label className="font-bold" htmlFor="email"> School email</label>
-            <input type="text" name="email" id="email" required onChange={this.emailChange}/>
+            <label className="font-bold" htmlFor="email">School email</label>
+            <input className="text-xl text-black px-2 py-1" type="text" name="email" id="email" required onChange={this.emailChange}/>
           </div>
           <div className="self-center space-x-4">
-            <label className="font-bold" htmlFor="password"> Password</label>
-            <input type="text" name="password" id="password" required onChange={this.passwordChange}/>
+            <label className="font-bold" htmlFor="password">Password</label>
+            <input className="text-xl text-black px-2 py-1" type="text" name="password" id="password" required onChange={this.passwordChange}/>
           </div>
           <input
             className="px-2 py-1 self-center flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75"

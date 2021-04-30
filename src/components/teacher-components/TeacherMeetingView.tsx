@@ -192,9 +192,9 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
 
   render(){
     return(
-      <div className="px-10">
+      <div className="px-10 pt-20">
         <div className="flex flex-row justify-between">
-          <p className="font-bold text-5xl text-blue-500 mb-3">
+          <p className="font-bold text-5xl text-blue-500 mb-5 ml-4">
             {this.props.user.displayName}
           </p>
           <button

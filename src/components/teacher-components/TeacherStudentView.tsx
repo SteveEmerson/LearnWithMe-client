@@ -100,7 +100,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
 
   componentDidUpdate(prevProps: TSVProps, prevState: TSVState){
       console.log("GOT TO UPDATE TSV")
-      if(prevState.currStudent.id !== this.state.currStudent.id){
+      if(prevState.currStudent.id && (prevState.currStudent.id !== this.state.currStudent.id)){
         // console.log(`TSV UPDATE CURR STUDENT`)
 
         this.props.getMeetings();
@@ -151,13 +151,14 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   render() {
+    console.log(this.props.user.displayName)
     return(
-      <div className="px-10"> 
+      <div className="px-10 pt-20"> 
         <p className="font-bold text-5xl text-blue-500 mb-5 ml-4">{this.props.user.displayName}</p>
         {/* Contents ... SCF left  SCS grid right*/}
         <div className="grid grid-cols-3 gap-6" >
           <div className="col-span-1">
-            {this.state.currStudent.id !== 0
+            {this.state.currStudent && this.state.currStudent.id !== 0
             ? <StudentCardFull 
                 student={this.state.currStudent}
                 setTSVState={this.setState}
