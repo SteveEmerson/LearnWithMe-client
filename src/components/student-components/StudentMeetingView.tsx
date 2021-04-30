@@ -94,6 +94,8 @@ type SMVState = {
   makeGoal: boolean
   scheduleMeeting: boolean
   student: Student
+  sortedMeetings: Array<Meeting>
+  sortedGoals: Array<Goal>
 }
 
 
@@ -112,14 +114,37 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
         email: this.props.user.email,
         availability: this.props.user.availability,
         partners: this.props.user.partnerList
-      }
+      },
+      sortedMeetings: [],
+      sortedGoals: []
     }
 
     this.setState = this.setState.bind(this)
   }
 
   componentDidMount(){
-    this.getTeacherList()
+    this.getTeacherList();
+    this.sortMeetings();
+    this.sortGoals();
+  }
+
+  sortMeetings = () => {
+    //let today = new Date()
+    let temp: Array<Meeting> = this.props.meetings.filter((meeting) => {
+      return meeting
+    })
+    temp.sort((m1, m2) => (m1.d_t > m2.d_t) ? -1 : 1)
+
+    this.setState({sortedMeetings: temp})
+  }
+
+  sortGoals = () => {
+    let temp: Array<Goal> = this.props.goals.filter((goal) => {
+      return goal
+    })
+    temp.sort((g1, g2) => (g1.targetDate > g2.targetDate) ? 1 : -1)
+
+    this.setState({sortedGoals: temp})
   }
 
   toggleScheduleMeeting = () => {
@@ -165,7 +190,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
 
   renderGoalList = () => {
     return (
-      this.props.goals.map((goal) => {
+      this.state.sortedGoals.map((goal) => {
         return (
           <GoalCard
               rolePOV= {this.props.user.role}
@@ -192,7 +217,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
 
   renderMeetingList = () => {
     return (
-      this.props.meetings.map((meeting) => {
+      this.state.sortedMeetings.map((meeting) => {
         let teacher = this.state.allStudentTeachers.find(teacher => teacher.id === meeting.teacherId)
         let teacherName = teacher ? teacher.displayName : "no teacher"
         return (
@@ -213,24 +238,24 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   render(){
     return(
       <div className="px-10">
-         <div className="flex flex-row justify-between">
-            <p className="font-bold text-5xl text-blue-500 mb-3">
-              {this.props.user.displayName}
-            </p>
-            <button
-              className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center ml-10"
-              id="schedule-meeting" 
-              onClick={this.toggleMakeGoal}
-            >
-              new goal
-            </button>
-            <button
-              className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center ml-10"
-              id="schedule-meeting" 
-              onClick={this.toggleScheduleMeeting}
-            >
-              new meeting
-            </button>
+        <p className="font-bold text-5xl text-blue-500 mb-3">
+          {this.props.user.displayName}
+        </p>
+        <div className="grid grid-cols-2 gap-6 justify-items-end"> 
+          <button
+            className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center"
+            id="schedule-meeting" 
+            onClick={this.toggleMakeGoal}
+          >
+            new goal
+          </button>
+          <button
+            className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center mr-6"
+            id="schedule-meeting" 
+            onClick={this.toggleScheduleMeeting}
+          >
+            new meeting
+          </button>
          </div>
         
         {this.state.makeGoal 
@@ -259,7 +284,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               mountingFrom={"SMV"}
             /> 
           : null}
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-6">
           <div className="grid grid-cols-2 gap-6 mt-6 h-40">
             {this.props.goals.length !== 0 ? this.renderGoalList() : null}
           </div>
