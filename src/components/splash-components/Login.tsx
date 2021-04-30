@@ -83,8 +83,8 @@ class Login extends React.Component<LoginProps, LoginState> {
 
   render() {
     return(
-      <div style={{textAlign:'left', marginLeft:'50px'}}>
-        <h2>Login</h2>
+      <div>
+        <p>Login</p>
         <form onSubmit={this.handleSubmit}>
           <div>
             <p>Role:</p>

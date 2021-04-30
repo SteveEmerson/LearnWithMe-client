@@ -93,33 +93,37 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   render() {
     return(
-      <div style={{textAlign:'left', marginLeft:'50px'}}>
-        <h2>Signup</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <p>Role:</p>
+      <div className="p-10 text-3xl flex flex-col space-y-4 items-center">
+        <p className="text-blue-500 font-bold text-5xl">Welcome to LearnWithMe</p>
+        <form className="flex flex-col space-y-6" onSubmit={this.handleSubmit}>
+          <div className="flex flex-row space-x-5 self-center">
+            <p className="font-bold">Role</p>
             <div>
-              <label htmlFor="student"> Student</label>
-              <input type="radio" name="role" id="student" value="student" required onChange={this.roleChange}/>
+              <label className="p-4" htmlFor="student"> Student</label>
+              <input  type="radio" name="role" id="student" value="student" required onChange={this.roleChange}/>
             </div>
             <div>
-              <label htmlFor="teacher"> Teacher</label>
+              <label className="p-4" htmlFor="teacher"> Teacher</label>
               <input type="radio" name="role" id="teacher" value="teacher" required onChange={this.roleChange}/>
             </div>
           </div>
-          <div>
-            <label htmlFor="name"> Name (for display):</label>
+          <div className="self-center space-x-4">
+            <label className="font-bold" htmlFor="name"> Display Name</label>
             <input type="text" name="name" id="name" required onChange={this.nameChange}/>
           </div>
-          <div>
-            <label htmlFor="email"> School email:</label>
+          <div className="self-center space-x-4">
+            <label className="font-bold" htmlFor="email"> School email</label>
             <input type="text" name="email" id="email" required onChange={this.emailChange}/>
           </div>
-          <div>
-            <label htmlFor="password"> Password:</label>
+          <div className="self-center space-x-4">
+            <label className="font-bold" htmlFor="password"> Password</label>
             <input type="text" name="password" id="password" required onChange={this.passwordChange}/>
           </div>
-          <input type="submit" value="Submit" />
+          <input
+            className="px-2 py-1 self-center flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75"
+            type="submit" 
+            value="Submit" 
+          />
         </form>
 
         {this.state.signinError ? <h5>Email not available.</h5> : null}
