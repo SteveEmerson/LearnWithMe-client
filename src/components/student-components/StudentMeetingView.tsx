@@ -212,10 +212,27 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
 
   render(){
     return(
-      <div>
-        <h3>Student Meeting View</h3>
-        <hr/>
-        <button onClick={this.toggleMakeGoal}>Make Goal</button>
+      <div className="px-10">
+         <div className="flex flex-row justify-between">
+            <p className="font-bold text-5xl text-blue-500 mb-3">
+              {this.props.user.displayName}
+            </p>
+            <button
+              className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center ml-10"
+              id="schedule-meeting" 
+              onClick={this.toggleMakeGoal}
+            >
+              new goal
+            </button>
+            <button
+              className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center ml-10"
+              id="schedule-meeting" 
+              onClick={this.toggleScheduleMeeting}
+            >
+              new meeting
+            </button>
+         </div>
+        
         {this.state.makeGoal 
           ? <MakeGoal 
               student={this.state.student}
@@ -228,7 +245,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
             /> 
           : null}
 
-        <button onClick={this.toggleScheduleMeeting}>Schedule Meeting</button>
+        
         {this.state.scheduleMeeting
           ? <ScheduleMeeting
               teacher={null}
@@ -242,11 +259,13 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               mountingFrom={"SMV"}
             /> 
           : null}
-        <div className="GoalCardList">
-          {this.props.goals.length !== 0 ? this.renderGoalList() : null}
-        </div>
-        <div className="MeetingCardSmallList">
-          {this.props.meetings.length !== 0 ? this.renderMeetingList() : null}
+        <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 gap-6 mt-6 h-40">
+            {this.props.goals.length !== 0 ? this.renderGoalList() : null}
+          </div>
+          <div className="MeetingCardSmallList">
+            {this.props.meetings.length !== 0 ? this.renderMeetingList() : null}
+          </div>
         </div>
       </div>
     )

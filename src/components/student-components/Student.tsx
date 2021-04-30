@@ -156,14 +156,43 @@ class Student extends React.Component<StudentProps, StudentState> {
 
   render() {
     return(
-      <div>
-        <h1> Student </h1>
+      <div className="bg-black text-gray-50 min-h-screen">
         <Router>
-          <div>
-            <Link to='/student-meeting'><h4>LearnWithMe</h4></Link>
-            <h4><button onClick={this.handleLogout}>Logout</button></h4>
-            <Link to='/settings'><h4>Settings</h4></Link>
-          </div>
+          {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
+          <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-black mb-3">
+            <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+              <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
+                
+                {/* <Link to='/home' ><p className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"> (LOGO) </p></Link> */}
+                <p className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"> (LOGO) </p>
+              </div>
+
+              <div className= "lg:flex flex-grow items-center">
+                <ul className="flex flex-col lg:flex-row list-none lg:ml-auto space-x-4">
+                  <li className="nav-item">
+                    <Link to='/student-meeting' >
+                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">View Meetings</p>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="lg:flex flex-grow items-center lg:justify-end">
+                <button 
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-gray-500 rounded hover:opacity-75" 
+                  onClick={this.handleLogout}
+                >
+                  Logout
+                </button>
+                <Link to='/settings'>
+                  <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Settings</p>
+                </Link>
+              </div>
+
+            </div>
+          </nav>
+
+          {/* NAV END ATTRIBUTION */}
           <Switch>
             <Route exact path='/student-meeting'>
               <StudentMeetingView 

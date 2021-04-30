@@ -79,7 +79,12 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
       <div className="bg-white text-black border-l-8 border-blue-500 p-3 m-6 h-20">
         <div onClick={this.toggleMCF}>
           <div className="flex flex-row justify-between">
-            <p className="font-bold text-xl">{this.props.studentName}</p>
+            <p className="font-bold text-xl">
+              {this.props.role === "teacher"
+                ? this.props.studentName
+                : this.props.teacherName
+              }
+            </p>
             <p className="font-bold text-base">{mtg_d}</p>
           </div>
           <div className="flex flex-row justify-between mt-2">

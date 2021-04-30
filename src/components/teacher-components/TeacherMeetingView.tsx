@@ -197,7 +197,6 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
           <p className="font-bold text-5xl text-blue-500 mb-3">
             {this.props.user.displayName}
           </p>
-          <hr/>
           <button
             className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center ml-10"
             id="schedule-meeting" 
