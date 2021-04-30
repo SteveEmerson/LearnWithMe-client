@@ -67,34 +67,50 @@ class UpdatePersonalInfo extends React.Component<UPIProps, UPIState>{
   }
 
   render(){
+    let changes: boolean = 
+      this.state.newDisplayName !== this.props.user.displayName ||
+      this.state.newEmail !== this.props.user.email ||
+      this.state.newPassword !== ""
+
     return(
-      <div>
-        <form onSubmit={this.handleSubmitPersonalInfo}>
+      <div className="text-lg p-4">
+        <form className="flex flex-col space-y-3" onSubmit={this.handleSubmitPersonalInfo}>
           <div>
-            <label htmlFor="name"> Display Name:</label>
-            <input type="text" name="name" id="name" value={this.state.newDisplayName} onChange={this.nameChange}/>
+            <label className="p-4 font-semibold" htmlFor="name"> Display name</label>
+            <input className="text-black text-base px-1" type="text" name="name" id="name" value={this.state.newDisplayName} onChange={this.nameChange}/>
           </div>
           <div>
-            <label htmlFor="email"> School email:</label>
-            <input type="text" name="email" id="email" value={this.state.newEmail} onChange={this.emailChange}/>
+            <label className="p-4 font-semibold" htmlFor="email"> School email</label>
+            <input className="text-black text-base px-1" type="text" name="email" id="email" value={this.state.newEmail} onChange={this.emailChange}/>
           </div>
           <div>
-            <label htmlFor="showSetPassword"> Password:</label>
-            <button 
-              id="togglepassword"  
-              onClick={this.togglePassword}
-            >
-              {(this.state.hideSetPassword ? "update" : "cancel")}
-            </button>
-            <div hidden={this.state.hideSetPassword}>
-              <label htmlFor="currpassword"> Current Password:</label>
-              <input type="text" name="currpassword" id="currpassword" onChange={this.currPasswordChange}/>
-              <label htmlFor="password"> New Password:</label>
-              <input type="text" name="newpassword" id="newpassword" value={this.state.newPassword} onChange={this.newPasswordChange}/>
+            <div className="flex flex-row items-center">
+              <label className="p-4 font-semibold" htmlFor="showSetPassword"> Password</label>
+              <button
+                className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
+                id="togglepassword"  
+                onClick={this.togglePassword}
+              >
+                {(this.state.hideSetPassword ? "update" : "cancel")}
+              </button>
+            </div>
+            <div className={`flex flex-col space-y-3 ml-3 ${this.state.hideSetPassword ? "hidden" : null}`} >
+              <div>
+                <label className="p-4" htmlFor="currpassword"> Current Password</label>
+                <input className="text-black text-base px-1" type="text" name="currpassword" id="currpassword" onChange={this.currPasswordChange}/>
+              </div>
+              <div>
+                <label className="p-4" htmlFor="password"> New Password</label>
+                <input className="text-black text-base  px-1" type="text" name="newpassword" id="newpassword" value={this.state.newPassword} onChange={this.newPasswordChange}/>
+              </div>
             </div>
 
           </div>
-          <input type="submit" value="Update Info" />
+          <input
+            className={`px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!changes ? "hidden" : null}`}
+            type="submit" 
+            value="Confirm Changes" 
+          />
         </form>
       </div>
     )

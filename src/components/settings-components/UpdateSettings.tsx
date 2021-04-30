@@ -121,22 +121,27 @@ class UpdateSettings extends React.Component<USProps, USState>{
 
   render() {
     return(
-      <div>
-        <h1>Update Settings</h1>
-        <h3>Update Personal Information</h3>
-        <UpdatePersonalInfo passwordhash={this.state.passwordhash} user={this.props.user} setSettingsState={this.setState}/>
-        <h3>Update Partner List</h3>
-        <UpdatePartnerList user={this.props.user} setSettingsState={this.setState}/>
-        <br/><br/>
-        <button onClick={this.handleSubmit}>Confirm Changes</button>
-        <hr/>
-        <h3> Current Settings State</h3>
+      <div className="p-10">
+        <p className="text-center font-extrabold text-3xl">Settings</p>
+        <div className="grid grid-cols-2">
+          <div className="flex flex-col items-center">
+            <p className="text-center font-extrabold text-xl p-2">Personal Information</p>
+            <UpdatePersonalInfo passwordhash={this.state.passwordhash} user={this.props.user} setSettingsState={this.setState}/>
+          </div>
+          <div>
+            <p className="text-center font-extrabold text-xl p-2">Partner List</p>
+            <UpdatePartnerList user={this.props.user} setSettingsState={this.setState}/>
+          </div>
+          <button onClick={this.handleSubmit}>Confirm Changes</button>
+        </div>
+        
+        {/* <h3> Current Settings State</h3>
         <p>displayName: {this.state.displayName}</p>
         <p>email: {this.state.email}</p>
         <p>passwordHash: {this.state.passwordhash}</p>
         <p>partnerList: {String(this.state.partnerList)}</p>
         <p>availability: {String(this.state.availability)}</p>
-        <p>role: {this.props.user.role}</p>
+        <p>role: {this.props.user.role}</p> */}
       </div>
     )
   }

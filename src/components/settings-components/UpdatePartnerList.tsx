@@ -153,49 +153,63 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
 
   }
   render() {
+    let changes: boolean = true;
     return(
-      <div>
-        <h5>Current Partners</h5>
-
-        {
-          this.state.newPartnerData.map((partner: Partner) => {
-            return (
-              <div>
-                <span key={`Partner${partner.id}`}>{partner.name}</span>
-                <button
-                  key={`Remove${partner.id}`}
-                  value={partner.id}
-                  onClick={() => this.handleRemovePartner(partner)}
-                  >
-                  remove
-                </button>
-              </div>
-            )
-          })
-        }
-
-        <h5>All Database Partners</h5>
-        
-          {
-            this.state.allDatabasePartnerData
-            .map((partner: Partner) => {
-              return(
-                <div>
-                  <span id={String(partner.id)} key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</span>
-                  <button
-                    key={`Add${partner.id}`} 
-                    onClick={() =>{this.handleAddPartner(partner)}}
-                    >
-                    add
-                  </button>
-                </div>
-              ) 
-            })
-          }
-
-          <br/>
-          <button onClick={this.handleSubmitPartners}>Update Partner List</button>
-   
+      <div >
+        <div className="grid grid-cols-2 gap-20">
+          <div>
+            <p className="text-lg py-4 font-semibold">Current Partners</p>
+            {
+              this.state.newPartnerData.map((partner: Partner) => {
+                return (
+                  <div className="py-1">
+                    <div className="flex flex-row justify-between">
+                      <p key={`Partner${partner.id}`}>{partner.name}</p>
+                      <button
+                        className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
+                        key={`Remove${partner.id}`}
+                        value={partner.id}
+                        onClick={() => this.handleRemovePartner(partner)}
+                      >
+                        remove
+                      </button>
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </div>
+          
+          <div>
+            <p className="text-lg py-4 font-semibold" >Other Partners</p>
+              {
+                this.state.allDatabasePartnerData.map((partner: Partner) => {
+                  return(
+                    <div className="py-1">
+                      <div className="flex flex-row justify-between">
+                        <p key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</p>
+                        <button
+                          className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
+                          key={`Add${partner.id}`} 
+                          onClick={() =>{this.handleAddPartner(partner)}}
+                        >
+                          add
+                        </button>
+                      </div>
+                    </div>
+                  ) 
+                })
+              }
+          </div>
+        </div>
+        <div className="py-6">
+          <button
+            className={`m-auto px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!changes ? "hidden" : null}`} 
+            onClick={this.handleSubmitPartners}
+          >
+            Update Partner List
+          </button>
+        </div>
       </div>
     )
   }
