@@ -86,7 +86,7 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
     })
     .then(res => res.json())
     .then((note: Note) => {
-      console.log(note)
+      console.log("Note added to database")
       this.setState({showAddNote: false})
       this.setState({newNote: ""})
       this.props.getNotes()

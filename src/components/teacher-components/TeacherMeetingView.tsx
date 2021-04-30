@@ -162,7 +162,6 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
           }
         } )
         this.setState({allTeacherStudents: allStudents})
-        console.log(this.state.allTeacherStudents)
       })
       .catch(err => {
         console.log(`Error in fetching students: ${err}`)

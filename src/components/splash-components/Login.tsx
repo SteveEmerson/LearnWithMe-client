@@ -41,12 +41,10 @@ class Login extends React.Component<LoginProps, LoginState> {
         })
         .then((res) => res.json())
         .then((user) => {
-          console.log(user);
           if(user.hasOwnProperty('error')){
             this.setState({signinError: true})
           }else{
             let partners: number[] = (user.studentList) ? user.studentList: user.teacherList;
-            //console.log(partners)
             this.props.setAppState(
               {
                 user:{

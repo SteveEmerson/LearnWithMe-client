@@ -181,7 +181,6 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
           }
         } )
         this.setState({allStudentTeachers: allTeachers})
-        console.log(this.state.allStudentTeachers)
       })
       .catch(err => {
         console.log(`Error in fetching teachers: ${err}`)

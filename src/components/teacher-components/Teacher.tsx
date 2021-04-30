@@ -136,7 +136,6 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
         } )
         this.setState({students: allStudents})
         this.setState({gotStudents: true})
-        console.log(this.state.students)
        
       })
       .catch(err => {
@@ -197,7 +196,6 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       })
       .then((res) => res.json())
       .then((data: Array<Task>) => {
-        console.log('GOT TO HERE IN NEW TASK SUBMIT')
         this.setState({tasks: data})
         this.setState({gotTasks: true})
       })
@@ -243,12 +241,12 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                   <li className="nav-item">
 
                     <Link to='/teacher-student' >
-                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">View Students</p>
+                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Students</p>
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link to='/teacher-meeting' >
-                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">View Meetings</p>
+                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Meetings</p>
                     </Link>
                   </li>
                 </ul>

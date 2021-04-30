@@ -121,7 +121,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
 
   render() {
     return(
-      <div className="p-10">
+      <div className="px-10  pt-20">
         <p className="text-center font-extrabold text-3xl">Settings</p>
         <div className="grid grid-cols-2">
           <div className="flex flex-col items-center">

@@ -55,20 +55,11 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   }
 
   componentDidMount(){
-    console.log("Mount")
-    // console.log("Partner List on Mount", this.state.newPartnerList)
-    console.log("Partner Data on Mount", this.state.newPartnerData)
-    console.log("All Database Partner on Mount", this.state.allDatabasePartnerData)
-
     this.makeAllDatabasePartnerList();
-    // this.makeNewPartnerData()
   }
 
   componentDidUpdate(){
-    console.log("Update")
-    // console.log("Partner List: ",this.state.newPartnerList)
-    console.log("Partner Data: ", this.state.newPartnerData)
-    console.log("All Database Partner", this.state.allDatabasePartnerData)
+
   }
 
   makeAllDatabasePartnerList = () => {
@@ -129,7 +120,6 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
 
 
   handleAddPartner = (partner: Partner) => {
-    console.log(partner)
     let tempNew: Array<Partner> = this.state.newPartnerData;
     tempNew.push(partner);
     this.setState({newPartnerData: tempNew});
@@ -138,7 +128,6 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   }
 
   handleRemovePartner = (partner: Partner) => {
-    console.log(partner)
     let tempAll: Array<Partner> = this.state.allDatabasePartnerData;
     tempAll.push(partner);
     this.setState({allDatabasePartnerData: tempAll});
@@ -148,7 +137,6 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   
   handleSubmitPartners = () => {
     let newPartners: number[] = this.state.newPartnerData.map((partner: Partner) => partner.id);
-    console.log(newPartners);
     this.props.setSettingsState({partnerList: newPartners});
 
   }
@@ -185,7 +173,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
               {
                 this.state.allDatabasePartnerData.map((partner: Partner) => {
                   return(
-                    <div className="py-1">
+                    <div className="py-1" key={`P${partner.id}`}>
                       <div className="flex flex-row justify-between">
                         <p key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</p>
                         <button

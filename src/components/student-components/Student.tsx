@@ -171,7 +171,7 @@ class Student extends React.Component<StudentProps, StudentState> {
                 <ul className="flex flex-col lg:flex-row list-none lg:ml-auto space-x-4">
                   <li className="nav-item">
                     <Link to='/student-meeting' >
-                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">View Meetings</p>
+                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Goals and Meetings</p>
                     </Link>
                   </li>
                 </ul>

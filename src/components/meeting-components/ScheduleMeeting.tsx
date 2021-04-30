@@ -188,7 +188,6 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   renderTeacherSelect = () => {
-    console.log(this.props.allTeachers)
     return(
       <select 
         name="teachers" 
@@ -214,7 +213,6 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   renderStudentSelect = () => {
-    console.log(this.props.allStudents)
     return(
       <select
         name="students" 
@@ -241,18 +239,14 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
 
   handleTeacherSelect = (idString: string) => {
     let id: number = Number(idString)
-    console.log(id)
     let selectedTeacher: Teacher | undefined = this.props.allTeachers?.find(teacher => teacher.id === id)
     if (selectedTeacher) this.setState({teacher: selectedTeacher});
-    console.log(selectedTeacher)
   }
 
   handleStudentSelect = (idString: string) => {
     let id: number = Number(idString)
-    console.log(id)
     let selectedStudent: Student | undefined = this.props.allStudents?.find(student => student.id === id)
     if (selectedStudent) this.setState({student: selectedStudent});
-    console.log(selectedStudent)
   }
 
   render(){

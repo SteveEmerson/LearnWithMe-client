@@ -129,22 +129,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
 
         if(!this.props.teacherId){
           this.props.getGoals();
-        }else if(this.props.teacherId){
-          // let cStud: Student = {
-          //   id: this.props.student.id,
-          //   displayName: this.props.student.displayName,
-          //   email: this.props.student.email,
-          //   availability: this.props.student.availability,
-          //   meetings: this.props.student.meetings,
-          //   goal: newGoal,
-          // }
-          // this.props.setGParState({currStudent: cStud});
-          this.props.getGoals()
         }
-
-        //this.props.toggleMakeGoal()
-
-
       })
       .catch(err => console.log(`Error posting new goal: ${err}`));
       
@@ -168,8 +153,6 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       return shortTask
     });
 
-    console.log(JSON.stringify({taskList: newTaskList}))
-
     const url: string = (this.props.teacherId) 
     ? `http://localhost:3000/task/teacher_bulk` 
     : `http://localhost:3000/task/student_bulk`
@@ -184,24 +167,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     })
     .then((res) => res.json())
     .then((newTasks: Array<Task>) => {
-      if(this.props.teacherId){
-        // let cStud: Student = {
-        //   id: this.props.student.id,
-        //   displayName: this.props.student.displayName,
-        //   email: this.props.student.email,
-        //   availability: this.props.student.availability,
-        //   meetings: this.props.student.meetings,
-        //   goal: newGoal,
-        //   tasks: newTasks
-        // }
-  
-        // this.props.setGParState({currStudent: cStud});
-        //this.props.getTasks()
-      }
-
-        
-        this.props.getTasks();
-      
+        this.props.getTasks(); 
 
     })
     .catch((err) => console.log(`Error posting new tasks ${err}`))

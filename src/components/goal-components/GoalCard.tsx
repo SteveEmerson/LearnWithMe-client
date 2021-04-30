@@ -128,7 +128,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   handleTaskChange = (id: number | undefined) => {
-    console.log("Got handle task change");
     let tempTasks: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
     let currentTaskIndex: number = tempTasks.findIndex(task => task.id === id);
     let currentTask :Task = tempTasks[currentTaskIndex];
@@ -144,9 +143,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
     let uT: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
     let pT: Array<Task> = this.props.tasks ? this.props.tasks : [];
 
-    console.log('Tasks changed? ', uT?.length !== pT?.length || !this.compareTaskArrays(uT, pT))
-    console.log(uT)
-    console.log(pT)
     this.setState({tasksChanged: uT?.length !== pT?.length || !this.compareTaskArrays(uT, pT)}) 
   }
 
@@ -193,10 +189,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
     if (changedTasks && changedTasks.length > 0) {
       changedTasks.forEach((task: Task) => {
-        console.log(task)
-        console.log(this.props.student.id, task.studentId)
-        const url = `http://localhost:3000/task/${this.props.rolePOV}_update/${task.id}`
-        console.log(url)
+        const url: string = `http://localhost:3000/task/${this.props.rolePOV}_update/${task.id}`
         fetch(url, {
           method: 'PUT',
           body: JSON.stringify({
@@ -330,8 +323,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
     })
     .then(res => res.json())
     .then((json: {data: number[]}) => {
-      
-      console.log(json.data[0])
       // let newGoal: Goal = this.props.goal;
       // newGoal.description = this.state.newGoalDesc;
       // newGoal.targetDate = this.state.newDate;
@@ -395,7 +386,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
     })
     .then(res => res.json())
     .then((json) => {
-      console.log(json)
       this.deleteAllTasks()
 
       if(this.props.getGoals){
@@ -407,7 +397,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   deleteAllTasks = () => {
-    console.log(this.props.rolePOV)
     if(this.props.tasks && this.props.tasks.length > 0){
       this.props.tasks.forEach((task: Task) => {
         const url=`http://localhost:3000/task/${this.props.rolePOV}_delete/${task.id}`
@@ -420,7 +409,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
         })
         .then(res => res.json())
         .then((json) => {
-          console.log(json)
           this.setState({updatedTasks: []})
 
           if(this.props.getTasks){
@@ -433,13 +421,13 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
   
   removeStagedTask = (remTask: Task) => {
-    console.log(remTask.id)
+    //console.log(remTask.id)
     let temp: Array<Task> | undefined= this.state.updatedTasks?.filter((task) => task.id !== remTask.id)
-    console.log("Temp ", temp)
+    //console.log("Temp ", temp)
     this.setState({updatedTasks: temp})
-    console.log("Update ", this.state.updatedTasks)
+    //console.log("Update ", this.state.updatedTasks)
     this.setState({oldTasks: [...this.state.oldTasks, remTask]})
-    console.log("Old ", this.state.oldTasks)
+    //console.log("Old ", this.state.oldTasks)
   }
 
   addStagedTask(){

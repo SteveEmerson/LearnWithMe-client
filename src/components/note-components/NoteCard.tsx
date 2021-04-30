@@ -77,7 +77,7 @@ class NoteCard extends React.Component<NCProps, NCState> {
     })
     .then(res => res.json())
     .then((json: {message: string}) => {
-      console.log(`${json}`)
+      console.log("Note removed from database")
       this.setState({showEditNote: false})
       this.setState({newContent: ""})
       this.props.getNotes()
