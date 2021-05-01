@@ -36,6 +36,8 @@ type USState = {
   displayName: string
   partnerList: number[]
   availability: {}
+  pInfoChanged: boolean
+  partnersChanged: boolean
 }
 
 class UpdateSettings extends React.Component<USProps, USState>{
@@ -47,6 +49,8 @@ class UpdateSettings extends React.Component<USProps, USState>{
       displayName: this.props.user.displayName,
       partnerList: this.props.user.partnerList,
       availability: this.props.user.availability,
+      pInfoChanged: false,
+      partnersChanged: false
     }
     this.setState = this.setState.bind(this)
   }
@@ -118,6 +122,16 @@ class UpdateSettings extends React.Component<USProps, USState>{
       };
     this.props.setAppState({user: updatedUser});
   }
+  
+  handleCancel = () => {
+    this.setState({ 
+      email: this.props.user.email,
+      displayName: this.props.user.displayName,
+      partnerList: this.props.user.partnerList,
+      availability: this.props.user.availability,
+      pInfoChanged: false,
+      partnersChanged: false})
+  }
 
   render() {
     return(
@@ -132,8 +146,30 @@ class UpdateSettings extends React.Component<USProps, USState>{
             <p className="text-center font-extrabold text-xl p-2">Partner List</p>
             <UpdatePartnerList user={this.props.user} setSettingsState={this.setState}/>
           </div>
-          <button onClick={this.handleSubmit}>Confirm Changes</button>
+
         </div>
+        <button
+          className={`m-auto px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-red-500 rounded hover:opacity-75 self-center ${!this.state.pInfoChanged && !this.state.partnersChanged ? "hidden" : null}`} 
+          
+          onClick={this.handleSubmit}
+        >
+          { this.state.pInfoChanged && this.state.partnersChanged ? "Confirm All Changes"
+            : this.state.partnersChanged ? "Confirm Partner Changes"
+            : this.state.pInfoChanged ? "Confirm Personal Info Changes"
+            : null
+          }
+        </button>
+
+        <button
+          className={`m-auto px-2 py-2 flex items-center text-xs uppercase font-bold  text-white rounded hover:opacity-75 self-center ${!this.state.pInfoChanged && !this.state.partnersChanged ? "hidden" : null}`} 
+          
+          onClick={this.handleCancel}
+        >
+          Cancel
+        </button>
+
+
+        
         
         {/* <h3> Current Settings State</h3>
         <p>displayName: {this.state.displayName}</p>

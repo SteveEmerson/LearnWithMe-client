@@ -36,12 +36,24 @@ class UpdatePersonalInfo extends React.Component<UPIProps, UPIState>{
     }
   }
   
+  // checkChanges = () => {
+  //   let changes: boolean = 
+  //   this.state.newDisplayName !== this.props.user.displayName ||
+  //   this.state.newEmail !== this.props.user.email ||
+  //   this.state.newPassword !== ""
+
+  //   this.props.setSettingsState({pInfoChanged: changes})
+
+  //   return changes;
+  // }
+
   handleSubmitPersonalInfo = (e: React.SyntheticEvent)=> {
     e.preventDefault();
     this.props.setSettingsState(
       {
           displayName: this.state.newDisplayName,
           email: this.state.newEmail,
+          pInfoChanged: true
       })
   }
 
@@ -68,9 +80,9 @@ class UpdatePersonalInfo extends React.Component<UPIProps, UPIState>{
 
   render(){
     let changes: boolean = 
-      this.state.newDisplayName !== this.props.user.displayName ||
-      this.state.newEmail !== this.props.user.email ||
-      this.state.newPassword !== ""
+    this.state.newDisplayName !== this.props.user.displayName ||
+    this.state.newEmail !== this.props.user.email ||
+    this.state.newPassword !== ""
 
     return(
       <div className="text-lg p-4">
@@ -109,7 +121,7 @@ class UpdatePersonalInfo extends React.Component<UPIProps, UPIState>{
           <input
             className={`px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!changes ? "hidden" : null}`}
             type="submit" 
-            value="Confirm Changes" 
+            value="update personal info" 
           />
         </form>
       </div>

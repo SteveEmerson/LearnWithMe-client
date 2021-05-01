@@ -18,9 +18,13 @@ type UPLProps = {
 }
 
 type UPLState = {
-  // newPartnerList: number[]
+  currentPartnerIdList: number[]
+  otherPartnerIdList: number[]
   newPartnerData: Array<Partner>
   allDatabasePartnerData: Array<Partner>
+  gotAllPartners: boolean
+  gotNewPartners: boolean
+  changes: boolean
 }
 
 type Partner = {
@@ -47,19 +51,36 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   constructor(props: UPLProps){
     super(props)
     this.state = {
-      // newPartnerList: this.props.user.partnerList,
+      currentPartnerIdList: [],
+      otherPartnerIdList: [],
       newPartnerData: [],
-      allDatabasePartnerData: []
+      allDatabasePartnerData: [],
+      gotAllPartners: false,
+      gotNewPartners: false,
+      changes: false
     }
 
   }
 
   componentDidMount(){
     this.makeAllDatabasePartnerList();
+    
   }
 
-  componentDidUpdate(){
+  componentDidUpdate(prevProps: UPLProps, prevState: UPLState){
+    console.log(this.state.changes);
+  }
 
+  checkPartnerChanged = (idList: number[], partnerList: Array<Partner>) => {
+    let changed: boolean = false;
+
+    if(idList.length !== partnerList.length) {changed = true}
+    
+    partnerList.forEach((partner: Partner) => {
+      if(!idList.includes(partner.id)) {changed = true}
+    })
+
+    return changed
   }
 
   makeAllDatabasePartnerList = () => {
@@ -82,41 +103,50 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
         .filter((partner: Partner) => !this.props.user.partnerList.includes(partner.id))
 
         this.setState({allDatabasePartnerData: allPartners})
+        this.setState({gotAllPartners: true})
 
         let newPartners: Array<Partner> = 
         data.map((partner: FetchUserData) => {
           return {id: partner.id, name: partner.name}
         })
         .filter((partner: Partner) => this.props.user.partnerList.includes(partner.id))
+
         this.setState({newPartnerData: newPartners})
+        this.setState({gotNewPartners: true})
+
+        let otherPartIdList: number[] = allPartners.map((partner: Partner) => partner.id)
+        this.setState({otherPartnerIdList: otherPartIdList})
+
+        let currPartIdList: number[] = newPartners.map((partner: Partner) => partner.id)
+        this.setState({currentPartnerIdList: currPartIdList})
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
       }) 
   }
 
-  makeNewPartnerData = () => {
-    for(let id of this.props.user.partnerList){
-      let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
-      const url: string = `http://localhost:3000/${partnerRole}/${id}`
-      fetch(url,
-        {
-          method: 'GET',
-          headers: new Headers ({
-          'Content-Type': 'application/json',
-          'Authorization': this.props.user.sessionToken
-          })
-        })
-        .then((res) => res.json())
-        .then((data: FetchUserData) => {
-          return {id: data.id, name: data.name}
-        })
-        .then((partner: Partner) =>  this.state.newPartnerData.push(partner))
-        .catch(err => {
-          console.log(`Error in user fetch: ${err}`)
-        }) 
-    }
-  }
+  // makeNewPartnerData = () => {
+  //   for(let id of this.props.user.partnerList){
+  //     let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
+  //     const url: string = `http://localhost:3000/${partnerRole}/${id}`
+  //     fetch(url,
+  //       {
+  //         method: 'GET',
+  //         headers: new Headers ({
+  //         'Content-Type': 'application/json',
+  //         'Authorization': this.props.user.sessionToken
+  //         })
+  //       })
+  //       .then((res) => res.json())
+  //       .then((data: FetchUserData) => {
+  //         return {id: data.id, name: data.name}
+  //       })
+  //       .then((partner: Partner) =>  this.state.newPartnerData.push(partner))
+  //       .catch(err => {
+  //         console.log(`Error in user fetch: ${err}`)
+  //       }) 
+  //   }
+  // }
 
 
   handleAddPartner = (partner: Partner) => {
@@ -125,6 +155,11 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     this.setState({newPartnerData: tempNew});
     let filteredAllPartnerData: Array<Partner> = this.state.allDatabasePartnerData.filter(p => p !== partner);
     this.setState({allDatabasePartnerData: filteredAllPartnerData});
+
+    let currChanged: boolean =this.checkPartnerChanged(this.state.currentPartnerIdList, this.state.newPartnerData)
+
+
+    this.setState({changes: currChanged})
   }
 
   handleRemovePartner = (partner: Partner) => {
@@ -133,15 +168,19 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
     this.setState({allDatabasePartnerData: tempAll});
     let filteredPartnerData: Array<Partner> = this.state.newPartnerData.filter(p => p !== partner);
     this.setState({newPartnerData: filteredPartnerData});
+
+    let currChanged: boolean =this.checkPartnerChanged(this.state.currentPartnerIdList, this.state.newPartnerData)
+    let otherChanged: boolean = this.checkPartnerChanged(this.state.otherPartnerIdList, this.state.allDatabasePartnerData)
+
+    this.setState({changes: currChanged || otherChanged})
   }
   
   handleSubmitPartners = () => {
     let newPartners: number[] = this.state.newPartnerData.map((partner: Partner) => partner.id);
-    this.props.setSettingsState({partnerList: newPartners});
+    this.props.setSettingsState({partnerList: newPartners, partnersChanged: true});
 
   }
   render() {
-    let changes: boolean = true;
     return(
       <div >
         <div className="grid grid-cols-2 gap-20">
@@ -192,7 +231,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
         </div>
         <div className="py-6">
           <button
-            className={`m-auto px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!changes ? "hidden" : null}`} 
+            className={`m-auto px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!this.state.changes ? "hidden" : null}`} 
             onClick={this.handleSubmitPartners}
           >
             Update Partner List
