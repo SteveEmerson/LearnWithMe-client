@@ -145,7 +145,8 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
         {this.state.showAddNote
           ? 
             <div className="bg-gray-200 p-4">
-              <textarea  
+              <textarea 
+                className="px-1" 
                 name="task-description" 
                 id="task" 
                 cols={65}

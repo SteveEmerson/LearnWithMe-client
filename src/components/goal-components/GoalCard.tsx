@@ -106,7 +106,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   handleDate = (e: React.FormEvent<HTMLInputElement>) => {
-    this.setState({newDate: new Date(e.currentTarget.value)})
+    this.setState({newDate: new Date(e.currentTarget.value + "T07:00:00")})
   }
 
   getDateString = (d: Date): string => {
@@ -251,6 +251,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then(res => res.json())
         .then((task: Task) => {
           this.props.getTasks()
+          this.setState({newTasks: []})
         })
         .catch(err => console.log(`Error in adding tasks ${err}`))
       });
@@ -275,6 +276,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then((json: {message: string}) => {
           console.log(json)
           this.props.getTasks();
+          this.setState({oldTasks: []})
         })
         .catch(err => console.log(`Error in removing tasks ${err}`))
       });
@@ -318,8 +320,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
       //   this.props.setGParState({currStudent: cStud});
       // }
 
-      // REDUNDANT! JUST getGOALS
       this.props.getGoals()
+
+      // *******CHANGED 050121 1028********
+      this.addTasks()
+      this.removeTasks()
 
     })
     .catch(err => console.log(`Error in updating goal ${err}`))
@@ -455,7 +460,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
           type='date' 
           id="target-date" 
           name="goal-target-date"
-          value={String(goal.targetDate)}
+          defaultValue={String(goal.targetDate)}
           onChange={this.handleDate}
         />
 

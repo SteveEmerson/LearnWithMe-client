@@ -129,10 +129,9 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       .then((newGoal: Goal) => {
         
         if(this.state.tasks.length > 0) {this.taskSubmit(newGoal)};
-
-        if(!this.props.teacherId){
-          this.props.getGoals();
-        }
+        
+        this.props.getGoals();
+        
       })
       .catch(err => console.log(`Error posting new goal: ${err}`));
       
