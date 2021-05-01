@@ -114,6 +114,12 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
     this.sortMeetings()
   }
 
+  componentDidUpdate(prevProps: TMVProps, prevState: TMVState){
+    if(prevProps.meetings.length !== this.props.meetings.length){
+      this.sortMeetings()
+    }
+  }
+
   sortMeetings = () => {
     let today = new Date()
     let tempPast: Array<Meeting> = this.props.meetings.filter((meeting) => {
