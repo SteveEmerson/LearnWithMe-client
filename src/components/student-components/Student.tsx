@@ -115,6 +115,7 @@ class Student extends React.Component<StudentProps, StudentState> {
   }
 
   getGoals = () => {
+    console.log("Get Goals")
     const url: string = `http://localhost:3000/goal/student_get`
     fetch(url,
       {

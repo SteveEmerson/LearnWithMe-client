@@ -8,8 +8,8 @@ type GCProps = {
   tasks?: Array<Task>
   setGParState?: Function
   getStudentGoals?: Function
-  getGoals?: Function
-  getTasks?: Function
+  getGoals: Function
+  getTasks: Function
 }
 
 type Student = {
@@ -46,7 +46,7 @@ type GCState = {
   updatedTasks?: Array<Task>
   showEditForm: boolean
   newGoalDesc: string
-  newDate: Date
+  newDate: Date | null
   newTasks: Array<Task>
   oldTasks: Array<Task>
   newTaskDescription: string
@@ -70,8 +70,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
     super(props);
     this.state = {
       updatedTasks: [],
-      newGoalDesc: this.props.goal.description,
-      newDate: this.props.goal.targetDate,
+      newGoalDesc: "",
+      newDate: null,
       newTaskDescription: "",
       newTasks: [],
       oldTasks: [],
@@ -139,12 +139,13 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
 
   checkTasksChanged = () => {
-
     let uT: Array<Task> = this.state.updatedTasks ? this.state.updatedTasks : [];
     let pT: Array<Task> = this.props.tasks ? this.props.tasks : [];
 
     this.setState({tasksChanged: uT?.length !== pT?.length || !this.compareTaskArrays(uT, pT)}) 
   }
+
+
 
   compareTaskArrays = (a: Array<Task>, b: Array<Task>) => {
     for(let i: number = 0; i < a.length; i++){
@@ -220,25 +221,12 @@ class GoalCard extends React.Component<GCProps,GCState>{
           //   this.props.setGParState({currStudent: cStud});
           // }
 
-          if(this.props.rolePOV === "teacher" && this.props.getTasks){
-            this.props.getTasks();
-          }
-
-          // if(this.props.rolePOV === "student" && this.props.setGParState){
-          //   this.props.setGParState({tasks: updatedTasksDeepCopy});
-          // }
-
-          if(this.props.rolePOV === "student" && this.props.getTasks){
-            this.props.getTasks();
-          }
-          
+          this.props.getTasks();
           this.setState({tasksChanged: false});
-
         })
         .catch(err => console.log(`Error in updating tasks ${err}`))
       });
     }
-    
   }
 
   addTasks = () => {
@@ -262,15 +250,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         })
         .then(res => res.json())
         .then((task: Task) => {
-          console.log(task)
-
-          // Redundant ... just call getTasks
-          if(this.props.rolePOV === "teacher" && this.props.getTasks){
-            this.props.getTasks();
-          }
-          if(this.props.rolePOV === "student" && this.props.getTasks){
-            this.props.getTasks();
-          }
+          this.props.getTasks()
         })
         .catch(err => console.log(`Error in adding tasks ${err}`))
       });
@@ -294,12 +274,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
         .then(res => res.json())
         .then((json: {message: string}) => {
           console.log(json)
-          if(this.props.rolePOV === "teacher" && this.props.getTasks){
-            this.props.getTasks();
-          }
-          if(this.props.rolePOV === "student" && this.props.getTasks){
-            this.props.getTasks();
-          }
+          this.props.getTasks();
         })
         .catch(err => console.log(`Error in removing tasks ${err}`))
       });
@@ -309,12 +284,15 @@ class GoalCard extends React.Component<GCProps,GCState>{
   updateGoal = () => {
     this.toggleEditForm()
     const url = `http://localhost:3000/goal/${this.props.rolePOV}_update/${this.props.goal.id}`
-
+    
+    let description: string = (!this.state.newGoalDesc) ? this.props.goal.description : this.state.newGoalDesc;
+    let date: Date | null = (!this.state.newDate) ? new Date(this.props.goal.targetDate) : this.state.newDate;
+    
     fetch(url, {
       method: 'PUT',
       body: JSON.stringify({
-        description: this.state.newGoalDesc,
-        targetDate: this.state.newDate
+        description: description,
+        targetDate: date
       }),
       headers: new Headers ({
         'Content-Type': 'application/json',
@@ -341,13 +319,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
       // }
 
       // REDUNDANT! JUST getGOALS
-      if(this.props.rolePOV === "teacher" && this.props.getGoals){
-        this.props.getGoals();
-      }
-
-      if(this.props.rolePOV === "student" && this.props.getGoals){
-        this.props.getGoals();
-      }
+      this.props.getGoals()
 
     })
     .catch(err => console.log(`Error in updating goal ${err}`))
@@ -375,7 +347,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   deleteGoal = () => {
-
     const url=`http://localhost:3000/goal/${this.props.rolePOV}_delete/${this.props.goal.id}`
     fetch(url, {
       method: 'DELETE',
@@ -387,11 +358,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     .then(res => res.json())
     .then((json) => {
       this.deleteAllTasks()
-
-      if(this.props.getGoals){
-        this.props.getGoals();
-      }
-
+      this.props.getGoals();
     })
     .catch(err => console.log(`Error deleting goal: ${err}`));
   }
@@ -547,13 +514,15 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   render(){
-    let goal: Goal = this.props.goal;
-    let date: Date = new Date(goal.targetDate);
+    ///console.log(this.state.newDate)
+
+    let description: string = (!this.state.newGoalDesc) ? this.props.goal.description : this.state.newGoalDesc;
+    let date: Date = (!this.state.newDate) ? new Date(this.props.goal.targetDate) : this.state.newDate;
     return(
       <div className="bg-white text-black border p-2">
        
         <div className=" bg-gray-300 px-2" hidden={this.state.showEditForm} id="goal-info" onClick={this.toggleEditForm}>
-          <p className="font-bold text-xl ">{goal.description}</p>
+          <p className="font-bold text-xl ">{description}</p>
           <p className="font-bold">Complete by: {date.toDateString().slice(0,10)}</p>
           {this.state.canEdit ?  <p className="text-xs text-right">edit</p> : null}
         </div>

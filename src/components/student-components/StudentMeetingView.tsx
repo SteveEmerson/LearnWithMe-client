@@ -134,6 +134,11 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
       
       this.sortMeetings()
     }
+
+    if(prevProps.goals.length !== this.props.goals.length){
+      
+      this.sortGoals()
+    }
   }
 
   compareMeetingLists = (ml1: Array<Meeting>, ml2: Array<Meeting>): boolean => {
@@ -225,7 +230,8 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               token={this.props.user.sessionToken}
               tasks={this.props.tasks.filter((task) => task.goalId === goal.id)}
               setGParState={this.props.setStudState}
-              getStudentGoals={this.props.getGoals}
+              getGoals={this.props.getGoals}
+              getTasks={this.props.getTasks}
               key={`GC${goal.id}`}
           />
         )
