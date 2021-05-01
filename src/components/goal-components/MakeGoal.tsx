@@ -102,7 +102,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(this.state.goalTargetDate)
+    let date: Date = this.state.goalTargetDate ? this.state.goalTargetDate : new Date()
     e.preventDefault();
     this.props.setParState({makeGoal: false})
     const url: string = (this.props.teacherId) 
@@ -115,7 +115,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
         body: JSON.stringify(
           {
             description: this.state.goalDescription,
-            targetDate: this.state.goalTargetDate, 
+            targetDate: date, 
             studentId: this.props.student.id,
             teacherId: this.props.teacherId
           }
@@ -137,8 +137,6 @@ class MakeGoal extends React.Component<MGProps,MGState>{
       .catch(err => console.log(`Error posting new goal: ${err}`));
       
   }
-
-  //FIX THIS ... WILL BE A PROBLEM IF GOAL HAS NO TASKS?
 
   taskSubmit = (newGoal: Goal) => {
     let newTaskList: Array<Task> = this.state.tasks

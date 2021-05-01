@@ -326,10 +326,14 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   renderTasks = () => {
+    let taskList: Array<Task> | undefined = (this.state.updatedTasks && this.state.updatedTasks.length > 0)
+      ? this.state.updatedTasks
+      : this.props.tasks
+
     return(
       <div className="text-base font-semibold pl-2">
-        {(this.state.updatedTasks) 
-          ? this.state.updatedTasks.map((task) => {
+        {(taskList) 
+          ? taskList.map((task) => {
             return(
               <div key={`T${task.description.slice(5)}${task.id}`}>
                 <p className={` hover:text-blue-500 ${task.completed?"line-through":"no-underline"}`}
@@ -493,8 +497,12 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   renderEditTasks = () => {
+    let taskList: Array<Task> | undefined = (this.state.updatedTasks && this.state.updatedTasks.length > 0)
+    ? this.state.updatedTasks
+    : this.props.tasks
+
     return(
-      this.state.updatedTasks?.map((task) => {
+      taskList?.map((task) => {
         return(
           <div
             className="flex flex-row space-x-4"
@@ -514,14 +522,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   render(){
-    console.log(this.props.goal.targetDate)
     
     let description: string = (!this.state.newGoalDesc) ? this.props.goal.description : this.state.newGoalDesc;
     let date: Date = (!this.state.newDate) ? new Date(this.props.goal.targetDate + "T07:00:00") : this.state.newDate;
-    //console.log(date)
     return(
       <div className="bg-white text-black border p-2">
-       
         <div className=" bg-gray-300 px-2" hidden={this.state.showEditForm} id="goal-info" onClick={this.toggleEditForm}>
           <p className="font-bold text-xl ">{description}</p>
           <p className="font-bold">Complete by: {date.toDateString().slice(0,10)}</p>
