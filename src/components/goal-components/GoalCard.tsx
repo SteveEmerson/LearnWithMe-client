@@ -119,8 +119,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
   cancelEdit = () => {
     this.toggleEditForm();
-    this.setState({newGoalDesc: this.props.goal.description})
-    this.setState({newDate: this.props.goal.targetDate})
+    this.setState({newGoalDesc: ""})
+    this.setState({newDate: null})
     this.setState({newTasks: []})
     this.setState({oldTasks: []})
     this.setState({newTaskDescription: ""})
@@ -518,6 +518,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
     let description: string = (!this.state.newGoalDesc) ? this.props.goal.description : this.state.newGoalDesc;
     let date: Date = (!this.state.newDate) ? new Date(this.props.goal.targetDate) : this.state.newDate;
+    console.log(date)
     return(
       <div className="bg-white text-black border p-2">
        
