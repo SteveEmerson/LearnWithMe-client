@@ -436,9 +436,9 @@ class GoalCard extends React.Component<GCProps,GCState>{
           </div>
 
         : null}
-        <label className="font-semibold" htmlFor="goal-description">Description</label>
+        <label className="font-semibold " htmlFor="goal-description">Description</label>
         <textarea
-          className="bg-gray-100"
+          className="bg-gray-100 px-1"
           onChange=
           {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({newGoalDesc: e.currentTarget.value})}  id="goal-description"
           name="goal-description"
@@ -514,11 +514,11 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   render(){
-    ///console.log(this.state.newDate)
-
+    console.log(this.props.goal.targetDate)
+    
     let description: string = (!this.state.newGoalDesc) ? this.props.goal.description : this.state.newGoalDesc;
-    let date: Date = (!this.state.newDate) ? new Date(this.props.goal.targetDate) : this.state.newDate;
-    console.log(date)
+    let date: Date = (!this.state.newDate) ? new Date(this.props.goal.targetDate + "T07:00:00") : this.state.newDate;
+    //console.log(date)
     return(
       <div className="bg-white text-black border p-2">
        

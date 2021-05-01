@@ -44,7 +44,7 @@ type MGProps = {
 
 type MGState = {
   goalDescription: string
-  goalTargetDate: Date
+  goalTargetDate: Date | null
   tasks: string
 }
 
@@ -64,7 +64,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     super(props);
     this.state = {
       goalDescription: "",
-      goalTargetDate: new Date(),
+      goalTargetDate: null,
       tasks: "",
     }
   }
@@ -96,10 +96,13 @@ class MakeGoal extends React.Component<MGProps,MGState>{
   }
 
   handleDate = (e: React.FormEvent<HTMLInputElement>) => {
-    this.setState({goalTargetDate: new Date(e.currentTarget.value)})
+    // Need to specify a dummy time so the date is not off by one due to time zone issues
+    this.setState({goalTargetDate: new Date(e.currentTarget.value + "T07:00:00")})
+    
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(this.state.goalTargetDate)
     e.preventDefault();
     this.props.setParState({makeGoal: false})
     const url: string = (this.props.teacherId) 
@@ -174,6 +177,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
   }
 
   render(){
+    let today: Date = new Date();
     return(
       <div className="absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl">
         <p className="font-bold text-xl text-blue-500">New Goal</p>
@@ -181,7 +185,7 @@ class MakeGoal extends React.Component<MGProps,MGState>{
           
           <label className="font-semibold" htmlFor="goal-description">Description</label>
           <textarea
-            className="bg-gray-100"
+            className="bg-gray-100 px-1"
             required
             onChange=
             {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({goalDescription: e.currentTarget.value})}  id="goal-description"
@@ -195,12 +199,12 @@ class MakeGoal extends React.Component<MGProps,MGState>{
             type='date' 
             id="target-date" 
             name="goal-target-date"
-            value={this.state.goalTargetDate.toISOString().slice(0,10)}
+            defaultValue={today.toISOString().slice(0,10)}
             onChange={this.handleDate}
           />
           <label className="font-semibold mt-2" htmlFor="tasks">Tasks one per line (optional)</label>
           <textarea
-            className="bg-gray-100 mb-2"
+            className="bg-gray-100 mb-2 px-1"
             onChange=
             {(e: React.FormEvent<HTMLTextAreaElement>) => this.setState({tasks: e.currentTarget.value})}  
             id="tasks"
