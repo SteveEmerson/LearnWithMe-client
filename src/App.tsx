@@ -37,6 +37,9 @@ class App extends React.Component<{}, AppState> {
     this.setState = this.setState.bind(this)
   }
 
+  componentDidUpdate(){
+  }
+
   render() {
     return (
       <div>

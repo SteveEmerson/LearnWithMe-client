@@ -68,7 +68,6 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
   }
 
   componentDidUpdate(prevProps: UPLProps, prevState: UPLState){
-    console.log(this.state.changes);
   }
 
   checkPartnerChanged = (idList: number[], partnerList: Array<Partner>) => {
@@ -189,9 +188,9 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
             {
               this.state.newPartnerData.map((partner: Partner) => {
                 return (
-                  <div className="py-1">
+                  <div className="py-1" key={`NP${partner.id}`}>
                     <div className="flex flex-row justify-between">
-                      <p key={`Partner${partner.id}`}>{partner.name}</p>
+                      <p>{partner.name}</p>
                       <button
                         className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
                         key={`Remove${partner.id}`}
@@ -212,7 +211,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
               {
                 this.state.allDatabasePartnerData.map((partner: Partner) => {
                   return(
-                    <div className="py-1" key={`P${partner.id}`}>
+                    <div className="py-1" key={`AP${partner.id}`}>
                       <div className="flex flex-row justify-between">
                         <p key={`AllPartner${partner.id}`}>{partner.name}{partner.id}</p>
                         <button

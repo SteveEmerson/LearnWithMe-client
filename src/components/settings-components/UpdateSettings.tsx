@@ -103,14 +103,9 @@ class UpdateSettings extends React.Component<USProps, USState>{
       
     })
     .then((res) => res.json())
-    .then((user: FetchData) => {
-        console.log("Updated Settings", user);
-    })
-    .catch(err => {
-      console.log(`Error in fetch: ${err}`)
-    })
-
-    let updatedUser: User = 
+    .then((json) => {
+      console.log("Updated Settings", json);
+      let updatedUser: User = 
       {
         email: this.state.email,
         userId: this.props.user.userId,
@@ -120,7 +115,11 @@ class UpdateSettings extends React.Component<USProps, USState>{
         availability: this.state.availability,
         sessionToken: this.props.user.sessionToken
       };
-    this.props.setAppState({user: updatedUser});
+      this.props.setAppState({user: updatedUser});
+    })
+    .catch(err => {
+      console.log(`Error in fetch: ${err}`)
+    })
   }
   
   handleCancel = () => {

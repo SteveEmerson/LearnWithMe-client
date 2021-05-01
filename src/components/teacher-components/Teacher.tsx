@@ -107,7 +107,26 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
    
   }
 
+  componentDidUpdate(prevProps: TeacherProps, prevState: TeacherState) {
+    if(this.checkPartnerChanged(prevProps.currUser.partnerList, this.props.currUser.partnerList)){
+      console.log("partners changed")
+      this.getStudents()
+    }else{
+      console.log("partners did not change")
+    }
+  }
 
+  checkPartnerChanged = (pl1: number[], pl2: number[]) => {
+    let changed: boolean = false;
+
+    if(pl1.length !== pl2.length) {changed = true}
+    
+    pl1.forEach((id) => {
+      if(!pl2.includes(id)) {changed = true}
+    })
+
+    return changed
+  }
 
   getStudents = () => {
     const url: string = `http://localhost:3000/student/`
@@ -223,7 +242,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   render() {
-    //console.log(this.props.currUser)
+
     return(
       <div className="bg-black text-gray-50 min-h-screen">
         <Router>
