@@ -128,6 +128,25 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
     this.sortGoals();
   }
 
+  componentDidUpdate(prevProps: SMVProps, prevState: SMVState) {
+
+    if(prevProps.meetings.length !== this.props.meetings.length){
+      
+      this.sortMeetings()
+    }
+  }
+
+  compareMeetingLists = (ml1: Array<Meeting>, ml2: Array<Meeting>): boolean => {
+    let same: boolean = true;
+    for(let i: number = 0; i < ml1.length; i++){
+      if(ml1[i].id !== ml2[i].id){
+        same = false
+      }
+    }
+
+    return same
+  }
+
   sortMeetings = () => {
     //let today = new Date()
     let temp: Array<Meeting> = this.props.meetings.filter((meeting) => {
@@ -235,6 +254,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   }
 
   render(){
+    //console.log(this.props.meetings)
     return(
       <div className="px-10 pt-20">
         <p className="font-bold text-5xl text-blue-500 mb-3">

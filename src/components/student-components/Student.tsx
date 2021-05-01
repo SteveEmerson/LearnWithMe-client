@@ -107,6 +107,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       .then((data: Array<Meeting>) => {
         this.setState({meetings: data})
         this.setState({gotMeetings: true})
+        
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)
@@ -155,6 +156,8 @@ class Student extends React.Component<StudentProps, StudentState> {
 
 
   render() {
+    // console.log(this.state.gotMeetings, this.state.gotGoals, this.state.gotTasks)
+    // console.log(this.state.meetings)
     return(
       <div className="bg-black text-gray-50 min-h-screen">
         <Router>
