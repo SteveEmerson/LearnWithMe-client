@@ -286,7 +286,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
     const url = `http://localhost:3000/goal/${this.props.rolePOV}_update/${this.props.goal.id}`
     
     let description: string = (!this.state.newGoalDesc) ? this.props.goal.description : this.state.newGoalDesc;
-    let date: Date | null = (!this.state.newDate) ? new Date(this.props.goal.targetDate) : this.state.newDate;
+    let date: Date | null = (!this.state.newDate) ? new Date(this.props.goal.targetDate + "T07:00:00") : this.state.newDate;
     
     fetch(url, {
       method: 'PUT',
