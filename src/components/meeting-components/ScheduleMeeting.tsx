@@ -260,9 +260,16 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         
         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>
           <label className="font-semibold mt-2" htmlFor="meeting-time">Time </label>
-          <input className=" mt-2 mb-2" onChange={this.handleDate} type="datetime-local" id="meeting-time"
-            name="meeting-time" defaultValue={this.getDateString(new Date())}
-            min={this.getDateString(new Date())} max={this.getDateString(this.getMaxDate())}>
+          <input 
+            className=" mt-2 mb-2" 
+            onChange={this.handleDate} 
+            type="datetime-local" 
+            id="meeting-time"
+            name="meeting-time" 
+            defaultValue={this.getDateString(new Date())}
+            min={this.getDateString(new Date())} 
+            max={this.getDateString(this.getMaxDate())}
+          >
           </input>
           <div className="flex flex-row justify-start mt-2">
             <button 
