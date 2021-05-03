@@ -34,6 +34,7 @@ type USProps = {
 type USState = {
   email: string
   passwordhash: string
+  newPassword: string
   displayName: string
   partnerList: number[]
   availability: {}
@@ -47,6 +48,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
     this.state = {
       email: this.props.user.email,
       passwordhash: "",
+      newPassword: "",
       displayName: this.props.user.displayName,
       partnerList: this.props.user.partnerList,
       availability: this.props.user.availability,
@@ -85,6 +87,23 @@ class UpdateSettings extends React.Component<USProps, USState>{
 
   handleSubmit = (e: React.SyntheticEvent)=> {
     e.preventDefault();
+    let reqBody = this.state.newPassword === ""
+    ?
+      {
+        email: this.state.email, 
+        name: this.state.displayName,
+        partnerList: this.state.partnerList,
+        availability: this.state.availability
+      }
+    :
+      {
+        email: this.state.email, 
+        name: this.state.displayName,
+        partnerList: this.state.partnerList,
+        availability: this.state.availability,
+        password: this.state.newPassword
+      }
+
     const url: string = `http://localhost:3000/${this.props.user.role}/${this.props.user.userId}`
     // console.log(this.props.user.sessionToken);
     fetch(url,
@@ -94,13 +113,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
         'Content-Type': 'application/json',
         'Authorization': this.props.user.sessionToken
         },
-      body: JSON.stringify(
-        {
-          email: this.state.email, 
-          name: this.state.displayName,
-          partnerList: this.state.partnerList,
-          availability: this.state.availability
-        })
+      body: JSON.stringify(reqBody)
       
     })
     .then((res) => res.json())

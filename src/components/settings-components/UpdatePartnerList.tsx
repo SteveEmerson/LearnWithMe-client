@@ -207,7 +207,9 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
           </div>
           
           <div>
-            <p className="text-lg py-4 font-semibold" >Other Partners</p>
+            <p className="text-lg py-4 font-semibold" >
+              Other {this.props.user.role === "teacher" ? "Students" : "Teachers"}
+            </p>
               {
                 this.state.allDatabasePartnerData.map((partner: Partner) => {
                   return(

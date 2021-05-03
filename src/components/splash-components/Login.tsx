@@ -101,7 +101,7 @@ class Login extends React.Component<LoginProps, LoginState> {
           </div>
           <div className="self-center space-x-4">
             <label className="font-bold" htmlFor="password"> Password</label>
-            <input className="text-xl text-black px-2 py-1" type="text" name="password" id="password" required onChange={this.passwordChange}/>
+            <input className="text-xl text-black px-2 py-1" type="password" name="password" id="password" required onChange={this.passwordChange}/>
           </div>
           <input
             className="px-2 py-1 self-center flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75"
