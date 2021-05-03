@@ -1,6 +1,7 @@
 import * as React from 'react';
 import UpdatePartnerList from './UpdatePartnerList';
 import UpdatePersonalInfo from './UpdatePersonalInfo';
+import history from '../../history-module/history';
 
 type User = {
   email: string
@@ -103,9 +104,14 @@ class UpdateSettings extends React.Component<USProps, USState>{
       
     })
     .then((res) => res.json())
-    .then((json) => {
-      console.log("Updated Settings", json);
-      let updatedUser: User = 
+    .then((user: FetchData) => {
+        console.log("Updated Settings", user);
+    })
+    .catch(err => {
+      console.log(`Error in fetch: ${err}`)
+    })
+
+    let updatedUser: User = 
       {
         email: this.state.email,
         userId: this.props.user.userId,
@@ -115,11 +121,8 @@ class UpdateSettings extends React.Component<USProps, USState>{
         availability: this.state.availability,
         sessionToken: this.props.user.sessionToken
       };
-      this.props.setAppState({user: updatedUser});
-    })
-    .catch(err => {
-      console.log(`Error in fetch: ${err}`)
-    })
+    this.props.setAppState({user: updatedUser});
+    history.goBack()
   }
   
   handleCancel = () => {
@@ -130,9 +133,11 @@ class UpdateSettings extends React.Component<USProps, USState>{
       availability: this.props.user.availability,
       pInfoChanged: false,
       partnersChanged: false})
+      history.goBack()
   }
 
   render() {
+    console.log(history.location)
     return(
       <div className="px-10  pt-20">
         <p className="text-center font-extrabold text-3xl">Settings</p>

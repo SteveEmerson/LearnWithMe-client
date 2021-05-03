@@ -2,6 +2,7 @@ import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom';
 import UpdateSettings from '../settings-components/UpdateSettings'
 import StudentMeetingView from './StudentMeetingView';
+import history from '../../history-module/history'
 
 type StudentProps = {
   currUser: User
@@ -85,6 +86,7 @@ class Student extends React.Component<StudentProps, StudentState> {
         }
       }
     )
+    history.push('/home');
   }
 
   componentDidMount(){

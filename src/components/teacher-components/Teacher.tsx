@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-ro
 import UpdateSettings from '../settings-components/UpdateSettings'
 import TeacherStudentView from './TeacherStudentView';
 import TeacherMeetingView from './TeacherMeetingView';
+import history from '../../history-module/history'
 
 type TeacherProps = {
   currUser: User
@@ -225,7 +226,6 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
 
 
   handleLogout = () => {
-    localStorage.removeItem('sessionToken')
     this.props.setAppState(
       {
         user: {
@@ -239,6 +239,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
         }
       }
     )
+    history.push('/home');
   }
 
   render() {
