@@ -142,7 +142,7 @@ class UpdatePersonalInfo extends React.Component<UPIProps, UPIState>{
               </div>
               <div>
                 <label className="p-4" htmlFor="password"> Re-enter New Password</label>
-                <input className="text-black text-base  px-1" type="password" name="newpassword" id="newpassword" value={this.state.confirmNewPassword} onChange={this.confirmNewPasswordChange}/>
+                <input className="text-black text-base  px-1" type="password" name="cnewpassword" id="cnewpassword" value={this.state.confirmNewPassword} onChange={this.confirmNewPasswordChange}/>
                 {this.state.newPassword !== ""  && this.state.newPassword !== this.state.confirmNewPassword
                   ? <p className="text-xs text-red-500">Passwords do not match</p> 
                   : null
