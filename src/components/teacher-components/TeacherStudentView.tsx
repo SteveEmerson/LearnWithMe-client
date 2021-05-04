@@ -151,7 +151,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   render() {
     return(
       <div className="px-10 pt-20"> 
-        <p className="font-bold text-5xl text-blue-500 mb-5 ml-4">{this.props.user.displayName}</p>
+        <p className="font-bold text-5xl text-blue-500 mb-5 ml-4" style={{color:"blue"}}>{this.props.user.displayName}</p>
         {/* Contents ... SCF left  SCS grid right*/}
         <div className="grid grid-cols-3 gap-6" >
           <div className="col-span-1">

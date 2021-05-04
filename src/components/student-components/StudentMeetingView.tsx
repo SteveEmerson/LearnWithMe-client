@@ -263,7 +263,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
     //console.log(this.props.meetings)
     return(
       <div className="px-10 pt-20">
-        <p className="font-bold text-5xl text-blue-500 mb-3">
+        <p className="font-bold text-5xl text-blue-500 mb-3" style={{color:"blue"}}>
           {this.props.user.displayName}
         </p>
         <div className="grid grid-cols-2 gap-6 justify-items-end"> 
@@ -271,6 +271,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
             className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center"
             id="schedule-meeting" 
             onClick={this.toggleMakeGoal}
+            style={{backgroundColor:"blue"}}
           >
             new goal
           </button>
@@ -278,6 +279,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
             className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center mr-6"
             id="schedule-meeting" 
             onClick={this.toggleScheduleMeeting}
+            style={{backgroundColor:"blue"}}
           >
             new meeting
           </button>

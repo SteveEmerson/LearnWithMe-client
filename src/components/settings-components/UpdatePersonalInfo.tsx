@@ -155,7 +155,8 @@ class UpdatePersonalInfo extends React.Component<UPIProps, UPIState>{
           <input
             className={`px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!changes ? "hidden" : null}`}
             type="submit" 
-            value="update personal info" 
+            value="update personal info"
+            style={{backgroundColor:"blue"}}
           />
         </form>
       </div>

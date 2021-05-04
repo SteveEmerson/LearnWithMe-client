@@ -232,7 +232,8 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
         </div>
         <div className="py-6">
           <button
-            className={`m-auto px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!this.state.changes ? "hidden" : null}`} 
+            className={`m-auto px-2 py-2 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 self-center ${!this.state.changes ? "hidden" : null}`}
+            style={{backgroundColor:"blue"}}
             onClick={this.handleSubmitPartners}
           >
             Update Partner List

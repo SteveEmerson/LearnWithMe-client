@@ -199,11 +199,12 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
     return(
       <div className="px-10 pt-20">
         <div className="flex flex-row justify-between">
-          <p className="font-bold text-5xl text-blue-500 mb-5 ml-4">
+          <p className="font-bold text-5xl text-blue-500 mb-5 ml-4" style={{color:"blue"}}>
             {this.props.user.displayName}
           </p>
           <button
-            className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75 max-h-10 self-center ml-10"
+            className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-600 rounded hover:opacity-75 max-h-10 self-center ml-10"
+            style={{backgroundColor:"blue"}}
             id="schedule-meeting" 
             onClick={this.toggleScheduleMeeting}
           >

@@ -76,7 +76,7 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
     let date = new Date(this.props.meeting.d_t);
     let mtg_d = date.toString().slice(0,24);
     return(
-      <div className="bg-white text-black border-l-8 border-blue-500 p-3 m-6 h-20">
+      <div className="bg-white text-black border-l-8 border-blue-500 p-3 m-6 h-20" style={{borderColor:"blue"}}>
         <div onClick={this.toggleMCF}>
           <div className="flex flex-row justify-between">
             <p className="font-bold text-xl">

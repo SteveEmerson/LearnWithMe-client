@@ -70,8 +70,10 @@ class StudentCardSmall extends React.Component<SCSProps,{}>{
   }
   render(){
     return(
-      <div  className="bg-white text-black border-l-8 border-blue-500 max-h-20 p-2"
+      <div  
+        className="bg-white text-black border-l-8 border-blue-500 max-h-20 p-2"
         onClick={()=> this.setCurrStudent()}
+        style={{borderColor:"blue"}}
       >
         <div >
           <p className="font-bold text-l">{this.props.student.displayName}</p>

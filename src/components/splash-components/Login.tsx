@@ -82,7 +82,7 @@ class Login extends React.Component<LoginProps, LoginState> {
   render() {
     return(
       <div className="px-10 py-40 text-3xl flex flex-col space-y-4 items-center">
-        <p className="text-blue-500 font-bold text-5xl">Welcome back!</p>
+        <p className="text-blue-500 font-bold text-5xl" style={{color:"blue"}}>Welcome back!</p>
         <form className="flex flex-col space-y-6" onSubmit={this.handleSubmit}>
           <div className="flex flex-row space-x-5 self-center">
             <p className="font-bold">Role</p>
@@ -105,6 +105,7 @@ class Login extends React.Component<LoginProps, LoginState> {
           </div>
           <input
             className="px-2 py-1 self-center flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75"
+            style={{backgroundColor:"blue"}}
             type="submit" 
             value="Submit" 
           />

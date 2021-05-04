@@ -252,7 +252,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   render(){
     return(
       <div className="absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl">
-        <p className="font-bold text-xl text-blue-500">Schedule Meeting</p>
+        <p className="font-bold text-xl text-blue-500" style={{color:"blue"}}>Schedule Meeting</p>
         {this.props.teacher && this.props.student
           ? <p className="font-semibold mt-2">Meet with {this.props.student.displayName}</p>
           : this.props.student ? this.renderTeacherSelect() : this.renderStudentSelect()

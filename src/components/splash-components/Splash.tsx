@@ -60,7 +60,7 @@ class Splash extends React.Component<SplashProps, SplashState> {
                   </li>
                   <li className="nav-item">
                     <Link to='/signup' >
-                      <button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-blue-500 rounded hover:opacity-75">SignUp</button>
+                      <button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-blue-500 rounded hover:opacity-75" style={{backgroundColor:"blue"}}>SignUp</button>
                     </Link>
                   </li>
                 </ul>
