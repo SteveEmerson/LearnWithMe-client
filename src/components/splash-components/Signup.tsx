@@ -14,6 +14,7 @@ type User = {
 type SignupState = {
   email: string
   password: string
+  cpassword: string
   role: string
   displayName: string
   signinError: boolean
@@ -31,20 +32,36 @@ class Signup extends React.Component<SignupProps, SignupState> {
     this.state = {
       email: "",
       password: "",
+      cpassword: "",
       role: "",
       displayName: "",
       signinError: false
     }
   }
   
-  handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  validateSubmit = (e: React.SyntheticEvent) => {
 
+    e.preventDefault();
+    if(this.state.password !== ""  && this.state.password === this.state.cpassword){
+      this.handleSubmit()
+    }else{
+      window.alert("Passwords do not match")
+    }
+    
+  }
+
+  handleSubmit = () => {
+    
     const url: string = `http://localhost:3000/${this.state.role}/register`
     fetch(url,
     {
         method: 'POST',
-        body: JSON.stringify({email: this.state.email, password: this.state.password, name:this.state.displayName}),
+        body: JSON.stringify(
+          {
+            email: this.state.email, password: 
+            this.state.password, 
+            name:this.state.displayName
+          }),
         headers: new Headers ({
         'Content-Type': 'application/json',
         })
@@ -86,6 +103,10 @@ class Signup extends React.Component<SignupProps, SignupState> {
     this.setState({password: e.currentTarget.value})
   }
 
+  cpasswordChange = (e: React.FormEvent<HTMLInputElement>) : void => {
+    this.setState({cpassword: e.currentTarget.value})
+  }
+
   roleChange = (e: React.FormEvent<HTMLInputElement>) : void => {
     this.setState({role: e.currentTarget.value})
   }
@@ -95,7 +116,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
     return(
       <div className="px-10 py-40 text-3xl flex flex-col space-y-4 items-center">
         <p className="text-blue-500 font-bold text-5xl">Welcome to LearnWithMe</p>
-        <form className="flex flex-col space-y-6" onSubmit={this.handleSubmit}>
+        <form className="flex flex-col space-y-6" onSubmit={this.validateSubmit}>
           <div className="flex flex-row space-x-5 self-center">
             <p className="font-bold">Role</p>
             <div>
@@ -115,15 +136,26 @@ class Signup extends React.Component<SignupProps, SignupState> {
             <label className="font-bold" htmlFor="email">School email</label>
             <input className="text-xl text-black px-2 py-1" type="text" name="email" id="email" required onChange={this.emailChange}/>
           </div>
-          <div className="self-center space-x-4">
-            <label className="font-bold" htmlFor="password">Password</label>
-            <input className="text-xl text-black px-2 py-1" type="password" name="password" id="password" required onChange={this.passwordChange}/>
+          <div className="flex flex-row space-x-5">
+            <div className="self-center space-x-4">
+              <label className="font-bold" htmlFor="password">Password</label>
+              <input className="text-xl text-black px-2 py-1" type="password" name="password" id="password" required onChange={this.passwordChange}/>
+            </div>
+            <div className="self-center space-x-4">
+              <label className="font-bold" htmlFor="password">Confirm Password</label>
+              <input className="text-xl text-black px-2 py-1" type="password" name="cpassword" id="cpassword" required onChange={this.cpasswordChange}/>
+            </div>
           </div>
+            {this.state.password !== ""  && this.state.password !== this.state.cpassword
+              ? <p className="text-xs text-red-500 self-center">Passwords do not match</p> 
+              : null
+            }
           <input
             className="px-2 py-1 self-center flex items-center text-xs uppercase font-bold  text-white bg-blue-500 rounded hover:opacity-75"
             type="submit" 
             value="Submit" 
           />
+
         </form>
 
         {this.state.signinError ? <h5>Email not available.</h5> : null}
