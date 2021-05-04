@@ -2,7 +2,9 @@ import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-router-dom';
 import UpdateSettings from '../settings-components/UpdateSettings'
 import StudentMeetingView from './StudentMeetingView';
-import history from '../../history-module/history'
+import history from '../../history-module/history';
+import logo from '../../assets/logo/Logo.png';
+import cog from '../../assets/settings-cogwheel-button.svg';
 
 type StudentProps = {
   currUser: User
@@ -45,6 +47,7 @@ type StudentState = {
   gotMeetings: boolean
   gotGoals: boolean
   gotTasks: boolean
+  childComp: string
 }
 
 type Task = {
@@ -68,6 +71,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       gotMeetings: false,
       gotGoals: false,
       gotTasks: false,
+      childComp: "gm"
     }
     this.setState = this.setState.bind(this)
   }
@@ -165,25 +169,30 @@ class Student extends React.Component<StudentProps, StudentState> {
       <div className="bg-black text-gray-50 min-h-screen">
         <Router>
           {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
-          <nav className="fixed w-screen flex flex-wrap items-center justify-between px-2 py-3 bg-black mb-3">
-            <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+          <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-black mb-3">
+            <div className="container px-4 mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
                 
                 {/* <Link to='/home' ><p className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"> (LOGO) </p></Link> */}
-                <p className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"> (LOGO) </p>
+                <img className="max-h-12" src={logo} alt=""/>  
               </div>
 
               <div className= "lg:flex flex-grow items-center">
                 <ul className="flex flex-col lg:flex-row list-none lg:ml-auto space-x-4">
                   <li className="nav-item">
                     <Link to='/student-meeting' >
-                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Goals and Meetings</p>
+                      <p 
+                        className={`px-3 py-2 flex items-center text-lg uppercase font-bold leading-snug text-white rounded hover:opacity-75 ${this.state.childComp==="gm"?"underline":null}`}
+                        onClick={() => this.setState({childComp: "gm"})}
+                      >
+                        Goals and Meetings
+                      </p>
                     </Link>
                   </li>
                 </ul>
               </div>
 
-              <div className="lg:flex flex-grow items-center lg:justify-end">
+              <div className="lg:flex flex-grow items-center lg:justify-end space-x-5">
                 <button 
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-gray-500 rounded hover:opacity-75" 
                   onClick={this.handleLogout}
@@ -191,7 +200,13 @@ class Student extends React.Component<StudentProps, StudentState> {
                   Logout
                 </button>
                 <Link to='/settings'>
-                  <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Settings</p>
+                  <img 
+                    className="max-h-6" 
+                    onClick={() => this.setState({childComp: ""})}
+                    style={{filter: "invert(43%) sepia(9%) saturate(543%) hue-rotate(182deg) brightness(101%) contrast(97%)"}} 
+                    src={cog} 
+                    alt="cog"
+                  />
                 </Link>
               </div>
 

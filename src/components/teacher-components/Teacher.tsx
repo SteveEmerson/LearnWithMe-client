@@ -4,6 +4,8 @@ import UpdateSettings from '../settings-components/UpdateSettings'
 import TeacherStudentView from './TeacherStudentView';
 import TeacherMeetingView from './TeacherMeetingView';
 import history from '../../history-module/history'
+import logo from '../../assets/logo/Logo.png'
+import cog from '../../assets/settings-cogwheel-button.svg'
 
 type TeacherProps = {
   currUser: User
@@ -59,6 +61,7 @@ type TeacherState = {
   gotGoals: boolean
   gotTasks: boolean
   gotStudents: boolean
+  childComp: string
 }
 
 type Task = {
@@ -95,7 +98,8 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       gotMeetings: false,
       gotGoals: false,
       gotTasks: false,
-      gotStudents: false
+      gotStudents: false,
+      childComp: "students"
     }
     this.setState = this.setState.bind(this);
   }
@@ -239,6 +243,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
         }
       }
     )
+    this.setState({childComp: ""})
     history.push('/home');
   }
 
@@ -250,10 +255,10 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
 
           {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
 
-          <nav className=" w-screen fixed flex flex-wrap items-center justify-between px-2 py-3 bg-black mb-3">
-            <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+          <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-black mb-3">
+            <div className="container px-4 mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
-                <p className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"> (LOGO) </p>
+              <img className="max-h-12" src={logo} alt=""/>  
               </div>
 
               <div className= "lg:flex flex-grow items-center">
@@ -261,18 +266,28 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                   <li className="nav-item">
 
                     <Link to='/teacher-student' >
-                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Students</p>
+                      <p 
+                        className={`px-3 py-2 flex items-center text-lg uppercase font-bold leading-snug text-white rounded hover:opacity-75 ${this.state.childComp==="students"?"underline":null}`}
+                        onClick={() => this.setState({childComp: "students"})}
+                      >
+                        Students
+                      </p>
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link to='/teacher-meeting' >
-                      <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Meetings</p>
+                      <p 
+                        className={`px-3 py-2 flex items-center text-lg uppercase font-bold leading-snug text-white rounded hover:opacity-75 ${this.state.childComp==="meetings"?"underline":null}`}
+                        onClick={() => this.setState({childComp: "meetings"})}
+                      >
+                        Meetings
+                      </p>
                     </Link>
                   </li>
                 </ul>
               </div>
 
-              <div className="lg:flex flex-grow items-center lg:justify-end">
+              <div className="lg:flex flex-grow items-center lg:justify-end space-x-5">
                 <button 
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white bg-gray-500 rounded hover:opacity-75" 
                   onClick={this.handleLogout}
@@ -280,7 +295,13 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                   Logout
                 </button>
                 <Link to='/settings'>
-                  <p className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white rounded hover:opacity-75">Settings</p>
+                  <img 
+                    className="max-h-6" 
+                    style={{filter: "invert(43%) sepia(9%) saturate(543%) hue-rotate(182deg) brightness(101%) contrast(97%)"}} 
+                    onClick={() => this.setState({childComp: ""})}
+                    src={cog} 
+                    alt="cog"
+                  />
                 </Link>
               </div>
 

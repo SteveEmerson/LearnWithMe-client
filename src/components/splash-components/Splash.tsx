@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link, Redirect } from 'react-ro
 import Login from './Login';
 import Signup from './Signup';
 import Home from './Home';
+import logo from '../../assets/logo/Logo.png'
 
 type SplashProps = {
   setAppState: Function
@@ -27,12 +28,14 @@ class Splash extends React.Component<SplashProps, SplashState> {
 
           {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
 
-          <nav className="fixed w-screen flex flex-wrap items-center justify-between px-2 py-3 bg-black mb-3">
-            <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+          <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-black mb-3">
+            <div className="container px-4 mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
                 
-                <Link to='/home' ><p className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"> (LOGO) </p></Link>
-
+                <Link to='/home' >
+                    <img className="max-h-12" src={logo} alt=""/>  
+                </Link>
+                
                 <button
                   className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
                   type="button"
