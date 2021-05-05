@@ -1,5 +1,6 @@
 let APIURL = '';
 
+// eslint-disable-next-line default-case
 switch (window.location.hostname) {
   case 'localhost' || '127.0.0.1':
     APIURL = 'localhost:3000';
