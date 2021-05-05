@@ -143,7 +143,7 @@ class Student extends React.Component<StudentProps, StudentState> {
   }
 
   getTasks = () => {
-    const url: string = `http://:3000/task/student_get`
+    const url: string = `https://${APIURL}/task/student_get`
     fetch(url,
       {
           method: 'GET',
