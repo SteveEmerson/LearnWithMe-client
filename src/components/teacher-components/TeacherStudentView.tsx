@@ -99,7 +99,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   componentDidUpdate(prevProps: TSVProps, prevState: TSVState){
-      if(prevState.currStudent.id && (prevState.currStudent.id !== this.state.currStudent.id)){
+      if(prevState.currStudent.id && this.state.currStudent && (prevState.currStudent.id !== this.state.currStudent.id)){
 
         this.props.getMeetings();
   
