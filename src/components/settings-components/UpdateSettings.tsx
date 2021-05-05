@@ -104,7 +104,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
         availability: this.state.availability,
         password: this.state.newPassword
       }
-
+    console.log(reqBody)
     const url: string = `https://${APIURL}/${this.props.user.role}/${this.props.user.userId}`
     // console.log(this.props.user.sessionToken);
     fetch(url,
@@ -151,7 +151,6 @@ class UpdateSettings extends React.Component<USProps, USState>{
   }
 
   render() {
-    console.log(history.location)
     return(
       <div className="px-10  pt-20">
         <p className="text-center font-extrabold text-3xl">Settings</p>
