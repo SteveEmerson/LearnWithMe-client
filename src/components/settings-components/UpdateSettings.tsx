@@ -90,6 +90,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
     e.preventDefault();
 
     let reqBody = {
+      name: "Jennifer TEST Emerson",
       email: "jemers@school.edu",
       password: "qwerty",
       partnerList: [1]
