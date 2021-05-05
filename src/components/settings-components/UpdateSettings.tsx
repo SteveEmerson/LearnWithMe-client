@@ -88,22 +88,29 @@ class UpdateSettings extends React.Component<USProps, USState>{
 
   handleSubmit = (e: React.SyntheticEvent)=> {
     e.preventDefault();
-    let reqBody = this.state.newPassword === ""
-    ?
-      {
-        email: this.state.email, 
-        name: this.state.displayName,
-        partnerList: this.state.partnerList,
-        availability: this.state.availability
-      }
-    :
-      {
-        email: this.state.email, 
-        name: this.state.displayName,
-        partnerList: this.state.partnerList,
-        availability: this.state.availability,
-        password: this.state.newPassword
-      }
+
+    let reqBody = {
+      email: "jemers@school.edu",
+      password: "qwerty",
+      partnerList: [1]
+  
+  }
+    // let reqBody = this.state.newPassword === ""
+    // ?
+    //   {
+    //     email: this.state.email, 
+    //     name: this.state.displayName,
+    //     partnerList: this.state.partnerList,
+    //     availability: this.state.availability
+    //   }
+    // :
+    //   {
+    //     email: this.state.email, 
+    //     name: this.state.displayName,
+    //     partnerList: this.state.partnerList,
+    //     availability: this.state.availability,
+    //     password: this.state.newPassword
+    //   }
     console.log(reqBody)
     const url: string = `https://${APIURL}/${this.props.user.role}/${this.props.user.userId}`
     // console.log(this.props.user.sessionToken);
