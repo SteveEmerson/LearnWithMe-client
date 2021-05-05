@@ -85,7 +85,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
 
   makeAllDatabasePartnerList = () => {
     let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
-    const url: string = `http://${APIURL}/${partnerRole}/`
+    const url: string = `https://${APIURL}/${partnerRole}/`
     fetch(url,
       {
           method: 'GET',

@@ -181,7 +181,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   }
 
   getTeacherList = () => {
-    const url: string = `http://${APIURL}/teacher/`
+    const url: string = `https://${APIURL}/teacher/`
     fetch(url,
       {
           method: 'GET',

@@ -53,7 +53,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   handleSubmit = () => {
     
-    const url: string = `http://${APIURL}/${this.state.role}/register`
+    const url: string = `https://${APIURL}/${this.state.role}/register`
     fetch(url,
     {
         method: 'POST',

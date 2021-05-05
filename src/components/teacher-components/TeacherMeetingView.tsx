@@ -144,7 +144,7 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
   }
 
   getStudentList = () => {
-    const url: string = `http://${APIURL}/student/`
+    const url: string = `https://${APIURL}/student/`
     fetch(url,
       {
           method: 'GET',

@@ -135,7 +135,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getStudents = () => {
-    const url: string = `http://${APIURL}/student/`
+    const url: string = `https://${APIURL}/student/`
     fetch(url,
       {
           method: 'GET',
@@ -169,7 +169,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getMeetings = () => {
-    const url: string = `http://${APIURL}/meeting/teacher_get`
+    const url: string = `https://${APIURL}/meeting/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -189,7 +189,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getGoals = () => {
-    const url: string = `http://${APIURL}/goal/teacher_get`
+    const url: string = `https://${APIURL}/goal/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -210,7 +210,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
 
   getTasks = () => {
     
-    const url: string = `http://${APIURL}/task/teacher_get`
+    const url: string = `https://${APIURL}/task/teacher_get`
     fetch(url,
       {
           method: 'GET',
