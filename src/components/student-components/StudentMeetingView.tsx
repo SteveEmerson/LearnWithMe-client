@@ -3,6 +3,7 @@ import GoalCard from '../goal-components/GoalCard';
 import MeetingCardSmall from '../meeting-components/MeetingCardSmall';
 import MakeGoal from '../goal-components/MakeGoal';
 import ScheduleMeeting from '../meeting-components/ScheduleMeeting';
+import APIURL from '../../helpers/environment'
 
 type User = {
   email: string
@@ -180,7 +181,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   }
 
   getTeacherList = () => {
-    const url: string = `http://localhost:3000/teacher/`
+    const url: string = `http://${APIURL}/teacher/`
     fetch(url,
       {
           method: 'GET',

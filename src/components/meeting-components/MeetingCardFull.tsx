@@ -1,5 +1,6 @@
 import * as React from 'react';
 import NoteCard from '../note-components/NoteCard'
+import APIURL from '../../helpers/environment'
 
 type Meeting = {
   id: number,
@@ -52,7 +53,7 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
 
   deleteMeeting = () => {
     this.props.toggleMCF()  //probaly wont need this later
-    let url: string = `http://localhost:3000/meeting/${this.props.role}_delete/${this.props.meeting.id}`
+    let url: string = `http://${APIURL}/meeting/${this.props.role}_delete/${this.props.meeting.id}`
     
     fetch(url, {
       method: 'DELETE',
@@ -71,7 +72,7 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
   }
 
   addNote = () => {
-    const url: string = `http://localhost:3000/mtg_note/${this.props.role}_create`
+    const url: string = `http://${APIURL}/mtg_note/${this.props.role}_create`
 
     fetch(url, {
       method: 'POST',

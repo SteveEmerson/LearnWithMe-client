@@ -1,4 +1,5 @@
 import * as React from 'react';
+import APIURL from '../../helpers/environment'
 
 //Some of this will need changed when  this component is reused in other places.
 type Student = {
@@ -134,7 +135,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     let role = this.props.teacher ? 'teacher' : 'student'
     e.preventDefault();
-    const url: string = `http://localhost:3000/meeting/${role}_create`
+    const url: string = `http://${APIURL}/meeting/${role}_create`
     fetch(url,
       {
           method: 'POST',

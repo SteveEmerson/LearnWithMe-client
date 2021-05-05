@@ -1,4 +1,5 @@
 import * as React from 'react';
+import APIURL from '../../helpers/environment'
 
 type Student = {
   id: number
@@ -106,8 +107,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     e.preventDefault();
     this.props.setParState({makeGoal: false})
     const url: string = (this.props.teacherId) 
-    ? `http://localhost:3000/goal/teacher_create` 
-    : `http://localhost:3000/goal/student_create`
+    ? `http://${APIURL}/goal/teacher_create` 
+    : `http://${APIURL}/goal/student_create`
     
     fetch(url, 
       {
@@ -154,8 +155,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     });
 
     const url: string = (this.props.teacherId) 
-    ? `http://localhost:3000/task/teacher_bulk` 
-    : `http://localhost:3000/task/student_bulk`
+    ? `http://${APIURL}/task/teacher_bulk` 
+    : `http://${APIURL}/task/student_bulk`
     
     fetch(url, {
       method: 'POST',

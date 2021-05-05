@@ -2,6 +2,7 @@ import * as React from 'react';
 import UpdatePartnerList from './UpdatePartnerList';
 import UpdatePersonalInfo from './UpdatePersonalInfo';
 import history from '../../history-module/history';
+import APIURL from '../../helpers/environment'
 
 type User = {
   email: string
@@ -63,7 +64,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
   }
 
   getCurrentPasswordHash = () => {
-    const url: string = `http://localhost:3000/${this.props.user.role}/${this.props.user.userId}`
+    const url: string = `http://${APIURL}/${this.props.user.role}/${this.props.user.userId}`
     fetch(url,
       {
           method: 'GET',
@@ -104,7 +105,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
         password: this.state.newPassword
       }
 
-    const url: string = `http://localhost:3000/${this.props.user.role}/${this.props.user.userId}`
+    const url: string = `http://${APIURL}/${this.props.user.role}/${this.props.user.userId}`
     // console.log(this.props.user.sessionToken);
     fetch(url,
     { 

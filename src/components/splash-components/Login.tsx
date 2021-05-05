@@ -1,5 +1,6 @@
 import * as React from 'react';
 //import {RouteComponentProps, withRouter} from "react-router-dom"
+import APIURL from '../../helpers/environment'
 
 type LoginProps = {
   setAppState: Function
@@ -30,7 +31,7 @@ class Login extends React.Component<LoginProps, LoginState> {
       console.log("Error: No Role Given")
     }else{
 
-      const url: string = `http://localhost:3000/${this.state.role}/signin`
+      const url: string = `http://${APIURL}/${this.state.role}/signin`
       fetch(url,
         {
           method: 'POST',

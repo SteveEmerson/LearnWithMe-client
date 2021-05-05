@@ -1,4 +1,5 @@
 import * as React from 'react';
+import APIURL from '../../helpers/environment'
 
 type SignupProps = {
   setAppState: Function
@@ -52,7 +53,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   handleSubmit = () => {
     
-    const url: string = `http://localhost:3000/${this.state.role}/register`
+    const url: string = `http://${APIURL}/${this.state.role}/register`
     fetch(url,
     {
         method: 'POST',

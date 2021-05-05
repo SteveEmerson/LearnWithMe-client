@@ -1,5 +1,6 @@
 import * as React from 'react';
 import MeetingCardFull from './MeetingCardFull';
+import APIURL from '../../helpers/environment'
 
 type Meeting= {
   id: number,
@@ -48,7 +49,7 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
   }
 
   getNotes = () => {
-    const url: string = `http://localhost:3000/mtg_note/student_get/${this.props.meeting.id}`
+    const url: string = `http://${APIURL}/mtg_note/student_get/${this.props.meeting.id}`
     fetch(url,
       {
           method: 'GET',

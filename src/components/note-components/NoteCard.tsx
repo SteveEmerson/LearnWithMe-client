@@ -1,4 +1,5 @@
 import * as React from 'react';
+import APIURL from '../../helpers/environment'
 
 type Note = {
   id: number
@@ -38,7 +39,7 @@ class NoteCard extends React.Component<NCProps, NCState> {
   }
 
   updateNote = () => {
-    const url: string = `http://localhost:3000/mtg_note/${this.props.role}_update/${this.props.note.id}`
+    const url: string = `http://${APIURL}/mtg_note/${this.props.role}_update/${this.props.note.id}`
 
     fetch(url, {
       method: 'PUT',
@@ -66,7 +67,7 @@ class NoteCard extends React.Component<NCProps, NCState> {
   }
 
   deleteNote = () => {
-    const url: string = `http://localhost:3000/mtg_note/${this.props.role}_delete/${this.props.note.id}`
+    const url: string = `http://${APIURL}/mtg_note/${this.props.role}_delete/${this.props.note.id}`
 
     fetch(url, {
       method: 'DELETE',

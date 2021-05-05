@@ -1,6 +1,7 @@
 import * as React from 'react';
 import MeetingCardSmall from '../meeting-components/MeetingCardSmall';
 import ScheduleMeeting from '../meeting-components/ScheduleMeeting';
+import APIURL from '../../helpers/environment'
 
 type User = {
   email: string
@@ -143,7 +144,7 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
   }
 
   getStudentList = () => {
-    const url: string = `http://localhost:3000/student/`
+    const url: string = `http://${APIURL}/student/`
     fetch(url,
       {
           method: 'GET',

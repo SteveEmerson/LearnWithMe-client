@@ -6,6 +6,7 @@ import TeacherMeetingView from './TeacherMeetingView';
 import history from '../../history-module/history'
 import logo from '../../assets/logo/Logo.png'
 import cog from '../../assets/settings-cogwheel-button.svg'
+import APIURL from '../../helpers/environment'
 
 type TeacherProps = {
   currUser: User
@@ -134,7 +135,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getStudents = () => {
-    const url: string = `http://localhost:3000/student/`
+    const url: string = `http://${APIURL}/student/`
     fetch(url,
       {
           method: 'GET',
@@ -168,7 +169,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getMeetings = () => {
-    const url: string = `http://localhost:3000/meeting/teacher_get`
+    const url: string = `http://${APIURL}/meeting/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -188,7 +189,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getGoals = () => {
-    const url: string = `http://localhost:3000/goal/teacher_get`
+    const url: string = `http://${APIURL}/goal/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -209,7 +210,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
 
   getTasks = () => {
     
-    const url: string = `http://localhost:3000/task/teacher_get`
+    const url: string = `http://${APIURL}/task/teacher_get`
     fetch(url,
       {
           method: 'GET',

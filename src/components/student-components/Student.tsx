@@ -5,6 +5,7 @@ import StudentMeetingView from './StudentMeetingView';
 import history from '../../history-module/history';
 import logo from '../../assets/logo/Logo.png';
 import cog from '../../assets/settings-cogwheel-button.svg';
+import APIURL from '../../helpers/environment'
 
 type StudentProps = {
   currUser: User
@@ -100,7 +101,7 @@ class Student extends React.Component<StudentProps, StudentState> {
   }
 
   getMeetings = () => {
-    const url: string = `http://localhost:3000/meeting/student_get`
+    const url: string = `http://${APIURL}/meeting/student_get`
     fetch(url,
       {
           method: 'GET',
@@ -122,7 +123,7 @@ class Student extends React.Component<StudentProps, StudentState> {
 
   getGoals = () => {
     console.log("Get Goals")
-    const url: string = `http://localhost:3000/goal/student_get`
+    const url: string = `http://${APIURL}/goal/student_get`
     fetch(url,
       {
           method: 'GET',
@@ -142,7 +143,7 @@ class Student extends React.Component<StudentProps, StudentState> {
   }
 
   getTasks = () => {
-    const url: string = `http://localhost:3000/task/student_get`
+    const url: string = `http://:3000/task/student_get`
     fetch(url,
       {
           method: 'GET',

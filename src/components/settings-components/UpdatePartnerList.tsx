@@ -1,4 +1,5 @@
 import * as React from 'react';
+import APIURL from '../../helpers/environment'
 
 
 type User = {
@@ -84,7 +85,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
 
   makeAllDatabasePartnerList = () => {
     let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
-    const url: string = `http://localhost:3000/${partnerRole}/`
+    const url: string = `http://${APIURL}/${partnerRole}/`
     fetch(url,
       {
           method: 'GET',
@@ -123,29 +124,6 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
         console.log(`Error in fetch: ${err}`)
       }) 
   }
-
-  // makeNewPartnerData = () => {
-  //   for(let id of this.props.user.partnerList){
-  //     let partnerRole = (this.props.user.role === 'teacher'? "student": "teacher")
-  //     const url: string = `http://localhost:3000/${partnerRole}/${id}`
-  //     fetch(url,
-  //       {
-  //         method: 'GET',
-  //         headers: new Headers ({
-  //         'Content-Type': 'application/json',
-  //         'Authorization': this.props.user.sessionToken
-  //         })
-  //       })
-  //       .then((res) => res.json())
-  //       .then((data: FetchUserData) => {
-  //         return {id: data.id, name: data.name}
-  //       })
-  //       .then((partner: Partner) =>  this.state.newPartnerData.push(partner))
-  //       .catch(err => {
-  //         console.log(`Error in user fetch: ${err}`)
-  //       }) 
-  //   }
-  // }
 
 
   handleAddPartner = (partner: Partner) => {
