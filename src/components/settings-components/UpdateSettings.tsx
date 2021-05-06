@@ -89,55 +89,43 @@ class UpdateSettings extends React.Component<USProps, USState>{
   handleSubmit = (e: React.SyntheticEvent)=> {
     e.preventDefault();
 
-    let reqBody = {
-      name: "Jennifer T Emerson",
-      email: "jemers@school.edu",
-      password: "qwerty",
-      partnerList: [1]
+  //   let reqBody = {
+  //     name: "Jennifer T Emerson",
+  //     email: "jemers@school.edu",
+  //     password: "12345",
+  //     partnerList: [1],
+  //     availability: {}
   
-  }
+  // }
 
-    let testBody = {
-        email: this.state.email,
-        //password: "qwerty" 
+    let reqBody = this.state.newPassword === ""
+    ?
+      {
+        email: this.state.email, 
         name: this.state.displayName,
-        //partnerList: this.state.partnerList,
-        //availability: this.state.availability
+        partnerList: this.state.partnerList,
+        availability: this.state.availability
+      }
+    :
+      {
+        email: this.state.email, 
+        name: this.state.displayName,
+        partnerList: this.state.partnerList,
+        availability: this.state.availability,
+        password: this.state.newPassword
       }
 
-    console.log(this.state.email)
-    console.log(this.state.displayName)
-    console.log(this.state.partnerList)
-    console.log(this.state.availability)
-
-  
-    // let reqBody = this.state.newPassword === ""
-    // ?
-    //   {
-    //     email: this.state.email, 
-    //     name: this.state.displayName,
-    //     partnerList: this.state.partnerList,
-    //     availability: this.state.availability
-    //   }
-    // :
-    //   {
-    //     email: this.state.email, 
-    //     name: this.state.displayName,
-    //     partnerList: this.state.partnerList,
-    //     availability: this.state.availability,
-    //     password: this.state.newPassword
-    //   }
     console.log(reqBody)
     const url: string = `${APIURL}/${this.props.user.role}/${this.props.user.userId}`
     // console.log(this.props.user.sessionToken);
     fetch(url,
     { 
-      method: 'PUT',
+      method: `${this.state.newPassword === "" ? "PATCH" : "PUT"}`,
       headers:{
         'Content-Type': 'application/json',
         'Authorization': this.props.user.sessionToken
         },
-      body: JSON.stringify(testBody)
+      body: JSON.stringify(reqBody)
       
     })
     .then((res) => res.json())
