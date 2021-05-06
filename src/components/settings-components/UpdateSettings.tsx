@@ -96,6 +96,17 @@ class UpdateSettings extends React.Component<USProps, USState>{
       partnerList: [1]
   
   }
+
+    let testBody = {
+        email: this.state.email, 
+        name: this.state.displayName,
+        partnerList: this.state.partnerList,
+        availability: this.state.availability
+      }
+
+    console.log(testBody)
+
+  
     // let reqBody = this.state.newPassword === ""
     // ?
     //   {
