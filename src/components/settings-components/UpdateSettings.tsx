@@ -104,7 +104,10 @@ class UpdateSettings extends React.Component<USProps, USState>{
         availability: this.state.availability
       }
 
-    console.log(testBody)
+    console.log(this.state.email)
+    console.log(this.state.displayName)
+    console.log(this.state.partnerList)
+    console.log(this.state.availability)
 
   
     // let reqBody = this.state.newPassword === ""
