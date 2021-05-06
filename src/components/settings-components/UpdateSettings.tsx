@@ -64,7 +64,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
   }
 
   getCurrentPasswordHash = () => {
-    const url: string = `https://${APIURL}/${this.props.user.role}/${this.props.user.userId}`
+    const url: string = `${APIURL}/${this.props.user.role}/${this.props.user.userId}`
     fetch(url,
       {
           method: 'GET',
@@ -128,7 +128,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
     //     password: this.state.newPassword
     //   }
     console.log(reqBody)
-    const url: string = `https://${APIURL}/${this.props.user.role}/${this.props.user.userId}`
+    const url: string = `${APIURL}/${this.props.user.role}/${this.props.user.userId}`
     // console.log(this.props.user.sessionToken);
     fetch(url,
     { 

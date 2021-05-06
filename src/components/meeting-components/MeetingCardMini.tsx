@@ -48,7 +48,7 @@ class MeetingCardMini extends React.Component<MCMProps,MCMState>{
   }
 
   getNotes = () => {
-    const url: string = `https://${APIURL}/mtg_note/teacher_get/${this.props.meeting.id}`
+    const url: string = `${APIURL}/mtg_note/teacher_get/${this.props.meeting.id}`
     fetch(url,
       {
           method: 'GET',

@@ -107,8 +107,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     e.preventDefault();
     this.props.setParState({makeGoal: false})
     const url: string = (this.props.teacherId) 
-    ? `https://${APIURL}/goal/teacher_create` 
-    : `https://${APIURL}/goal/student_create`
+    ? `${APIURL}/goal/teacher_create` 
+    : `${APIURL}/goal/student_create`
     
     fetch(url, 
       {
@@ -155,8 +155,8 @@ class MakeGoal extends React.Component<MGProps,MGState>{
     });
 
     const url: string = (this.props.teacherId) 
-    ? `https://${APIURL}/task/teacher_bulk` 
-    : `https://${APIURL}/task/student_bulk`
+    ? `${APIURL}/task/teacher_bulk` 
+    : `${APIURL}/task/student_bulk`
     
     fetch(url, {
       method: 'POST',

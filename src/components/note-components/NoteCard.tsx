@@ -39,7 +39,7 @@ class NoteCard extends React.Component<NCProps, NCState> {
   }
 
   updateNote = () => {
-    const url: string = `https://${APIURL}/mtg_note/${this.props.role}_update/${this.props.note.id}`
+    const url: string = `${APIURL}/mtg_note/${this.props.role}_update/${this.props.note.id}`
 
     fetch(url, {
       method: 'PUT',
@@ -67,7 +67,7 @@ class NoteCard extends React.Component<NCProps, NCState> {
   }
 
   deleteNote = () => {
-    const url: string = `https://${APIURL}/mtg_note/${this.props.role}_delete/${this.props.note.id}`
+    const url: string = `${APIURL}/mtg_note/${this.props.role}_delete/${this.props.note.id}`
 
     fetch(url, {
       method: 'DELETE',

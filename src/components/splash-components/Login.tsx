@@ -31,7 +31,7 @@ class Login extends React.Component<LoginProps, LoginState> {
       console.log("Error: No Role Given")
     }else{
 
-      const url: string = `https://${APIURL}/${this.state.role}/signin`
+      const url: string = `${APIURL}/${this.state.role}/signin`
       fetch(url,
         {
           method: 'POST',

@@ -135,7 +135,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     let role = this.props.teacher ? 'teacher' : 'student'
     e.preventDefault();
-    const url: string = `https://${APIURL}/meeting/${role}_create`
+    const url: string = `${APIURL}/meeting/${role}_create`
     fetch(url,
       {
           method: 'POST',

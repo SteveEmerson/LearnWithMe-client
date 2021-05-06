@@ -191,7 +191,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
     if (changedTasks && changedTasks.length > 0) {
       changedTasks.forEach((task: Task) => {
-        const url: string = `https://${APIURL}/task/${this.props.rolePOV}_update/${task.id}`
+        const url: string = `${APIURL}/task/${this.props.rolePOV}_update/${task.id}`
         fetch(url, {
           method: 'PUT',
           body: JSON.stringify({
@@ -235,7 +235,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
     if (newTasks.length > 0){
       newTasks.forEach((task) => {
-        const url = `https://${APIURL}/task/${this.props.rolePOV}_create`
+        const url = `${APIURL}/task/${this.props.rolePOV}_create`
     
         fetch(url, {
           method: 'POST',
@@ -264,7 +264,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
     if (oldTasks.length > 0){
       oldTasks.forEach((task) => {
-        const url = `https://${APIURL}/task/${this.props.rolePOV}_delete/${task.id}`
+        const url = `${APIURL}/task/${this.props.rolePOV}_delete/${task.id}`
    
         fetch(url, {
           method: 'DELETE',
@@ -286,7 +286,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
 
   updateGoal = () => {
     this.toggleEditForm()
-    const url = `https://${APIURL}/goal/${this.props.rolePOV}_update/${this.props.goal.id}`
+    const url = `${APIURL}/goal/${this.props.rolePOV}_update/${this.props.goal.id}`
     
     let description: string = (!this.state.newGoalDesc) ? this.props.goal.description : this.state.newGoalDesc;
     let date: Date | null = (!this.state.newDate) ? new Date(this.props.goal.targetDate + "T07:00:00") : this.state.newDate;
@@ -357,7 +357,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
 
   deleteGoal = () => {
-    const url=`https://${APIURL}/goal/${this.props.rolePOV}_delete/${this.props.goal.id}`
+    const url=`${APIURL}/goal/${this.props.rolePOV}_delete/${this.props.goal.id}`
     fetch(url, {
       method: 'DELETE',
       headers: new Headers({
@@ -376,7 +376,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
   deleteAllTasks = () => {
     if(this.props.tasks && this.props.tasks.length > 0){
       this.props.tasks.forEach((task: Task) => {
-        const url=`https://${APIURL}/task/${this.props.rolePOV}_delete/${task.id}`
+        const url=`${APIURL}/task/${this.props.rolePOV}_delete/${task.id}`
         fetch(url, {
           method: 'DELETE',
           headers: new Headers({

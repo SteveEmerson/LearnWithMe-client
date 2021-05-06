@@ -135,7 +135,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getStudents = () => {
-    const url: string = `https://${APIURL}/student/`
+    const url: string = `${APIURL}/student/`
     fetch(url,
       {
           method: 'GET',
@@ -169,7 +169,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getMeetings = () => {
-    const url: string = `https://${APIURL}/meeting/teacher_get`
+    const url: string = `${APIURL}/meeting/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -189,7 +189,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   getGoals = () => {
-    const url: string = `https://${APIURL}/goal/teacher_get`
+    const url: string = `${APIURL}/goal/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -210,7 +210,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
 
   getTasks = () => {
     
-    const url: string = `https://${APIURL}/task/teacher_get`
+    const url: string = `${APIURL}/task/teacher_get`
     fetch(url,
       {
           method: 'GET',
@@ -254,7 +254,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       <div className="bg-black text-gray-50 min-h-screen">
         <Router>
 
-          {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
+          {/* NAV elements adapted from  www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
 
           <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-black mb-3">
             <div className="container px-4 mx-4 flex flex-wrap items-center justify-between">
