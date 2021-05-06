@@ -98,9 +98,9 @@ class UpdateSettings extends React.Component<USProps, USState>{
   }
 
     let testBody = {
-        email: this.state.email, 
+        //email: this.state.email, 
         name: this.state.displayName,
-        partnerList: this.state.partnerList,
+        //partnerList: this.state.partnerList,
         //availability: this.state.availability
       }
 
