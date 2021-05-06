@@ -98,7 +98,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
   }
 
     let testBody = {
-        email: this.state.email,
+        email: "jemers@school.edu",
         password: "qwerty" 
         //name: this.state.displayName,
         //partnerList: this.state.partnerList,
