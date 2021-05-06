@@ -133,7 +133,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
         'Content-Type': 'application/json',
         'Authorization': this.props.user.sessionToken
         },
-      body: JSON.stringify(reqBody)
+      body: JSON.stringify(testBody)
       
     })
     .then((res) => res.json())
