@@ -1,7 +1,6 @@
 import * as React from 'react';
 import APIURL from '../../helpers/environment'
 
-//Some of this will need changed when  this component is reused in other places.
 type Student = {
   id: number
   displayName: string
@@ -153,21 +152,6 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
       })
       .then((res) => res.json())
       .then((data: Meeting) => {
-        // let meetings:  Array<Meeting> | undefined = 
-        // this.props.student ? this.props.student.meetings : [];
-        
-        // if(this.props.student && role === "teacher" && this.props.mountingFrom === "SCF") {
-        //   let cStud: Student = {
-        //     id: this.props.student.id,
-        //     displayName: this.props.student.displayName,
-        //     email: this.props.student.email,
-        //     availability: this.props.student.availability,
-        //     meetings: meetings ? [...meetings, data] : [data],
-        //     goal:this.props.student.goal
-        //   }
-        
-        //   this.props.setGParState({currStudent: cStud})
-        // }
 
         if(role === "teacher" && this.props.getTeacherMeetings){
           this.props.getTeacherMeetings()
@@ -241,16 +225,22 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   handleTeacherSelect = (idString: string) => {
     let id: number = Number(idString)
     let selectedTeacher: Teacher | undefined = this.props.allTeachers?.find(teacher => teacher.id === id)
-    if (selectedTeacher) this.setState({teacher: selectedTeacher});
+    if (selectedTeacher) {
+      this.setState({teacher: selectedTeacher});
+    }
   }
 
   handleStudentSelect = (idString: string) => {
     let id: number = Number(idString)
     let selectedStudent: Student | undefined = this.props.allStudents?.find(student => student.id === id)
-    if (selectedStudent) this.setState({student: selectedStudent});
+    if (selectedStudent) {
+      this.setState({student: selectedStudent});
+      console.log("MEETINGS: ", selectedStudent)
+    }
   }
 
   render(){
+    console.log(this.props.teacher)
     return(
       <div className="absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl">
         <p className="font-bold text-xl text-blue-500" style={{color:"blue"}}>Schedule Meeting</p>
