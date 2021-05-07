@@ -168,7 +168,7 @@ class UpdatePartnerList extends React.Component<UPLProps, UPLState>{
                 return (
                   <div className="py-1" key={`NP${partner.id}`}>
                     <div className="flex flex-row justify-between">
-                      <p>{partner.name}</p>
+                      <p>{partner.name}{partner.id}</p>
                       <button
                         className="max-h-5 px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-gray-500 rounded hover:opacity-75"
                         key={`Remove${partner.id}`}
