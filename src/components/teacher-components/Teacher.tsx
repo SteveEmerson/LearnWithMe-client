@@ -132,12 +132,12 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   componentDidUpdate(prevProps: TeacherProps, prevState: TeacherState) {
-    if(this.checkPartnerChanged(prevProps.currUser.partnerList, this.props.currUser.partnerList)){
-      console.log("partners changed")
-      this.getStudents()
-    }else{
-      console.log("partners did not change")
-    }
+    // if(this.checkPartnerChanged(prevProps.currUser.partnerList, this.props.currUser.partnerList)){
+    //   console.log("partners changed")
+    //   this.getStudents()
+    // }else{
+    //   console.log("partners did not change")
+    // }
   }
 
   checkPartnerChanged = (pl1: number[], pl2: number[]) => {

@@ -53,6 +53,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   render() {
+    // console.log(this.state.user)
     return (
       <div>
         {this.state.user.role === "" && <Splash setAppState={this.setState}/>}

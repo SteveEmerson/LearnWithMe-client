@@ -1,5 +1,6 @@
 import * as React from 'react';
 import APIURL from '../../helpers/environment'
+import TeacherStudentView from '../teacher-components/TeacherStudentView';
 
 type Student = {
   id: number
@@ -35,7 +36,19 @@ type Teacher = {
   tasks?: Array<Task>
 }
 
-type TestTeacher = {
+
+type Task = {
+  id: number
+  description: string
+  completed: boolean
+  createdAt: Date,
+  updatedAt: Date,
+  goalId: number,
+  studentId: number,
+  teacherId: number
+}
+
+type SMUser = {
   id: number
   displayName: string
   email: string
@@ -50,33 +63,6 @@ type TestTeacher = {
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>
-}
-
-type Task = {
-  id: number
-  description: string
-  completed: boolean
-  createdAt: Date,
-  updatedAt: Date,
-  goalId: number,
-  studentId: number,
-  teacherId: number
-}
-
-type User = {
-  email: string
-  userId: number
-  displayName: string
-  partnerList: number[]
-  role: string
-  availability: {
-    mon: string[],
-    tue: string[],
-    wed: string[],
-    thu: string[],
-    fri: string[]
-  }
-  sessionToken: string
 }
 
 type Goal = {
@@ -124,7 +110,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     super(props);
     this.state = {
       date: "",
-      time: "",
+      time: "02:00:00",
       d_t: new Date(),
       teacher: {
         id: 0,
@@ -132,11 +118,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         email: "",
         availability: 
           {
-            mon : ["14:00:00", "14:15:00", "14:30:00"],
-            tue : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
-            wed : ["14:00:00", "14:15:00", "14:30:00"],
-            thu : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
-            fri : ["14:00:00", "14:15:00", "14:30:00"]
+            mon : [],
+            tue : [],
+            wed : [],
+            thu : [],
+            fri : []
           },
         partners: []
       },
@@ -182,10 +168,20 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
 
   handleDate = (e: React.FormEvent<HTMLInputElement>) => {
     let selectedDate = e.currentTarget.value;
-    let selectedTime = "T07:15:00"
-    let selectedDT = selectedDate + selectedTime
-    //console.log(new Date(selectedDT))
+    this.setState({date: selectedDate})
+    
+    let selectedDT = selectedDate + "T" + this.state.time;
     this.setState({d_t: new Date(selectedDT)})
+    
+    
+  }
+
+  handleTime = (timeSlot: string) => {
+    this.setState({time: timeSlot})
+    if(this.state.date !== ""){
+      let selectedDT = this.state.date + "T" + timeSlot;
+      this.setState({d_t: new Date(selectedDT)})
+    }
   }
 
   submitValidation = (): boolean => {
@@ -198,6 +194,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     let dow: number = this.state.d_t.getDay()
     if(dow === 0 || dow === 6){
       window.alert("Meetings can only be scheudled for school days.")
+      return false
+    }
+
+    if(this.state.time === "02:00:00"){
+      window.alert("Please select a time.")
       return false
     }
 
@@ -241,10 +242,6 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
           console.log(`Error in fetch: ${err}`)
         }) 
     }
-  }
-
-  componentDidUpdate(){
-    
   }
 
   renderTeacherSelect = () => {
@@ -304,11 +301,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   handleTeacherSelect = (idString: string) => {
-    // let id: number = Number(idString)
-    // let selectedTeacher: Teacher | undefined = this.props.allTeachers?.find(teacher => teacher.id === id)
-    // if (selectedTeacher) {
-    //   this.setState({teacher: selectedTeacher});
-    // }
+    let id: number = Number(idString)
+    let selectedTeacher: Teacher | undefined = this.props.allTeachers?.find(teacher => teacher.id === id)
+    if (selectedTeacher) {
+      this.setState({teacher: selectedTeacher});
+    }
   }
 
   handleStudentSelect = (idString: string) => {
@@ -321,26 +318,34 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   renderTimeSelections = () => {
-    let dow: number = this.state.d_t.getDay();
+    let dow: any = this.state.d_t.getDay();
     let role: string = this.props.teacher ? 'teacher' : 'student';
-    // let user: User = role === "teacher" ? this.state.teacher : this.state.student;
+    let user: SMUser; 
+    if(this.props.teacher){
+      user = this.props.teacher;
+    }else if (this.props.student){
+      user = this.props.student;
+    }else{
+      user = this.state.teacher
+    }
+
     let rawSlots: string[];
 
-    switch (dow) {
+    switch(dow) {
       case 1:
-        rawSlots= this.state.teacher.availability.mon;
+        rawSlots= user.availability.mon;
         break;
       case 2:
-        rawSlots= this.state.teacher.availability.tue;
+        rawSlots= user.availability.tue;
         break;
       case 3:
-        rawSlots= this.state.teacher.availability.wed;
+        rawSlots= user.availability.wed;
         break;
       case 4:
-        rawSlots= this.state.teacher.availability.thu;
+        rawSlots= user.availability.thu;
         break;
       case 5:
-        rawSlots= this.state.teacher.availability.fri;
+        rawSlots= user.availability.fri;
         break;
       default:
         rawSlots= [];
@@ -355,7 +360,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
             return(
               <p 
                 className={`text-white font-semibold bg-blue-600 py-1 w-20 text-center rounded-md hover:bg-blue-800 ${selected ? "bg-blue-800" : null}`}
-                onClick={() => this.setState({time:slot})}
+                onClick={() => this.handleTime(slot)}
               >
                   {this.formatSlotTime(slot)}
                   
