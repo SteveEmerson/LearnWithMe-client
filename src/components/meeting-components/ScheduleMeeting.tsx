@@ -91,7 +91,14 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         id: 0,
         displayName: "",
         email: "",
-        availability: {},
+        availability: 
+          {
+            mo: [],
+            tu: [],
+            we: [],
+            th: [],
+            fr: []
+          },
         partners: []
       },
       student: {
@@ -135,12 +142,26 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     this.setState({d_t: new Date(selectedDT)})
   }
 
+  submitValidation = (): boolean => {
+    let role: string = this.props.teacher ? 'teacher' : 'student'
+    if(this.state.student.id === 0){
+      window.alert(`You must select a ${role==="teacher" ? "student." : " teacher."}`)
+      return false
+    }
+
+    let dow: number = this.state.d_t.getDay()
+    if(dow === 0 || dow === 6){
+      window.alert("Meetings can only be scheudled for school days.")
+      return false
+    }
+
+    return true
+  }
+
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let role = this.props.teacher ? 'teacher' : 'student'
-    if(this.state.student.id === 0){
-      window.alert(`You must select a ${role==="teacher" ? "student." : " teacher."}`)
-    }else{        
+    if(this.submitValidation()){        
       const url: string = `${APIURL}/meeting/${role}_create`
       fetch(url,
         {
