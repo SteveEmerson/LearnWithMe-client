@@ -80,12 +80,16 @@ type SMState = {
   d_t: Date
   teacher: Teacher
   student: Student
+  date: string
+  time: string
 }
 
 class ScheduleMeeting extends React.Component<SMProps,SMState>{
   constructor(props: SMProps){
     super(props);
     this.state = {
+      date: "",
+      time: "",
       d_t: new Date(),
       teacher: {
         id: 0,
@@ -93,11 +97,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         email: "",
         availability: 
           {
-            mo: [],
-            tu: [],
-            we: [],
-            th: [],
-            fr: []
+            1 : ["14:00:00", "14:15:00", "14:30:00"],
+            2 : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
+            3 : ["14:00:00", "14:15:00", "14:30:00"],
+            4 : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
+            5 : ["14:00:00", "14:15:00", "14:30:00"]
           },
         partners: []
       },
@@ -266,24 +270,65 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   handleStudentSelect = (idString: string) => {
-    let id: number = Number(idString)
-    let selectedStudent: Student | undefined = this.props.allStudents?.find(student => student.id === id)
+    let id: number = Number(idString);
+    let selectedStudent: Student | undefined = this.props.allStudents?.find(student => student.id === id);
     if (selectedStudent) {
       this.setState({student: selectedStudent});
       console.log("MEETINGS: ", selectedStudent)
     }
   }
 
+  renderTimeSelections = () => {
+    let role = this.props.teacher ? 'teacher' : 'student';
+    let user = role === "teacher" ? this.state.teacher : this.state.student;
+    let rawSlots: string[] = ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"]
+    
+    return(
+      <div className="row-span-2 mx-5">
+        <p className = "font-semibold"> Time </p>
+        <div className="flex flex-col gap-4">
+          {rawSlots.map((slot: string) => {
+            let selected: boolean = this.formatSlotTime(this.state.time) === this.formatSlotTime(slot);
+            return(
+              <p 
+                className={`text-white font-semibold bg-blue-600 py-1 w-20 text-center rounded-md hover:bg-blue-800 ${selected ? "bg-blue-800" : null}`}
+                onClick={() => this.setState({time:slot})}
+              >
+                  {this.formatSlotTime(slot)}
+                  
+              </p>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  formatSlotTime = (rawTime: string) => {
+    let rawHour: string = rawTime.slice(0,2);
+    let rawMinute: string = rawTime.slice(3,5);
+    let rawHourNum: number = Number(rawHour);
+    let formatHourNum: number = rawHourNum > 12 ? rawHourNum - 12 : rawHourNum;
+    let AP: string = rawHourNum < 12 ? "am" : "pm";
+    let formatTime = `${String(formatHourNum)}:${rawMinute} ${AP}`
+    return formatTime
+
+  }
+
   render(){
-    console.log(this.props.teacher)
+    console.log(this.state.d_t)
     return(
       <div className = "absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl"> 
-        <p className="text-center font-bold text-xl text-blue-500 mb-4" style={{color:"blue"}}>Schedule Meeting</p>
+        <p 
+          className="text-center font-bold text-3xl text-blue-600 mb-4" 
+        >
+          Schedule meeting
+        </p>
         <form 
           onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}
-          className="grid grid-rows-2 grid-cols-1 gap-4"
+          className="flex flex-col gap-4"
         > 
-          <div className="grid grid-cols-2 grid-rows-2 grid-flow-col gap-4">
+          <div className="grid grid-cols-2 grid-rows-2 grid-flow-col gap-6">
             {this.props.teacher && this.props.student
               ? <p className="font-semibold mt-2">Meet with {this.props.student.displayName}</p>
               : this.props.student ? this.renderTeacherSelect() : this.renderStudentSelect()
@@ -302,11 +347,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
               >
               </input>
             </div>
-            <div className="col-span-2">
-              <p>
-                Gonna be picking a time
-              </p>
-            </div>
+            {this.renderTimeSelections()}
           </div>
           <div className="flex flex-row justify-start mt-2">
             <button 
