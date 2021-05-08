@@ -355,15 +355,18 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         <p className = "font-semibold"> Time </p>
         <div className="flex flex-col gap-4">
           {rawSlots.map((slot: string) => {
+            let available = this.checkSlotAvailability(slot)
             let selected: boolean = this.formatSlotTime(this.state.time) === this.formatSlotTime(slot);
             return(
               <p 
-                className={`text-white font-semibold bg-blue-600 py-1 w-20 text-center rounded-md hover:bg-blue-800 ${selected ? "bg-blue-800" : null}`}
-                onClick={() => this.handleTime(slot)}
+                className={`text-white font-semibold py-1 w-20 text-center rounded-md
+                  ${available ? `bg-blue-600 hover:bg-blue-800 ${selected ? "bg-blue-800" : null}`
+                            : "bg-gray-500"}
+                `}
+                onClick={available ? () => this.handleTime(slot) : undefined}
               >
-                  {this.formatSlotTime(slot)}
-                  
-              </p>
+                {this.formatSlotTime(slot)}
+              </p> 
             )
           })}
         </div>
@@ -380,6 +383,23 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     let formatTime = `${String(formatHourNum)}:${rawMinute} ${AP}`
     return formatTime
 
+  }
+
+  checkSlotAvailability = (timeSlot: string) => {
+    let meetings: Array<Meeting> | undefined = 
+      this.props.teacher ? this.props.teacher.meetings 
+                          : this.props.student ? this.props.student.meetings : []
+    let meetingDTs: Date[] | undefined = meetings?.map(meeting => meeting.d_t)
+    meetingDTs?.forEach(meetingDT => {
+      let mDT: Date = new Date(meetingDT);
+      let selectedDate: string = this.state.d_t.toISOString().slice(0,10);
+      let meetingDate: string = mDT.toISOString().slice(0,10);
+      let meetingTime: string = mDT.toISOString().slice(11,20);
+      if(meetingDate === selectedDate && meetingTime === timeSlot){
+        return false
+      }
+    })
+    return true
   }
 
   render(){
