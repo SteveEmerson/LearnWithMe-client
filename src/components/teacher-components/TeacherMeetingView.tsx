@@ -9,7 +9,13 @@ type User = {
   displayName: string
   partnerList: number[]
   role: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   sessionToken: string
 }
 
@@ -17,7 +23,13 @@ type Student = {
   id: number
   displayName: string
   email: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
@@ -28,7 +40,13 @@ type Teacher = {
   id: number
   displayName: string
   email: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
@@ -49,19 +67,19 @@ type Task = {
   id: number
   description: string
   completed: boolean
-  createdAt: Date,
-  updatedAt: Date,
-  goalId: number,
-  studentId: number,
+  createdAt: Date
+  updatedAt: Date
+  goalId: number
+  studentId: number
   teacherId: number
 }
 
 type Meeting= {
-  id: number,
-  d_t: Date,
-  teacherId: number,
-  studentId: number,
-  createdAt: Date,
+  id: number
+  d_t: Date
+  teacherId: number
+  studentId: number
+  createdAt: Date
   updatedAt: Date
 }
 
@@ -72,7 +90,13 @@ type FetchStudentData = {
   name: string,
   teacherList: number[]
   role: string,
-  availability: {},
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   createdAt: string,
   updatedAt: string
 }

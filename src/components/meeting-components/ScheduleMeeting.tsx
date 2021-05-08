@@ -5,7 +5,13 @@ type Student = {
   id: number
   displayName: string
   email: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
@@ -16,7 +22,30 @@ type Teacher = {
   id: number
   displayName: string
   email: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
+  partners: number[]
+  meetings?:Array<Meeting>
+  goal?:Goal
+  tasks?: Array<Task>
+}
+
+type TestTeacher = {
+  id: number
+  displayName: string
+  email: string
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
@@ -34,15 +63,21 @@ type Task = {
   teacherId: number
 }
 
-// type User = {
-//   email: string
-//   userId: number
-//   displayName: string
-//   partnerList: number[]
-//   role: string
-//   availability: {}
-//   sessionToken: string
-// }
+type User = {
+  email: string
+  userId: number
+  displayName: string
+  partnerList: number[]
+  role: string
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
+  sessionToken: string
+}
 
 type Goal = {
   id: number
@@ -97,11 +132,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         email: "",
         availability: 
           {
-            1 : ["14:00:00", "14:15:00", "14:30:00"],
-            2 : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
-            3 : ["14:00:00", "14:15:00", "14:30:00"],
-            4 : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
-            5 : ["14:00:00", "14:15:00", "14:30:00"]
+            mon : ["14:00:00", "14:15:00", "14:30:00"],
+            tue : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
+            wed : ["14:00:00", "14:15:00", "14:30:00"],
+            thu : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
+            fri : ["14:00:00", "14:15:00", "14:30:00"]
           },
         partners: []
       },
@@ -109,7 +144,14 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         id: 0,
         displayName: "",
         email: "",
-        availability: {},
+        availability: 
+          {
+            mon : ["14:00:00", "14:15:00", "14:30:00"],
+            tue : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
+            wed : ["14:00:00", "14:15:00", "14:30:00"],
+            thu : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
+            fri : ["14:00:00", "14:15:00", "14:30:00"]
+          },
         partners: []
       }
     }
@@ -262,11 +304,11 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   handleTeacherSelect = (idString: string) => {
-    let id: number = Number(idString)
-    let selectedTeacher: Teacher | undefined = this.props.allTeachers?.find(teacher => teacher.id === id)
-    if (selectedTeacher) {
-      this.setState({teacher: selectedTeacher});
-    }
+    // let id: number = Number(idString)
+    // let selectedTeacher: Teacher | undefined = this.props.allTeachers?.find(teacher => teacher.id === id)
+    // if (selectedTeacher) {
+    //   this.setState({teacher: selectedTeacher});
+    // }
   }
 
   handleStudentSelect = (idString: string) => {
@@ -279,9 +321,30 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   renderTimeSelections = () => {
-    let role = this.props.teacher ? 'teacher' : 'student';
-    let user = role === "teacher" ? this.state.teacher : this.state.student;
-    let rawSlots: string[] = ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"]
+    let dow: number = this.state.d_t.getDay();
+    let role: string = this.props.teacher ? 'teacher' : 'student';
+    // let user: User = role === "teacher" ? this.state.teacher : this.state.student;
+    let rawSlots: string[];
+
+    switch (dow) {
+      case 1:
+        rawSlots= this.state.teacher.availability.mon;
+        break;
+      case 2:
+        rawSlots= this.state.teacher.availability.tue;
+        break;
+      case 3:
+        rawSlots= this.state.teacher.availability.wed;
+        break;
+      case 4:
+        rawSlots= this.state.teacher.availability.thu;
+        break;
+      case 5:
+        rawSlots= this.state.teacher.availability.fri;
+        break;
+      default:
+        rawSlots= [];
+    }
     
     return(
       <div className="row-span-2 mx-5">

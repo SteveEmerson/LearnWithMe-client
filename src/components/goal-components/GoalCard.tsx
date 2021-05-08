@@ -17,7 +17,13 @@ type Student = {
   id: number
   displayName: string
   email: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal | null

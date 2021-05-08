@@ -8,7 +8,13 @@ type User = {
   displayName: string
   partnerList: number[]
   role: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   sessionToken: string
 }
 
@@ -34,15 +40,21 @@ type Partner = {
 }
 
 type FetchUserData = {
-  id: number,
-  email: string,
-  passwordhash: string,
-  name: string,
-  studentList?: number[],
+  id: number
+  email: string
+  passwordhash: string
+  name: string
+  studentList?: number[]
   teacherList?: number[]
   role: string,
-  availability: {},
-  createdAt: string,
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
+  createdAt: string
   updatedAt: string
 }
 

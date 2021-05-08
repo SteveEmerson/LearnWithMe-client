@@ -80,7 +80,13 @@ class Signup extends React.Component<SignupProps, SignupState> {
                 displayName: user.displayName,
                 userId: user.userId,
                 partnerList: [],
-                availability: {},
+                availability: {
+                  mon: [],
+                  tue: [],
+                  wed: [],
+                  thu: [],
+                  fri: []
+                },
                 sessionToken: user.sessionToken
               }
             })

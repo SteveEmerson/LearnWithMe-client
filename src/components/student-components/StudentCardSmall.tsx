@@ -4,7 +4,13 @@ type Student = {
   id: number
   displayName: string
   email: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   meetings?:Array<Meeting>
   goal?:Goal
   tasks?: Array<Task>

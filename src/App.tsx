@@ -11,7 +11,13 @@ type User = {
   displayName: string
   userId: number
   partnerList: number[]
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   sessionToken: string
 }
 
@@ -29,7 +35,13 @@ class App extends React.Component<{}, AppState> {
         displayName: "",
         userId: 0,
         partnerList: [],
-        availability: {},
+        availability: {
+          mon: [],
+          tue: [],
+          wed: [],
+          thu: [],
+          fri: []
+        },
         sessionToken: ""
        
       }

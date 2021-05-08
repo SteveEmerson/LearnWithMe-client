@@ -19,7 +19,13 @@ type User = {
   displayName: string
   partnerList: number[]
   role: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   sessionToken: string
 }
 
@@ -27,7 +33,13 @@ type Student = {
   id: number
   displayName: string
   email: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   partners: number[]
   meetings?:Array<Meeting>
   goal?:Goal
@@ -77,14 +89,20 @@ type Task = {
 }
 
 type FetchStudentData = {
-  id: number,
-  email: string,
-  passwordhash: string,
-  name: string,
+  id: number
+  email: string
+  passwordhash: string
+  name: string
   teacherList: number[]
-  role: string,
-  availability: {},
-  createdAt: string,
+  role: string
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
+  createdAt: string
   updatedAt: string
 }
 
@@ -239,7 +257,13 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
           displayName: "",
           userId: 0,
           partnerList: [],
-          availability: {},
+          availability: {
+            mon: [],
+            tue: [],
+            wed: [],
+            thu: [],
+            fri: []
+          },
           sessionToken:""
         }
       }

@@ -6,7 +6,13 @@ type User = {
   displayName: string
   partnerList: number[]
   role: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   sessionToken: string
 }
 

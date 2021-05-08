@@ -10,20 +10,32 @@ type User = {
   displayName: string
   partnerList: number[]
   role: string
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   sessionToken: string
 }
 
 type FetchData = {
-  id: number,
-  email: string,
-  passwordhash: string,
+  id: number
+  email: string
+  passwordhash: string
   name: string,
-  studentList?: number[],
+  studentList?: number[]
   teacherList?: number[]
-  role: string,
-  availability: {},
-  createdAt: string,
+  role: string
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
+  createdAt: string
   updatedAt: string
 }
 
@@ -38,7 +50,13 @@ type USState = {
   newPassword: string
   displayName: string
   partnerList: number[]
-  availability: {}
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   pInfoChanged: boolean
   partnersChanged: boolean
 }
