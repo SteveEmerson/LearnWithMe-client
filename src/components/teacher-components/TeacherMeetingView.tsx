@@ -104,6 +104,7 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
         email: this.props.user.email,
         availability: this.props.user.availability,
         partners: this.props.user.partnerList,
+        meetings: this.props.meetings
       },
       pastMeetings: [],
       futureMeetings: []
@@ -113,24 +114,24 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
   componentDidMount(){
     this.getStudentList()
     this.sortMeetings()
-    this.buildTeacher()
+    console.log(this.state.teacher)
   }
 
   componentDidUpdate(prevProps: TMVProps, prevState: TMVState){
     if(prevProps.meetings.length !== this.props.meetings.length){
       this.sortMeetings()
+      this.buildTeacher()
     }
   }
 
   buildTeacher = () => {
-    let mtgs: Array<Meeting> = [...this.state.pastMeetings, ...this.state.futureMeetings]
     let tchr: Teacher = {
       id: this.props.user.userId,
       displayName: this.props.user.displayName,
       email: this.props.user.email,
       availability: this.props.user.availability,
       partners: this.props.user.partnerList,
-      meetings: mtgs
+      meetings: this.props.meetings
     }
     this.setState({teacher: tchr})
   }
