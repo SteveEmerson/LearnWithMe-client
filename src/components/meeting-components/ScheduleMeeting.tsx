@@ -1,6 +1,5 @@
 import * as React from 'react';
 import APIURL from '../../helpers/environment'
-import TeacherStudentView from '../teacher-components/TeacherStudentView';
 
 type Student = {
   id: number
@@ -319,7 +318,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
 
   renderTimeSelections = () => {
     let dow: any = this.state.d_t.getDay();
-    let role: string = this.props.teacher ? 'teacher' : 'student';
+    // let role: string = this.props.teacher ? 'teacher' : 'student';
     let user: SMUser; 
     if(this.props.teacher){
       user = this.props.teacher;
