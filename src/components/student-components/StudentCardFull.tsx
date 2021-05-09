@@ -93,6 +93,7 @@ type SCFProps = {
   getMeetings: Function
   getGoals: Function
   getTasks: Function
+  meetings: Array<Meeting>
 }
 
 type SCFState = {
@@ -116,7 +117,8 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
         displayName: this.props.teacher.displayName,
         email: this.props.teacher.email,
         availability: {...this.props.teacher.availability},
-        partners: this.props.teacher.partnerList
+        partners: this.props.teacher.partnerList,
+        meetings: this.props.meetings
       }
     }
     this.setState = this.setState.bind(this)
@@ -148,6 +150,7 @@ class StudentCardFull extends React.Component<SCFProps,SCFState>{
   }
 
   render(){
+    console.log(this.state.teacher)
     let num_meetings = this.props.student.meetings ? this.props.student.meetings.length : 0;
     return(
       <div className="bg-white text-black p-3">

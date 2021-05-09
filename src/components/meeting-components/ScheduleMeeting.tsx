@@ -74,7 +74,7 @@ type Goal = {
   teacherId: number | null
 }
 
-type Meeting= {
+type Meeting = {
   id: number
   d_t: Date
   teacherId: number
@@ -131,14 +131,20 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
         email: "",
         availability: 
           {
-            mon : ["14:00:00", "14:15:00", "14:30:00"],
-            tue : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
-            wed : ["14:00:00", "14:15:00", "14:30:00"],
-            thu : ["13:15:00", "13:30:00", "13:45:00", "14:00:00", "14:15:00", "14:30:00"],
-            fri : ["14:00:00", "14:15:00", "14:30:00"]
+            mon : [],
+            tue : [],
+            wed : [],
+            thu : [],
+            fri : []
           },
         partners: []
       }
+    }
+  }
+
+  componentDidMount(){
+    if(this.props.student && this.props.mountingFrom === "SCF"){
+      this.setState({student: this.props.student})
     }
   }
 
@@ -317,7 +323,6 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     let selectedStudent: Student | undefined = this.props.allStudents?.find(student => student.id === id);
     if (selectedStudent) {
       this.setState({student: selectedStudent});
-      console.log("MEETINGS: ", selectedStudent)
     }
   }
 
@@ -333,31 +338,50 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
       user = this.state.teacher
     }
 
-    console.log(user)
-
     let rawSlots: string[];
+    let prawSlots: string[];
 
     switch(dow) {
       case 1:
-        rawSlots= user.availability.mon;
+        rawSlots = user.availability.mon;
+        prawSlots = this.props.teacher 
+        ? this.state.student.availability.mon 
+        : this.state.teacher.availability.mon;
         break;
       case 2:
-        rawSlots= user.availability.tue;
+        rawSlots = user.availability.tue;
+        prawSlots = this.props.teacher 
+        ? this.state.student.availability.tue 
+        : this.state.teacher.availability.tue;
         break;
       case 3:
-        rawSlots= user.availability.wed;
+        rawSlots = user.availability.wed;
+        prawSlots = this.props.teacher 
+        ? this.state.student.availability.wed 
+        : this.state.teacher.availability.wed;
         break;
       case 4:
-        rawSlots= user.availability.thu;
+        rawSlots = user.availability.thu;
+        prawSlots = this.props.teacher 
+        ? this.state.student.availability.thu 
+        : this.state.teacher.availability.thu;
         break;
       case 5:
-        rawSlots= user.availability.fri;
+        rawSlots = user.availability.fri;
+        prawSlots = this.props.teacher 
+        ? this.state.student.availability.fri 
+        : this.state.teacher.availability.fri;
         break;
       default:
-        rawSlots= [];
+        rawSlots = [];
+        prawSlots = [];
     }
 
-    console.log(rawSlots)
+
+    if(prawSlots.length > 0){
+      rawSlots = rawSlots.filter(slot => prawSlots.includes(slot))
+    }
+
     return(
       <div className="row-span-2 mx-5">
         <p className = "font-semibold"> Time </p>
@@ -398,7 +422,6 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     let meetings: Array<Meeting> | undefined = 
       this.props.teacher ? this.props.teacher.meetings 
                           : this.props.student ? this.props.student.meetings : []
-    console.log(meetings)
     let meetingDTs: Date[] | undefined = meetings?.map(meeting => new Date(meeting.d_t))
     meetingDTs?.forEach(meetingDT => {
       let slotDT: Date = new Date(this.state.date + "T" + slotTime);

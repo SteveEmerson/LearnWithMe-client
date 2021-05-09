@@ -32,7 +32,7 @@ type Student = {
   id: number
   displayName: string
   email: string
-  availability: {
+    availability: {
     mon: string[],
     tue: string[],
     wed: string[],
@@ -176,6 +176,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
                 getMeetings={this.props.getMeetings}
                 getGoals={this.props.getGoals}
                 getTasks={this.props.getTasks}
+                meetings={this.props.meetings}
               />
             : null}
           </div>
