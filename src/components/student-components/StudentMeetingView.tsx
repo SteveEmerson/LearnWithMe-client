@@ -138,7 +138,8 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
         displayName: this.props.user.displayName,
         email: this.props.user.email,
         availability: this.props.user.availability,
-        partners: this.props.user.partnerList
+        partners: this.props.user.partnerList,
+        meetings: this.props.meetings
       },
       sortedMeetings: [],
       sortedGoals: []
@@ -158,12 +159,25 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
     if(prevProps.meetings.length !== this.props.meetings.length){
       
       this.sortMeetings()
+      this.buildStudent()
     }
 
     if(prevProps.goals.length !== this.props.goals.length){
       
       this.sortGoals()
     }
+  }
+
+  buildStudent = () => {
+    let stdnt: Student = {
+      id: this.props.user.userId,
+      displayName: this.props.user.displayName,
+      email: this.props.user.email,
+      availability: this.props.user.availability,
+      partners: this.props.user.partnerList,
+      meetings: this.props.meetings
+    }
+    this.setState({student: stdnt})
   }
 
   compareMeetingLists = (ml1: Array<Meeting>, ml2: Array<Meeting>): boolean => {

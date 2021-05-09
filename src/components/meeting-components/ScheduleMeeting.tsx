@@ -185,8 +185,13 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
 
   submitValidation = (): boolean => {
     let role: string = this.props.teacher ? 'teacher' : 'student'
-    if(this.state.student.id === 0){
-      window.alert(`You must select a ${role==="teacher" ? "student." : " teacher."}`)
+    if(role === 'teacher' && this.state.student.id === 0){
+      window.alert("You must select a student")
+      return false
+    }
+
+    if(role === 'student' && this.state.teacher.id === 0){
+      window.alert("You must select a teacher")
       return false
     }
 
@@ -246,7 +251,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   renderTeacherSelect = () => {
     return(
       <div>
-        <label className="font-semibold mr-2" htmlFor="students">Student</label>
+        <label className="font-semibold mr-2" htmlFor="students">Teacher</label>
         <select 
           name="teachers" 
           id='teacher-select'
@@ -317,7 +322,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   renderTimeSelections = () => {
-    let dow: any = this.state.d_t.getDay();
+    let dow: number = this.state.d_t.getDay();
     // let role: string = this.props.teacher ? 'teacher' : 'student';
     let user: SMUser; 
     if(this.props.teacher){
@@ -327,6 +332,8 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
     }else{
       user = this.state.teacher
     }
+
+    console.log(user)
 
     let rawSlots: string[];
 
@@ -349,7 +356,8 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
       default:
         rawSlots= [];
     }
-    
+
+    console.log(rawSlots)
     return(
       <div className="row-span-2 mx-5">
         <p className = "font-semibold"> Time </p>
@@ -385,25 +393,24 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
 
   }
 
-  checkSlotAvailability = (timeSlot: string) => {
+  checkSlotAvailability = (slotTime: string) => {
+    let available: boolean = true;
     let meetings: Array<Meeting> | undefined = 
       this.props.teacher ? this.props.teacher.meetings 
                           : this.props.student ? this.props.student.meetings : []
-    let meetingDTs: Date[] | undefined = meetings?.map(meeting => meeting.d_t)
+    console.log(meetings)
+    let meetingDTs: Date[] | undefined = meetings?.map(meeting => new Date(meeting.d_t))
     meetingDTs?.forEach(meetingDT => {
-      let mDT: Date = new Date(meetingDT);
-      let selectedDate: string = this.state.d_t.toISOString().slice(0,10);
-      let meetingDate: string = mDT.toISOString().slice(0,10);
-      let meetingTime: string = mDT.toISOString().slice(11,20);
-      if(meetingDate === selectedDate && meetingTime === timeSlot){
-        return false
+      let slotDT: Date = new Date(this.state.date + "T" + slotTime);
+      if(meetingDT.toString() === slotDT.toString()){
+        available = false
       }
     })
-    return true
+    return available
   }
 
   render(){
-    console.log(this.state.d_t)
+    console.log(this.props.teacher)
     return(
       <div className = "absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl"> 
         <p 
