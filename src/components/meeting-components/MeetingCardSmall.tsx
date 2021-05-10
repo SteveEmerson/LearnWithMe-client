@@ -73,6 +73,16 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
     })
   }
 
+  formatSlotTime = (rawTime: string) => {
+    let rawHour: string = rawTime.slice(0,2);
+    let rawMinute: string = rawTime.slice(3,5);
+    let rawHourNum: number = Number(rawHour);
+    let formatHourNum: number = rawHourNum > 12 ? rawHourNum - 12 : rawHourNum;
+    let AP: string = rawHourNum < 12 ? "am" : "pm";
+    let formatTime = `${String(formatHourNum)}:${rawMinute} ${AP}`
+    return formatTime
+  }
+
   render(){
     let date = new Date(this.props.meeting.d_t);
     let mtg_d = date.toString().slice(0,24);
@@ -86,7 +96,7 @@ class MeetingCardSmall extends React.Component<MCSProps,MCSState>{
                 : this.props.teacherName
               }
             </p>
-            <p className="font-bold text-base">{mtg_d}</p>
+            <p className="font-bold text-base">{mtg_d.slice(0,16)} {this.formatSlotTime(mtg_d.slice(16,21))}</p>
           </div>
           <div className="flex flex-row justify-between mt-2">
             {this.state.notes.length > 0

@@ -120,6 +120,16 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
     )
   }
 
+  formatSlotTime = (rawTime: string) => {
+    let rawHour: string = rawTime.slice(0,2);
+    let rawMinute: string = rawTime.slice(3,5);
+    let rawHourNum: number = Number(rawHour);
+    let formatHourNum: number = rawHourNum > 12 ? rawHourNum - 12 : rawHourNum;
+    let AP: string = rawHourNum < 12 ? "am" : "pm";
+    let formatTime = `${String(formatHourNum)}:${rawMinute} ${AP}`
+    return formatTime
+  }
+
   render(){
     let date = new Date(this.props.meeting.d_t);
     let mtgDate = date.toString()
@@ -127,7 +137,7 @@ class MeetingCardFull extends React.Component<MCFProps, MCFState>{
     return(
       <div className="absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl">
         <div className="flex flex-row justify-between">
-          <p className="font-bold text-xl">{`${mtgDate.slice(0,16)} at ${mtgDate.slice(16,21)}`}</p>
+          <p className="font-bold text-xl">{`${mtgDate.slice(0,16)} at ${this.formatSlotTime(mtgDate.slice(16,21))}`}</p>
           {this.state.upcoming
           ? <button
               className="max-h-5  px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-red-500
