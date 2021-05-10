@@ -433,7 +433,7 @@ class ScheduleMeeting extends React.Component<SMProps,SMState>{
   }
 
   render(){
-    console.log(this.props.teacher)
+    //console.log(this.props.teacher)
     return(
       <div className = "absolute top-1/4 left-1/4 bg-white text-black border border-gray-500 p-3 shadow-xl"> 
         <p 

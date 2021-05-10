@@ -23,7 +23,7 @@ class Splash extends React.Component<SplashProps, SplashState> {
 
   render(){
     return (
-      <div className="bg-black text-gray-50 h-screen">
+      <div className="bg-splash-back text-gray-50 h-screen">
         <Router>
 
           {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
