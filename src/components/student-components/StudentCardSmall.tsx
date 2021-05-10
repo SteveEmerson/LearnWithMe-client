@@ -82,7 +82,7 @@ class StudentCardSmall extends React.Component<SCSProps,{}>{
         style={{borderColor:"blue"}}
       >
         <div >
-          <p className="font-bold text-l">{this.props.student.displayName}</p>
+          <p className="font-bold text-l">{this.props.student.displayName} {this.props.student.id}</p>
           <div className="flex flex-row justify-start space-x-4 ">
             <p>Meetings {this.props.student.meetings ? this.props.student.meetings.length : null}</p>
             <p>

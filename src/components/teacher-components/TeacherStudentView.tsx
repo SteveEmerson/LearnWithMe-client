@@ -140,9 +140,12 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
     return studentTasks
   }
 
+  //
+
   renderStudentList = () => {
     return(
-      this.props.students.map((student: Student) => {
+      this.props.students.filter(student => student.partners.includes(this.props.user.userId))
+      .map((student: Student) => {
         student.meetings = this.getStudentMeetings(student.id)
         student.goal = this.getStudentGoal(student.id)
         student.tasks = this.getStudentTasks(student.id)
