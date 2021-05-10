@@ -77,7 +77,7 @@ type TSVProps = {
 }
 
 type TSVState = {
-  currStudent: Student
+  currStudent: Student | null
   mounted: boolean
 }
 
@@ -99,7 +99,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   constructor(props: TSVProps){
     super(props)
     this.state = {
-      currStudent: this.props.students[0],
+      currStudent: null,
       mounted: false,
     }
 
@@ -107,7 +107,12 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   componentDidMount(){
-    
+    let paired: Array<Student> = 
+      this.props.students.filter(student => student.partners.includes(this.props.user.userId))
+    if (paired.length > 0){
+      this.setState({currStudent: paired[0]})
+    }
+
   }
 
   componentDidUpdate(prevProps: TSVProps, prevState: TSVState){

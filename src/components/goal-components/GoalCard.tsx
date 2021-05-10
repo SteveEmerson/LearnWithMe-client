@@ -341,6 +341,8 @@ class GoalCard extends React.Component<GCProps,GCState>{
     let taskList: Array<Task> | undefined = (this.state.updatedTasks && this.state.updatedTasks.length > 0)
       ? this.state.updatedTasks
       : this.props.tasks
+    
+    taskList ? console.log(taskList[0]) : console.log("no tasks")
 
     return(
       <div className="text-base font-semibold pl-2">
