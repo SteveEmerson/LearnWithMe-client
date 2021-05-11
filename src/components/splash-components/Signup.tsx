@@ -126,7 +126,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
                 displayName: user.displayName,
                 userId: user.userId,
                 partnerList: [],
-                availability: user.availability,
+                availability: this.state.availability,
                 sessionToken: user.sessionToken
               }
             })
