@@ -274,7 +274,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
 
   render() {
     return(
-      <div className="bg-night-sky-back text-gray-50 min-h-screen">
+      <div className="bg-night-sky-back bg-fixed text-gray-50 min-h-screen">
         <Router>
 
           {/* NAV elements adapted from  www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}

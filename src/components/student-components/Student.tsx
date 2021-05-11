@@ -249,7 +249,7 @@ class Student extends React.Component<StudentProps, StudentState> {
   render() {
     console.log(this.state.teachers)
     return(
-      <div className="bg-night-sky-back text-gray-50 min-h-screen">
+      <div className="bg-night-sky-back bg-fixed text-gray-50 min-h-screen">
         <Router>
           {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
           <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-opacity-0 mb-3">
