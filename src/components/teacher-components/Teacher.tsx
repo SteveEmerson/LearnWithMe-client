@@ -274,12 +274,12 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
 
   render() {
     return(
-      <div className="bg-black text-gray-50 min-h-screen">
+      <div className="bg-night-sky-back text-gray-50 min-h-screen">
         <Router>
 
           {/* NAV elements adapted from  www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
 
-          <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-black mb-3">
+          <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-opacity-0 mb-3">
             <div className="container px-4 mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
               <img className="max-h-12" src={logo} alt=""/>  

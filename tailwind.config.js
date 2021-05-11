@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       backgroundImage: theme => ({
 
-        'splash-back': "url('/src/assets/hummingbird-hawkmoth-4811285_1920.jpg')",
+        'night-sky-back': "url('/src/assets/night-sky.jpg')",
 
        })
     },
