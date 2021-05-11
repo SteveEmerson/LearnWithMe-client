@@ -252,7 +252,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       <div className="bg-night-sky-back bg-fixed text-gray-50 min-h-screen">
         <Router>
           {/* NAV elements adapted from  https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/react/navbars*/}
-          <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-opacity-0 mb-3">
+          <nav className="fixed w-screen flex flex-wrap items-center justify-between py-3 bg-gray-800 bg-opacity-20 mb-3">
             <div className="container px-4 mx-4 flex flex-wrap items-center justify-between">
               <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
                 

@@ -238,11 +238,11 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
     return(
       <div className="px-10 pt-20">
         <div className="flex flex-row justify-between">
-          <p className="font-bold text-5xl text-blue-500 mb-5 ml-4" style={{color:"blue"}}>
+          <p className="font-bold text-5xl text-blue-500 mb-5 ml-4 mt-5" style={{color:"blue"}}>
             {this.props.user.displayName}
           </p>
           <button
-            className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-600 rounded hover:opacity-75 max-h-10 self-center ml-10"
+            className=" px-2 py-1 flex items-center text-xs uppercase font-bold  text-white bg-blue-600 rounded hover:opacity-75 max-h-10 self-center mr-6"
             style={{backgroundColor:"blue"}}
             id="schedule-meeting" 
             onClick={this.toggleScheduleMeeting}
@@ -265,9 +265,11 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
           : null}
         <div className="grid grid-cols-2 gap-6">
           <div>
+            <p className="text-right mr-6 text-lg font-bold">Past</p>
             {this.state.pastMeetings.length !== 0 ? this.renderMeetingList(this.state.pastMeetings) : null}
           </div>
           <div>
+            <p className="text-left ml-6 text-lg font-bold">Future</p>
             {this.state.futureMeetings.length !== 0 ? this.renderMeetingList(this.state.futureMeetings) : null}
           </div>
         </div>

@@ -184,7 +184,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
     let temp: Array<Goal> = this.props.goals.filter((goal) => {
       return goal
     })
-    temp.sort((g1, g2) => (g1.targetDate > g2.targetDate) ? 1 : -1)
+    temp.sort((g1, g2) => (g1.targetDate > g2.targetDate) ? -1 : 1)
 
     this.setState({sortedGoals: temp})
   }
@@ -280,7 +280,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   render(){
     return(
       <div className="px-10 pt-20">
-        <p className="font-bold text-5xl text-blue-500 mb-3" style={{color:"blue"}}>
+        <p className="font-bold text-5xl text-blue-500 mb-3 mt-5" style={{color:"blue"}}>
           {this.props.user.displayName}
         </p>
         <div className="grid grid-cols-2 gap-6 justify-items-end"> 
