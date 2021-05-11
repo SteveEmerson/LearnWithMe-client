@@ -3,7 +3,6 @@ import GoalCard from '../goal-components/GoalCard';
 import MeetingCardSmall from '../meeting-components/MeetingCardSmall';
 import MakeGoal from '../goal-components/MakeGoal';
 import ScheduleMeeting from '../meeting-components/ScheduleMeeting';
-import APIURL from '../../helpers/environment'
 
 type User = {
   email: string
@@ -85,29 +84,13 @@ type Task = {
   teacherId: number
 }
 
-type FetchTeacherData = {
-  id: number
-  email: string
-  passwordhash: string
-  name: string
-  studentList: number[]
-  role: string
-  availability: {
-    mon: string[],
-    tue: string[],
-    wed: string[],
-    thu: string[],
-    fri: string[]
-  }
-  createdAt: string
-  updatedAt: string
-}
 
 type SMVProps = {
   user: User
   meetings: Array<Meeting>
   goals: Array<Goal>
   tasks: Array<Task>
+  teachers: Array<Teacher>
   getMeetings: Function
   getGoals: Function
   getTasks: Function
@@ -115,7 +98,6 @@ type SMVProps = {
 }
 
 type SMVState = {
-  allStudentTeachers: Array<Teacher>
   makeGoal: boolean
   scheduleMeeting: boolean
   student: Student
@@ -124,13 +106,10 @@ type SMVState = {
 }
 
 
-type AllPartners = Array<FetchTeacherData>
-
 class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   constructor(props: SMVProps){
     super(props);
     this.state = {
-      allStudentTeachers: [],
       makeGoal: false,
       scheduleMeeting: false,
       student: {
@@ -149,7 +128,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   }
 
   componentDidMount(){
-    this.getTeacherList();
+    // this.getTeacherList();
     this.sortMeetings();
     this.sortGoals();
   }
@@ -218,37 +197,37 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
     this.setState({makeGoal: !this.state.makeGoal})
   }
 
-  getTeacherList = () => {
-    const url: string = `${APIURL}/teacher/`
-    fetch(url,
-      {
-          method: 'GET',
-          headers: new Headers ({
-          'Content-Type': 'application/json',
-          'Authorization': this.props.user.sessionToken
-          })
-      })
-      .then((res) => res.json())
-      .then((data: AllPartners) => {
-        let allTeachers: Array<Teacher> = 
-        data.filter((partner: FetchTeacherData) => {
-          return this.props.user.partnerList.includes(partner.id)
-        })
-        .map((partner: FetchTeacherData) => {
-          return {
-            id: partner.id, 
-            displayName: partner.name, 
-            email:partner.email, 
-            availability:partner.availability,
-            partners: partner.studentList
-          }
-        } )
-        this.setState({allStudentTeachers: allTeachers})
-      })
-      .catch(err => {
-        console.log(`Error in fetching teachers: ${err}`)
-      }) 
-  }
+  // getTeacherList = () => {
+  //   const url: string = `${APIURL}/teacher/`
+  //   fetch(url,
+  //     {
+  //         method: 'GET',
+  //         headers: new Headers ({
+  //         'Content-Type': 'application/json',
+  //         'Authorization': this.props.user.sessionToken
+  //         })
+  //     })
+  //     .then((res) => res.json())
+  //     .then((data: AllPartners) => {
+  //       let allTeachers: Array<Teacher> = 
+  //       data.filter((partner: FetchTeacherData) => {
+  //         return this.props.user.partnerList.includes(partner.id)
+  //       })
+  //       .map((partner: FetchTeacherData) => {
+  //         return {
+  //           id: partner.id, 
+  //           displayName: partner.name, 
+  //           email:partner.email, 
+  //           availability:partner.availability,
+  //           partners: partner.studentList
+  //         }
+  //       } )
+  //       this.setState({allStudentTeachers: allTeachers})
+  //     })
+  //     .catch(err => {
+  //       console.log(`Error in fetching teachers: ${err}`)
+  //     }) 
+  // }
 
   renderGoalList = () => {
     return (
@@ -281,7 +260,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
   renderMeetingList = () => {
     return (
       this.state.sortedMeetings.map((meeting) => {
-        let teacher = this.state.allStudentTeachers.find(teacher => teacher.id === meeting.teacherId)
+        let teacher = this.props.teachers.find(teacher => teacher.id === meeting.teacherId)
         let teacherName = teacher ? teacher.displayName : "no teacher"
         return (
           <MeetingCardSmall 
@@ -342,7 +321,7 @@ class StudentMeetingView extends React.Component<SMVProps, SMVState>{
               student={this.state.student}
               setGParState={this.props.setStudState}
               token={this.props.user.sessionToken}
-              allTeachers={this.state.allStudentTeachers}
+              allTeachers={this.props.teachers}
               allStudents={null}
               getStudentMeetings={this.props.getMeetings}
               toggleScheduleMeeting={this.toggleScheduleMeeting}

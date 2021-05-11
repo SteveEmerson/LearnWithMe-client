@@ -42,6 +42,8 @@ type FetchData = {
 type USProps = {
   user: User
   setAppState: Function
+  getStudents?: Function
+  getTeachers?: Function
 }
 
 type USState = {
@@ -162,7 +164,13 @@ class UpdateSettings extends React.Component<USProps, USState>{
         availability: this.state.availability,
         sessionToken: this.props.user.sessionToken
       };
+
     this.props.setAppState({user: updatedUser});
+    if(this.props.user.role === 'teacher' && this.props.getStudents){
+      this.props.getStudents()
+    }else if(this.props.user.role === 'student' && this.props.getTeachers){
+      this.props.getTeachers()
+    }
     history.goBack()
   }
   

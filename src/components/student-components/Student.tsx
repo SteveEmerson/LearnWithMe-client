@@ -28,6 +28,43 @@ type User = {
   sessionToken: string
 }
 
+type Teacher = {
+  id: number
+  displayName: string
+  email: string
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
+  partners: number[]
+  meetings?:Array<Meeting>
+  goal?:Goal
+  tasks?: Array<Task>
+}
+
+type FetchTeacherData = {
+  id: number
+  email: string
+  passwordhash: string
+  name: string
+  studentList: number[]
+  role: string
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
+  createdAt: string
+  updatedAt: string
+}
+
+type AllPartners = Array<FetchTeacherData>
+
 type Meeting= {
   id: number,
   d_t: Date,
@@ -51,6 +88,7 @@ type StudentState = {
   meetings: Array<Meeting>
   goals: Array<Goal>
   tasks: Array<Task>
+  teachers: Array<Teacher>
   gotMeetings: boolean
   gotGoals: boolean
   gotTasks: boolean
@@ -75,6 +113,7 @@ class Student extends React.Component<StudentProps, StudentState> {
       meetings: [],
       goals: [],
       tasks: [],
+      teachers: [],
       gotMeetings: false,
       gotGoals: false,
       gotTasks: false,
@@ -110,6 +149,39 @@ class Student extends React.Component<StudentProps, StudentState> {
     this.getMeetings();
     this.getGoals();
     this.getTasks();
+    this.getTeachers();
+  }
+
+  getTeachers = () => {
+    const url: string = `${APIURL}/teacher/`
+    fetch(url,
+      {
+          method: 'GET',
+          headers: new Headers ({
+          'Content-Type': 'application/json',
+          'Authorization': this.props.currUser.sessionToken
+          })
+      })
+      .then((res) => res.json())
+      .then((data: AllPartners) => {
+        let allTeachers: Array<Teacher> = 
+        data.filter((partner: FetchTeacherData) => {
+          return this.props.currUser.partnerList.includes(partner.id)
+        })
+        .map((partner: FetchTeacherData) => {
+          return {
+            id: partner.id, 
+            displayName: partner.name, 
+            email:partner.email, 
+            availability:partner.availability,
+            partners: partner.studentList
+          }
+        } )
+        this.setState({teachers: allTeachers})
+      })
+      .catch(err => {
+        console.log(`Error in fetching teachers: ${err}`)
+      }) 
   }
 
   getMeetings = () => {
@@ -175,6 +247,7 @@ class Student extends React.Component<StudentProps, StudentState> {
 
 
   render() {
+    console.log(this.state.teachers)
     return(
       <div className="bg-black text-gray-50 min-h-screen">
         <Router>
@@ -231,13 +304,14 @@ class Student extends React.Component<StudentProps, StudentState> {
                 meetings={this.state.meetings}
                 goals={this.state.goals}
                 tasks={this.state.tasks}
+                teachers={this.state.teachers}
                 getMeetings={this.getMeetings}
                 getGoals={this.getGoals}
                 getTasks={this.getTasks}
                 setStudState={this.setState}
               />
             </Route>
-            <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>
+            <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState} getTeachers={this.getTeachers}/></Route>
           </Switch>
           {this.state.gotMeetings && this.state.gotGoals && this.state.gotTasks
           ? <Redirect to="/student-meeting"/> 

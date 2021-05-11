@@ -169,6 +169,7 @@ class TeacherStudentView extends React.Component<TSVProps,TSVState>{
   }
 
   render() {
+
     return(
       <div className="px-10 pt-20"> 
         <p className="font-bold text-5xl text-blue-500 mb-5 ml-4" style={{color:"blue"}}>{this.props.user.displayName}</p>

@@ -273,7 +273,6 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
   }
 
   render() {
-
     return(
       <div className="bg-black text-gray-50 min-h-screen">
         <Router>
@@ -355,7 +354,7 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
                 setTeacherState={this.setState}
               />
             </Route>
-            <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState}/></Route>
+            <Route exact path='/settings'><UpdateSettings user={this.props.currUser} setAppState={this.props.setAppState} getStudents={this.getStudents}/></Route>
           </Switch>
           {this.state.gotMeetings && this.state.gotGoals && this.state.gotTasks && this.state.gotStudents
           ? <Redirect to="/teacher-student"/> 
