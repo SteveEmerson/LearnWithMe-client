@@ -342,8 +342,25 @@ class GoalCard extends React.Component<GCProps,GCState>{
       ? this.state.updatedTasks
       : this.props.tasks
     
-    taskList ? console.log(taskList[0]) : console.log("no tasks")
-
+      if (taskList && taskList.length > 1) {
+        taskList.sort((a,b) => {
+          if(a.createdAt && b.createdAt){
+            if(a.createdAt > b.createdAt){
+              return 1
+            }else if (a.createdAt < b.createdAt){
+              return -1
+            }else{
+              if(a.description < b.description){
+                return -1
+              }else{
+                return 1
+              }
+            }    
+          }
+          return 1
+        })
+      }
+    
     return(
       <div className="text-base font-semibold pl-2">
         {(taskList) 
@@ -353,7 +370,7 @@ class GoalCard extends React.Component<GCProps,GCState>{
                 <p className={` hover:text-blue-500 ${task.completed?"line-through":"no-underline"}`}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {this.handleTaskChange(task.id)}}
                 >
-                  {task.description}
+                  {task.description} 
                 </p>
               </div>
             )
