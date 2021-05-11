@@ -19,6 +19,13 @@ type SignupState = {
   role: string
   displayName: string
   signinError: boolean
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
 }
 
 // type FormData = {
@@ -36,7 +43,39 @@ class Signup extends React.Component<SignupProps, SignupState> {
       cpassword: "",
       role: "",
       displayName: "",
-      signinError: false
+      signinError: false,
+      availability: 
+        {
+          fri: [
+              "14:15:00",
+              "14:30:00"
+          ],
+          mon: [
+              "14:00:00",
+              "14:15:00",
+              "14:30:00"
+          ],
+          thu: [
+              "13:15:00",
+              "13:30:00",
+              "13:45:00",
+              "14:00:00",
+              "14:15:00",
+              "14:30:00"
+          ],
+          tue: [
+              "13:15:00",
+              "13:30:00",
+              "13:45:00",
+              "14:00:00",
+              "14:15:00",
+              "14:30:00"
+          ],
+          wed: [
+              "14:15:00",
+              "14:30:00"
+          ]
+      }
     }
   }
   
@@ -61,7 +100,8 @@ class Signup extends React.Component<SignupProps, SignupState> {
           {
             email: this.state.email, password: 
             this.state.password, 
-            name:this.state.displayName
+            name:this.state.displayName,
+            availability: this.state.availability
           }),
         headers: new Headers ({
         'Content-Type': 'application/json',
