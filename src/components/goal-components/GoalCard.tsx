@@ -99,7 +99,6 @@ class GoalCard extends React.Component<GCProps,GCState>{
   componentDidUpdate(prevProps: GCProps, prevState: GCState){
     
     if(prevProps.goal.id !== this.props.goal.id ){
-      console.log("Got here")
       this.setState({updatedTasks: this.props.tasks ? JSON.parse(JSON.stringify(this.props.tasks)) : []})
       this.setState({tasksChanged: false})
     }
@@ -423,13 +422,13 @@ class GoalCard extends React.Component<GCProps,GCState>{
   }
   
   removeStagedTask = (remTask: Task) => {
-    //console.log(remTask.id)
+
     let temp: Array<Task> | undefined= this.state.updatedTasks?.filter((task) => task.id !== remTask.id)
-    //console.log("Temp ", temp)
+
     this.setState({updatedTasks: temp})
-    //console.log("Update ", this.state.updatedTasks)
+
     this.setState({oldTasks: [...this.state.oldTasks, remTask]})
-    //console.log("Old ", this.state.oldTasks)
+
   }
 
   addStagedTask(){

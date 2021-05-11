@@ -200,7 +200,6 @@ class Teacher extends React.Component<TeacherProps, TeacherState> {
       .then((data: Array<Meeting>) => {
         this.setState({meetings: data})
         this.setState({gotMeetings: true})
-        console.log("got meetings")
       })
       .catch(err => {
         console.log(`Error in fetch: ${err}`)

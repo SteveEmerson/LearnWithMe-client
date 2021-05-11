@@ -69,7 +69,6 @@ class Signup extends React.Component<SignupProps, SignupState> {
     })
     .then((res) => res.json())
     .then((user: User) => {
-      console.log(user);
         if(user.hasOwnProperty('error')){
           this.setState({signinError: true})
         }else{

@@ -138,7 +138,6 @@ class TeacherMeetingView extends React.Component<TMVProps,TMVState>{
   componentDidMount(){
     this.getStudentList()
     this.sortMeetings()
-    // console.log(this.state.teacher)
   }
 
   componentDidUpdate(prevProps: TMVProps, prevState: TMVState){

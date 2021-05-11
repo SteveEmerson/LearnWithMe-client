@@ -134,7 +134,6 @@ class Student extends React.Component<StudentProps, StudentState> {
   }
 
   getGoals = () => {
-    console.log("Get Goals")
     const url: string = `${APIURL}/goal/student_get`
     fetch(url,
       {
@@ -176,8 +175,6 @@ class Student extends React.Component<StudentProps, StudentState> {
 
 
   render() {
-    // console.log(this.state.gotMeetings, this.state.gotGoals, this.state.gotTasks)
-    // console.log(this.state.meetings)
     return(
       <div className="bg-black text-gray-50 min-h-screen">
         <Router>

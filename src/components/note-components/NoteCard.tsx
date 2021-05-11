@@ -53,7 +53,6 @@ class NoteCard extends React.Component<NCProps, NCState> {
     })
     .then(res => res.json())
     .then((json: {data: number[]}) => {
-      console.log(`${json.data[0]} note updated`)
       this.setState({showEditNote: false})
       this.setState({newContent: ""})
       this.props.getNotes()
@@ -78,7 +77,6 @@ class NoteCard extends React.Component<NCProps, NCState> {
     })
     .then(res => res.json())
     .then((json: {message: string}) => {
-      console.log("Note removed from database")
       this.setState({showEditNote: false})
       this.setState({newContent: ""})
       this.props.getNotes()

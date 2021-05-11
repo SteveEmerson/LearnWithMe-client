@@ -133,9 +133,7 @@ class UpdateSettings extends React.Component<USProps, USState>{
         password: this.state.newPassword
       }
 
-    console.log(reqBody)
     const url: string = `${APIURL}/${this.props.user.role}/${this.props.user.userId}`
-    // console.log(this.props.user.sessionToken);
     fetch(url,
     { 
       method: `${this.state.newPassword === "" ? "PATCH" : "PUT"}`,
