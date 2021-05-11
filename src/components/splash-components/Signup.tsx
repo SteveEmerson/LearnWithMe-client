@@ -9,6 +9,13 @@ type User = {
   userId: number
   displayName: string
   role: string
+  availability: {
+    mon: string[],
+    tue: string[],
+    wed: string[],
+    thu: string[],
+    fri: string[]
+  }
   sessionToken: string
 }
 
@@ -119,13 +126,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
                 displayName: user.displayName,
                 userId: user.userId,
                 partnerList: [],
-                availability: {
-                  mon: [],
-                  tue: [],
-                  wed: [],
-                  thu: [],
-                  fri: []
-                },
+                availability: user.availability,
                 sessionToken: user.sessionToken
               }
             })
