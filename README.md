@@ -56,4 +56,4 @@
 ## Settings
 
 - Update personal information
-- Add and rmove partners
+- Add and remove partners
